@@ -1,15 +1,23 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp")
+    id("com.google.firebase.crashlytics")
 }
 
+val secrets = Properties()
+secrets.load(FileInputStream("secrets.properties"))
+
 android {
-    namespace = "com.riyaz.woli"
+    namespace = "com.wiseowl.woli"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.riyaz.woli"
+        applicationId = "com.wiseowl.woli"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -19,6 +27,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        //resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
     }
 
     buildTypes {
@@ -67,4 +76,13 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
+
+    //Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
 }
