@@ -1,17 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.compose.compiler)
 }
 
 android {
-    namespace = "com.riyaz.woli"
-    compileSdk = 35
+    namespace = "com.wiseowl.woli"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.riyaz.woli"
+        applicationId = "com.wiseowl.woli"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
