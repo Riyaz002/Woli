@@ -1,2 +1,2 @@
 # Woli
-Android App to download and set wallpapers
+Light weight android application to download and set wallpapers
