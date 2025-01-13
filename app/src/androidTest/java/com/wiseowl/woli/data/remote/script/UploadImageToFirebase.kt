@@ -10,8 +10,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import java.net.HttpURLConnection
-import java.net.URL
 
 class UploadImageToFirebase {
     @Test

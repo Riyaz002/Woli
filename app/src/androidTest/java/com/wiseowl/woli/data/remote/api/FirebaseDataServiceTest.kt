@@ -13,6 +13,6 @@ class FirebaseDataServiceTest{
     fun getPageReturnAValidPage() = runBlocking{
         Firebase.initialize(getApplicationContext())
         val result = FirebaseDataService().getPage(1)
-        Assert.assertNotNull(result)
+        Assert.assertNotNull(result.isNotEmpty())
     }
 }
