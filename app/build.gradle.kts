@@ -4,9 +4,10 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.service)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp")
-    id("com.google.firebase.crashlytics")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.crashlytics)
 }
 
 val secrets = Properties()
@@ -27,7 +28,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        //resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
+        resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
     }
 
     buildTypes {
@@ -81,8 +82,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.firestore)
 
     //Room
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 }

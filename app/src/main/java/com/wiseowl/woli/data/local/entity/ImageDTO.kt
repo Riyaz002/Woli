@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 data class ImageDTO(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val url: String,
-    val title: String,
     val description: String,
     val category: String
 )
