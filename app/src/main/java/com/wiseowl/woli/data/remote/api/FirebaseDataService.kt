@@ -1,7 +1,5 @@
 package com.wiseowl.woli.data.remote.api
 
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.data.local.entity.ImageDTO
