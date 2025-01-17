@@ -1,5 +1,9 @@
 package com.wiseowl.woli.ui.navigation
+
+import kotlinx.serialization.Serializable
+
+
 sealed class Screen {
-    data object HOME: Screen()
-    data object DETAIL: Screen()
+    @Serializable data object HOME: Screen()
+    @Serializable data object DETAIL: Screen()
 }
