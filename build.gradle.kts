@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.google.service) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.crashlytics) apply false
+    kotlin("plugin.serialization") version "2.1.0" apply false
 }

@@ -1,9 +1,9 @@
 package com.wiseowl.woli.domain.coroutine
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 
 abstract class Dispatcher {
-    abstract val MAIN: Dispatchers
-    abstract val IO: Dispatchers
-    abstract val DEFAULT: Dispatchers
+    abstract val MAIN: CoroutineDispatcher
+    abstract val IO: CoroutineDispatcher
+    abstract val DEFAULT: CoroutineDispatcher
 }

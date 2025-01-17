@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.crashlytics)
+    kotlin("plugin.serialization")
 }
 
 val secrets = Properties()
@@ -92,4 +93,7 @@ dependencies {
 
     //Coil
     implementation(libs.coil.compose)
+
+    //Serializer
+    implementation(libs.kotlinx.serialization.json)
 }

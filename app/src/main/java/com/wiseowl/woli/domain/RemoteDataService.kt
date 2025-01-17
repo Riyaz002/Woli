@@ -1,4 +1,4 @@
-package com.wiseowl.woli.data.remote
+package com.wiseowl.woli.domain
 
 import com.wiseowl.woli.data.local.entity.ImageDTO
 

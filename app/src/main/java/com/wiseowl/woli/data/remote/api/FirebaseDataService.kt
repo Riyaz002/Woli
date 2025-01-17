@@ -1,11 +1,14 @@
 package com.wiseowl.woli.data.remote.api
 
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.data.local.entity.ImageDTO
-import com.wiseowl.woli.data.remote.RemoteDataService
+import com.wiseowl.woli.domain.RemoteDataService
 import kotlinx.coroutines.tasks.await
 
+@Suppress("UNCHECKED_CAST")
 class FirebaseDataService: RemoteDataService {
     private val firestore = Firebase.firestore
 
