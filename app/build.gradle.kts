@@ -96,4 +96,8 @@ dependencies {
 
     //Serializer
     implementation(libs.kotlinx.serialization.json)
+
+    //Dependency Injection
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.android)
 }
