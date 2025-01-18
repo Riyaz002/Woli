@@ -23,7 +23,15 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
         }
     }
 
-    fun loadNextPage() {
+    fun onEvent(event: HomeEvent){
+        when(event){
+            is HomeEvent.OnClickImage -> {
+                //Navigate to detail page
+            }
+        }
+    }
+
+    private fun loadNextPage() {
         val currentState = _state.value
         if(currentState is HomeState.Success){
             if(!currentState.homePageModel.images.isNullOrEmpty()){

@@ -31,15 +31,14 @@ fun Home(
             is HomeState.Success -> {
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
-                    columns = GridCells.Fixed(2),
-                    userScrollEnabled = true
+                    columns = GridCells.Fixed(2)
                 ) {
                     data.homePageModel.images?.let { images ->
-                        items(images){
+                        items(images){ image ->
                             ImageCard(
                                 modifier = Modifier.padding(10.dp),
-                                url = it.url,
-                                description = it.description
+                                image = image,
+                                onClick = viewModel::onEvent
                             )
                         }
                     }
