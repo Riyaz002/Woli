@@ -1,12 +1,10 @@
 package com.wiseowl.woli.data
 
-import com.wiseowl.woli.data.coroutine.Dispatcher
+import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ImageDTO.Companion.toImage
 import com.wiseowl.woli.domain.RemoteDataService
 import com.wiseowl.woli.domain.WoliRepository
 import com.wiseowl.woli.domain.model.Image
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.withContext
 
 class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): WoliRepository {
