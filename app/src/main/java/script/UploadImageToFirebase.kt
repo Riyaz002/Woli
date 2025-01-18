@@ -4,7 +4,7 @@ import android.content.Context
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.wiseowl.woli.data.local.entity.ImageDTO
-import com.wiseowl.woli.data.remote.api.FirebaseDataService.Companion.IMAGES_DOCUMENT
+import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.IMAGES_DOCUMENT
 
 class UploadImageToFirebase {
     fun startUploadingImages(applicationContext: Context, page: Int) {

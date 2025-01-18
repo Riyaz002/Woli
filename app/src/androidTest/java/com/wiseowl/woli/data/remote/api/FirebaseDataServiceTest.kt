@@ -3,6 +3,7 @@ package com.wiseowl.woli.data.remote.api
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
+import com.wiseowl.woli.data.remote.FirebaseDataService
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
