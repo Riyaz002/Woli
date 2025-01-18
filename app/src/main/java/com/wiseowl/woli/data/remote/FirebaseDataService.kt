@@ -12,15 +12,16 @@ import kotlinx.coroutines.tasks.await
 class FirebaseDataService: RemoteDataService {
     private val firestore = Firebase.firestore
 
-    override suspend fun getPage(page: Int): List<ImageDTO> {
+    override suspend fun getPage(page: Int): List<ImageDTO>? {
         val result = firestore.collection(PAGES_DOCUMENT).getDocumentOrNull(page.toString())?.data
-        val imagesData = result?.get("data") as List<Map<String, Any>>?
-        return imagesData?.toImages() ?: listOf()
+        val imagesData = result?.get(DATA) as List<Map<String, Any>>?
+        return imagesData?.toImages()
     }
 
     companion object{
         const val IMAGES_DOCUMENT = "images"
         const val PAGES_DOCUMENT = "pages"
+        const val DATA = "data"
 
         private fun List<Map<String, Any>>.toImages(): List<ImageDTO>{
             return map { row ->
