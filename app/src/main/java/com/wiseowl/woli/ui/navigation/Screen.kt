@@ -2,8 +2,13 @@ package com.wiseowl.woli.ui.navigation
 
 import kotlinx.serialization.Serializable
 
-
+@Serializable
 sealed class Screen {
+    open val route: String = "$this"
+
     @Serializable data object HOME: Screen()
-    @Serializable data object DETAIL: Screen()
+    @Serializable data object DETAIL: Screen(){
+        const val ARG_IMAGE_ID = "imageId"
+        override var route: String = super.route + "?$ARG_IMAGE_ID={$ARG_IMAGE_ID}"
+    }
 }
