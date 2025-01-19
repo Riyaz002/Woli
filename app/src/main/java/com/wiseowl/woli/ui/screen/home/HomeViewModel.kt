@@ -28,16 +28,21 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
             is HomeEvent.OnClickImage -> {
                 //Navigate to detail page
             }
+            is HomeEvent.LoadNextPage -> loadNextPage(event.page)
         }
     }
 
-    private fun loadNextPage() {
-        val currentState = _state.value
-        if(currentState is HomeState.Success){
-            if(!currentState.homePageModel.images.isNullOrEmpty()){
-                viewModelScope.launch(Dispatcher.IO) {
-
-                }
+    private fun loadNextPage(pageNo: Int) {
+        viewModelScope.launch {
+            val page = homeUseCase.getPageUseCase(pageNo)
+            val currentState = _state.value
+            if(currentState is HomeState.Success){
+                val homePageModel: HomePageModel = currentState.homePageModel.copy(
+                    images = currentState.homePageModel.images?.plus(page.images ?: listOf()),
+                    allPageLoaded = page.images.isNullOrEmpty(),
+                    currentPage = pageNo
+                )
+                _state.update { HomeState.Success(homePageModel) }
             }
         }
     }

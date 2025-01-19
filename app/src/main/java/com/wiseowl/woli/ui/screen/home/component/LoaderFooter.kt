@@ -1,0 +1,18 @@
+package com.wiseowl.woli.ui.screen.home.component
+
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+
+@Composable
+fun LoaderFooter(
+    modifier: Modifier = Modifier
+) {
+    Box(modifier) {
+        CircularProgressIndicator(
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}

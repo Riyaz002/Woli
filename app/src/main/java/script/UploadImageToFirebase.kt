@@ -8,7 +8,7 @@ import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.IMAGES_DOCUMENT
 
 class UploadImageToFirebase {
-    fun startUploadingImages(applicationContext: Context, page: Int) {
+    fun startUploadingImages(applicationContext: Context) {
         applicationContext.assets.open("imagedata.csv").bufferedReader().use {
             it.lines().forEach { line ->
                 val (url, description, category) = line.split(",")
@@ -21,7 +21,7 @@ class UploadImageToFirebase {
                     )
                 )
             }
-            uploadPage(applicationContext, page)
+            uploadPage(applicationContext, 2)
         }
     }
 
