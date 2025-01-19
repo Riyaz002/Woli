@@ -6,7 +6,8 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun Detail(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    imageId: String
 ) {
     Text(
         modifier = modifier,
