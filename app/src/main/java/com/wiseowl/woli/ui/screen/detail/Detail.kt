@@ -11,6 +11,6 @@ fun Detail(
 ) {
     Text(
         modifier = modifier,
-        text = "Detail"
+        text = "Detail: $imageId"
     )
 }
