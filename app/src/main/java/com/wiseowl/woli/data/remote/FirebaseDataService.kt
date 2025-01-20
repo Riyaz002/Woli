@@ -16,7 +16,8 @@ class FirebaseDataService: RemoteDataService {
     override suspend fun getPage(page: Int): List<ImageDTO>? {
         val result = firestore.collection(PAGES_DOCUMENT).getDocumentOrNull(page.toString())?.data
         val imagesData = result?.get(DATA) as List<DocumentReference>?
-        return imagesData?.map { it.get().await().data!!.toImages() }
+        val images = imagesData?.map { it.get() }?.map { it.await() }
+        return images?.map { it.data!!.toImages() }
     }
 
     companion object{
