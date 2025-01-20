@@ -13,4 +13,10 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
             return@withContext remoteDataService.getPage(page)?.map { it.toImage() }
         }
     }
+
+    override suspend fun getImage(id: Int): Image? {
+        return withContext(Dispatcher.IO){
+            return@withContext remoteDataService.getImage(id)?.toImage()
+        }
+    }
 }
