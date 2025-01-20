@@ -18,20 +18,28 @@ class FirebaseDataService: RemoteDataService {
         return imagesData?.toImages()
     }
 
+    override suspend fun getImage(id: Int): ImageDTO? {
+        val result = firestore.collection(IMAGES_DOCUMENT).getDocumentOrNull(id.toString())?.data
+        val image = (result as Map<String, Any>?)?.toImage()
+        return image
+    }
+
     companion object{
         const val IMAGES_DOCUMENT = "images"
         const val PAGES_DOCUMENT = "pages"
         const val DATA = "data"
 
         private fun List<Map<String, Any>>.toImages(): List<ImageDTO>{
-            return map { row ->
-                ImageDTO(
-                    id = row.getValue(ImageDTO::id.name).toString().toInt(),
-                    url = row.getValue(ImageDTO::url.name).toString(),
-                    description = row.getValue(ImageDTO::description.name).toString(),
-                    category = row.getValue(ImageDTO::category.name).toString()
-                )
-            }
+            return map { row -> row.toImage() }
+        }
+
+        private fun Map<String, Any>.toImage(): ImageDTO {
+            return ImageDTO(
+                id = getValue(ImageDTO::id.name).toString().toInt(),
+                url = getValue(ImageDTO::url.name).toString(),
+                description = getValue(ImageDTO::description.name).toString(),
+                category = getValue(ImageDTO::category.name).toString()
+            )
         }
 
         suspend fun CollectionReference.getDocumentOrNull(documentId: String): DocumentSnapshot?{
