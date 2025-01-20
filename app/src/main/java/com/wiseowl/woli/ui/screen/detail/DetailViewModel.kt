@@ -8,6 +8,7 @@ import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(imageId: String, detailUseCase: DetailUseCase): ViewModel() {
@@ -21,7 +22,25 @@ class DetailViewModel(imageId: String, detailUseCase: DetailUseCase): ViewModel(
 
     fun onEvent(event: Event){
         when(event){
+            is DetailEvent.OnClickImage -> {
+                _state.update { state ->
+                    if (state is DetailState.Success) {
+                        DetailState.Success(state.detailModel.copy(imagePreviewPopupVisible = true))
+                    } else state
+                }
+            }
 
+            is DetailEvent.OnClickSetWallpaper -> {
+                //SetWallpaper
+            }
+
+            is DetailEvent.OnDismissImagePreview -> {
+                _state.update { state ->
+                    if (state is DetailState.Success) {
+                        DetailState.Success(state.detailModel.copy(imagePreviewPopupVisible = false))
+                    } else state
+                }
+            }
         }
     }
 }

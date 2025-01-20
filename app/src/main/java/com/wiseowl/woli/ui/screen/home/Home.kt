@@ -41,7 +41,9 @@ fun Home(
                             ImageCard(
                                 modifier = Modifier.padding(10.dp),
                                 image = images[index],
-                                onClick = viewModel::onEvent
+                                cornerRadius = 20.dp,
+                                aspectRatio = 0.6f,
+                                onClick = { viewModel.onEvent(HomeEvent.OnClickImage(images[index].id)) }
                             )
                         }
                         items(
