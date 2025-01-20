@@ -1,6 +1,7 @@
 package com.wiseowl.woli.data.remote
 
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -14,8 +15,9 @@ class FirebaseDataService: RemoteDataService {
 
     override suspend fun getPage(page: Int): List<ImageDTO>? {
         val result = firestore.collection(PAGES_DOCUMENT).getDocumentOrNull(page.toString())?.data
-        val imagesData = result?.get(DATA) as List<Map<String, Any>>?
-        return imagesData?.toImages()
+        val imagesData = result?.get(DATA) as List<DocumentReference>?
+        val images = imagesData?.map { it.get() }?.map { it.await() }
+        return images?.map { it.data!!.toImages() }
     }
 
     companion object{
@@ -23,15 +25,13 @@ class FirebaseDataService: RemoteDataService {
         const val PAGES_DOCUMENT = "pages"
         const val DATA = "data"
 
-        private fun List<Map<String, Any>>.toImages(): List<ImageDTO>{
-            return map { row ->
-                ImageDTO(
-                    id = row.getValue(ImageDTO::id.name).toString().toInt(),
-                    url = row.getValue(ImageDTO::url.name).toString(),
-                    description = row.getValue(ImageDTO::description.name).toString(),
-                    category = row.getValue(ImageDTO::category.name).toString()
-                )
-            }
+        private fun Map<String, Any>.toImages(): ImageDTO {
+            return ImageDTO(
+                id = getValue(ImageDTO::id.name).toString().toInt(),
+                url = getValue(ImageDTO::url.name).toString(),
+                description = getValue(ImageDTO::description.name).toString(),
+                category = getValue(ImageDTO::category.name).toString()
+            )
         }
 
         suspend fun CollectionReference.getDocumentOrNull(documentId: String): DocumentSnapshot?{
