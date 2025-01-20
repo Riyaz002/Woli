@@ -26,7 +26,7 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
         }
     }
 
-    fun onEvent(event: HomeEvent){
+    fun onEvent(event: Event){
         when(event){
             is HomeEvent.OnClickImage -> {
                 EventHandler.sendEvent(Event.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))

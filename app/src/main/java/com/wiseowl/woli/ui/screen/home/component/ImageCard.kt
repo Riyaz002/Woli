@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import com.wiseowl.woli.domain.event.Event
 import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.ui.screen.home.HomeEvent
 import kotlin.reflect.KFunction1
@@ -22,7 +23,7 @@ import kotlin.reflect.KFunction1
 fun ImageCard(
     modifier: Modifier = Modifier,
     image: Image,
-    onClick: KFunction1<HomeEvent, Unit>
+    onClick: KFunction1<Event, Unit>
 ) {
     Box(
         modifier = modifier
