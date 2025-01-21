@@ -41,16 +41,17 @@ fun Home(
                             ImageCard(
                                 modifier = Modifier.padding(10.dp),
                                 image = images[index],
-                                onClick = viewModel::onEvent
+                                cornerRadius = 20.dp,
+                                aspectRatio = 0.6f,
+                                onClick = { viewModel.onEvent(HomeEvent.OnClickImage(images[index].id)) }
                             )
                         }
                         items(
                             1,
                             span = { GridItemSpan(2) }
                         ){
-
-                            if(!data.homePageModel.allPageLoaded){
-                                viewModel.onEvent(HomeEvent.LoadNextPage(data.homePageModel.currentPage+1))
+                            if(data.homePageModel.currentPage > 0){
+                                viewModel.onEvent(HomeEvent.LoadNextPage(data.homePageModel.currentPage.minus(1)))
                                 LoaderFooter(
                                     modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
                                 )

@@ -10,29 +10,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.wiseowl.woli.domain.model.Image
-import com.wiseowl.woli.ui.screen.home.HomeEvent
-import kotlin.reflect.KFunction1
 
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
     image: Image,
-    onClick: KFunction1<HomeEvent, Unit>
+    cornerRadius: Dp = 0.dp,
+    aspectRatio: Float? = null,
+    onClick: (() -> Unit)? = null
 ) {
     Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(20.dp))
-            .clickable { onClick(HomeEvent.OnClickImage(image.id)) }
+        modifier = modifier.clickable { onClick?.invoke() }
     ) {
         AsyncImage(
             modifier = Modifier
+                .clip(RoundedCornerShape(cornerRadius))
                 .fillMaxWidth()
-                .aspectRatio(0.6f),
+                .aspectRatio(aspectRatio),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(image.url)
                 .crossfade(true)
@@ -41,4 +41,10 @@ fun ImageCard(
             contentScale = ContentScale.Crop
         )
     }
+}
+
+fun Modifier.aspectRatio(aspectRatio: Float?): Modifier{
+    return if (aspectRatio != null) {
+        this.then(Modifier.aspectRatio(aspectRatio))
+    } else this
 }

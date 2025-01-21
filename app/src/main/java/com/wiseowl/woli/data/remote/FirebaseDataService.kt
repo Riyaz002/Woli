@@ -8,6 +8,7 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteDataService
 import kotlinx.coroutines.tasks.await
+import script.UploadImageToFirebase
 
 @Suppress("UNCHECKED_CAST")
 class FirebaseDataService: RemoteDataService {
@@ -20,6 +21,13 @@ class FirebaseDataService: RemoteDataService {
         return images?.map { it.data!!.toImages() }
     }
 
+    override suspend fun getTotalPageCount(): Int {
+        val collection = firestore.collection(PAGES_DOCUMENT)
+        val document = collection.document(UploadImageToFirebase.COUNT).get().await()
+        val totalPageCount = document.data?.getValue(UploadImageToFirebase.TOTAL_PAGE) as Long
+        return totalPageCount.toInt()
+    }
+
     override suspend fun getImage(id: Int): ImageDTO? {
         val result = firestore.collection(IMAGES_DOCUMENT).getDocumentOrNull(id.toString())?.data
         val image = (result as Map<String, Any>?)?.toImages()
@@ -29,6 +37,8 @@ class FirebaseDataService: RemoteDataService {
     companion object{
         const val IMAGES_DOCUMENT = "images"
         const val PAGES_DOCUMENT = "pages"
+        const val COUNT = "count"
+        const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
 
         private fun Map<String, Any>.toImages(): ImageDTO {

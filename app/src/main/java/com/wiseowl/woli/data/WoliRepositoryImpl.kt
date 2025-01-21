@@ -14,6 +14,12 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
         }
     }
 
+    override suspend fun getTotalPageCount(): Int {
+        return withContext(Dispatcher.IO){
+            return@withContext remoteDataService.getTotalPageCount()
+        }
+    }
+
     override suspend fun getImage(id: Int): Image? {
         return withContext(Dispatcher.IO){
             return@withContext remoteDataService.getImage(id)?.toImage()
