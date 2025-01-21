@@ -8,7 +8,7 @@ import com.wiseowl.woli.domain.WoliRepository
 import com.wiseowl.woli.data.local.WoliDatabase
 import com.wiseowl.woli.data.remote.FirebaseDataService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
-import com.wiseowl.woli.domain.usecase.home.GetPageUseCase
+import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import org.koin.core.context.startKoin
@@ -24,7 +24,7 @@ class WoliApplication: Application() {
 
         //Use Case
         singleOf(::GetImageUseCase)
-        singleOf(::GetPageUseCase)
+        singleOf(::PageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
     }

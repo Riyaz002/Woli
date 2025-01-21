@@ -20,8 +20,9 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
 
     init {
         viewModelScope.launch(Dispatcher.IO) {
-            val page = homeUseCase.getPageUseCase(1)
-            val homePageModel = HomePageModel(page.images, allPageLoaded = page.images.isNullOrEmpty())
+            val totalPages = homeUseCase.getPageUseCase.getTotalPageCount()
+            val page = homeUseCase.getPageUseCase.getPage(totalPages)
+            val homePageModel = HomePageModel(page.images, currentPage = totalPages)
             _state.update { _ -> HomeState.Success(homePageModel) }
         }
     }
@@ -37,12 +38,11 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
 
     private fun loadNextPage(pageNo: Int) {
         viewModelScope.launch {
-            val page = homeUseCase.getPageUseCase(pageNo)
+            val page = homeUseCase.getPageUseCase.getPage(pageNo)
             val currentState = _state.value
             if(currentState is HomeState.Success){
                 val homePageModel: HomePageModel = currentState.homePageModel.copy(
                     images = currentState.homePageModel.images?.plus(page.images ?: listOf()),
-                    allPageLoaded = page.images.isNullOrEmpty(),
                     currentPage = pageNo
                 )
                 _state.update { HomeState.Success(homePageModel) }

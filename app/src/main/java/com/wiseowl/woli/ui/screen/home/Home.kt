@@ -50,9 +50,8 @@ fun Home(
                             1,
                             span = { GridItemSpan(2) }
                         ){
-
-                            if(!data.homePageModel.allPageLoaded){
-                                viewModel.onEvent(HomeEvent.LoadNextPage(data.homePageModel.currentPage+1))
+                            if(data.homePageModel.currentPage > 0){
+                                viewModel.onEvent(HomeEvent.LoadNextPage(data.homePageModel.currentPage.minus(1)))
                                 LoaderFooter(
                                     modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
                                 )
