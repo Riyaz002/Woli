@@ -5,52 +5,93 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import com.wiseowl.woli.data.local.entity.ImageDTO
+import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.CATEGORY_COLLECTION
 import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.DATA
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.IMAGES_DOCUMENT
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.PAGES_DOCUMENT
+import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.IMAGES_COLLECTION
+import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.PAGES_COLLECTION
 import kotlinx.coroutines.tasks.await
 
 class UploadImageToFirebase {
+
+    private suspend fun forEveryDocumentInside(collectionName: String, action: suspend (Map<String, Any>?) -> Unit){
+        Firebase.firestore.collection(collectionName).get().await().documents.forEach {
+            action(it.data)
+        }
+    }
+
+    private suspend fun putDocumentIn(collectionName: String, documentId: String, document: Any){
+        Firebase.firestore.collection(collectionName).document(documentId).set(document).await()
+    }
+
+    suspend fun updateAllCategory(){
+        forEveryDocumentInside(IMAGES_COLLECTION){
+            val categories = it?.getValue(ImageDTO::categories.name) as List<String>
+            val id = it.getValue(ImageDTO::id.name).toString().toInt()
+            categories.forEach { category ->
+                val imageRef = Firebase.firestore.collection(IMAGES_COLLECTION).document(id.toString())
+                val categoryData = Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).get().await().data?.get(DATA) as List<DocumentReference>?
+                var categoryNewData = categoryData?.toMutableList() ?: mutableListOf()
+                categoryNewData.add(imageRef)
+                categoryNewData = categoryNewData.distinctBy { it.id }.toMutableList()
+                Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).set(mapOf(DATA to categoryNewData))
+            }
+        }
+    }
+
+    suspend fun updateCategory(category: String, documentReference: DocumentReference) {
+        val categoryData = Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).get().await().data?.get(DATA) as List<DocumentReference>?
+        var categoryNewData = categoryData?.toMutableList() ?: mutableListOf()
+        categoryNewData.add(documentReference)
+        categoryNewData = categoryNewData.distinctBy { it.id }.toMutableList()
+        Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).set(mapOf(DATA to categoryNewData))
+    }
+
     suspend fun startUploadingImages(applicationContext: Context) {
         applicationContext.assets.open("imagedata.csv").bufferedReader().use {
             val images = arrayListOf<ImageDTO>()
             for(line in it.lines()) {
-                val (url, description, category) = line.split(",")
-                val document = Firebase.firestore.collection(IMAGES_DOCUMENT).document(url.hashCode().toString()).get().await()
+                val keys = line.split(",")
+                val url = keys.first()
+                val description = keys[1]
+                val categories = keys.filterIndexed { index, _ -> index > 1 }
+
+                val document = Firebase.firestore.collection(IMAGES_COLLECTION).document(url.hashCode().toString()).get().await()
                 if(document.exists()) throw Exception("Image already exists")
                 images.add(
                     ImageDTO(
                         id = url.hashCode(),
                         url = url,
                         description = description,
-                        category = category
+                        categories = categories
                     )
                 )
             }
-            images.forEach {
-                Firebase.firestore.collection(IMAGES_DOCUMENT).document(it.id.toString()).set(it).await()
+            images.forEach { image ->
+                val documentReference = Firebase.firestore.collection(IMAGES_COLLECTION).document(image.id.toString())
+                documentReference.set(it).await()
+                image.categories.forEach { category -> updateCategory(category, documentReference) }
             }
             uploadPage(applicationContext)
         }
     }
 
     private suspend fun uploadPage(applicationContext: Context){
-        val currentPageNo = Firebase.firestore.collection(PAGES_DOCUMENT).document(COUNT).get().await().data?.getValue(TOTAL_PAGE) as Long
+        val currentPageNo = Firebase.firestore.collection(PAGES_COLLECTION).document(COUNT).get().await().data?.getValue(TOTAL_PAGE) as Long
         val page = currentPageNo+1
         applicationContext.assets.open("imagedata.csv").bufferedReader().use {
             val imagesRef = arrayListOf<DocumentReference>()
             it.lines().forEach { line ->
                 val url = line.split(",").first()
                 imagesRef.add(
-                    Firebase.firestore.collection(IMAGES_DOCUMENT).document(url.hashCode().toString())
+                    Firebase.firestore.collection(IMAGES_COLLECTION).document(url.hashCode().toString())
                 )
             }
             if (imagesRef.isNotEmpty()) {
-                Firebase.firestore.collection(PAGES_DOCUMENT).document(page.toString()).set(
+                Firebase.firestore.collection(PAGES_COLLECTION).document(page.toString()).set(
                     mapOf(DATA to imagesRef)
                 )
             }
-            Firebase.firestore.collection(PAGES_DOCUMENT).document(COUNT).set(mapOf(TOTAL_PAGE to page))
+            Firebase.firestore.collection(PAGES_COLLECTION).document(COUNT).set(mapOf(TOTAL_PAGE to page))
         }
     }
 
@@ -58,7 +99,7 @@ class UploadImageToFirebase {
         applicationContext.assets.open("imagedata.csv").bufferedReader().use {
             it.lines().forEach { line ->
                 val url = line.split(",").first()
-                Firebase.firestore.collection(IMAGES_DOCUMENT).document(url.hashCode().toString()).delete()
+                Firebase.firestore.collection(IMAGES_COLLECTION).document(url.hashCode().toString()).delete()
             }
         }
     }
