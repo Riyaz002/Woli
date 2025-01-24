@@ -66,10 +66,12 @@ class UploadImageToFirebase {
                     )
                 )
             }
-            images.forEach { image ->
-                val documentReference = Firebase.firestore.collection(IMAGES_COLLECTION).document(image.id.toString())
-                documentReference.set(it).await()
-                image.categories.forEach { category -> updateCategory(category, documentReference) }
+            images.forEach {
+                putDocumentIn(IMAGES_COLLECTION, it.id.toString(), it)
+                it.categories.forEach { category ->
+                    val imageRef = Firebase.firestore.collection(IMAGES_COLLECTION).document(it.id.toString())
+                    updateCategory(category, imageRef)
+                }
             }
             uploadPage(applicationContext)
         }
