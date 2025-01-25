@@ -1,5 +1,12 @@
 package com.wiseowl.woli.data
 
+import android.content.Context
+import coil3.Bitmap
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.SuccessResult
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ImageDTO.Companion.toImage
 import com.wiseowl.woli.domain.RemoteDataService
@@ -23,6 +30,20 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
     override suspend fun getImage(id: Int): Image? {
         return withContext(Dispatcher.IO){
             return@withContext remoteDataService.getImage(id)?.toImage()
+        }
+    }
+
+    override suspend fun getImageBitmap(context: Context, id: Int): Bitmap {
+        return withContext(Dispatcher.IO){
+            val image = getImage(id)
+            val loader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(image?.url)
+                .allowHardware(false) // Disable hardware bitmaps.
+                .build()
+
+            val result = (loader.execute(request) as SuccessResult)
+            result.image.toBitmap()
         }
     }
 }

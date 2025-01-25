@@ -37,7 +37,7 @@ fun ExpandableImageCard(
     val scale = remember { mutableFloatStateOf(1f) }
     val offset = remember { mutableStateOf(Offset(0f, 0f)) }
 
-    BackHandler {
+    BackHandler(expanded) {
         onDismiss()
     }
     SharedTransitionLayout {
@@ -50,7 +50,6 @@ fun ExpandableImageCard(
                     ImageCard(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(40.dp)
                             .sharedBounds(
                                 rememberSharedContentState(key = "bounds"),
                                 exit = fadeOut(),
