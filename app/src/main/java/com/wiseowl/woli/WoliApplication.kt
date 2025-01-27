@@ -2,6 +2,7 @@ package com.wiseowl.woli
 
 import android.app.Application
 import android.app.WallpaperManager
+import android.view.WindowManager
 import androidx.room.Room
 import com.wiseowl.woli.data.WoliRepositoryImpl
 import com.wiseowl.woli.domain.RemoteDataService
@@ -28,7 +29,7 @@ class WoliApplication: Application() {
         //Use Case
         singleOf(::GetImageUseCase)
         single{ GetBitmapUseCase(this@WoliApplication, get()) }
-        single{ SetWallpaperUseCase(getSystemService(WallpaperManager::class.java)) }
+        single{ SetWallpaperUseCase(getSystemService(WallpaperManager::class.java), getSystemService(WindowManager::class.java)) }
         singleOf(::PageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
