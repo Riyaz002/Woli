@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class DetailViewModel(imageId: String, detailUseCase: DetailUseCase): ViewModel() {
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
-            val image = detailUseCase.getImageUseCase(imageId.toInt())
+            val image = detailUseCase.getBitmapUseCase(imageId.toInt())
             it.emit(DetailState.Success(DetailModel(image)))
         }
     }

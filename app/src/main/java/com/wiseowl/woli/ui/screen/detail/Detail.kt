@@ -28,9 +28,7 @@ fun Detail(
     val viewModel = viewModel{ DetailViewModel(imageId, detailUseCase) }
     val state = viewModel.state.collectAsState()
     Box(
-        modifier
-            .fillMaxSize()
-
+        modifier.fillMaxSize()
     ) {
         state.value.let {
             if(it is DetailState.Success){

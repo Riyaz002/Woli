@@ -19,8 +19,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
+import coil3.Bitmap
 import com.wiseowl.woli.domain.event.Event
-import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import kotlin.reflect.KFunction1
@@ -29,7 +29,7 @@ import kotlin.reflect.KFunction1
 @Composable
 fun ExpandableImageCard(
     modifier: Modifier,
-    image: Image,
+    image: Bitmap,
     expanded: Boolean = false,
     onDismiss: (() -> Unit),
     onClick: KFunction1<Event, Unit>
