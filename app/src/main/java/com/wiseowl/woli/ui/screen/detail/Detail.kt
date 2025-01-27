@@ -57,7 +57,7 @@ fun Detail(
                         )
                         TextRoundButton(
                             text = "Set",
-                            onClick = { }
+                            onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
                         )
                     }
                 }

@@ -2,7 +2,9 @@ package com.wiseowl.woli.ui.screen.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.EventHandler
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
@@ -11,7 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetailViewModel(imageId: String, detailUseCase: DetailUseCase): ViewModel() {
+class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase): ViewModel() {
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
             val image = detailUseCase.getBitmapUseCase(imageId.toInt())
@@ -32,6 +34,12 @@ class DetailViewModel(imageId: String, detailUseCase: DetailUseCase): ViewModel(
 
             is DetailEvent.OnClickSetWallpaper -> {
                 //SetWallpaper
+                viewModelScope.launch(Dispatcher.IO) {
+                    val image = (state.value as DetailState.Success).detailModel.image
+                    EventHandler.sendEvent(Event.Progress(true))
+                    detailUseCase.setWallpaperUseCase(image!!)
+                    EventHandler.sendEvent(Event.Progress(false))
+                }
             }
 
             is DetailEvent.OnDismissImagePreview -> {
