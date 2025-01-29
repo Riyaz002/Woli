@@ -1,5 +1,6 @@
 package com.wiseowl.woli.domain.event
 
+import android.content.Intent
 import com.wiseowl.woli.ui.navigation.Screen
 
 interface Event{
@@ -7,4 +8,5 @@ interface Event{
     data class Navigate(val screen: Screen, val params: Map<String, String>) : Event{
         fun toRoute() =   "$screen?${params.entries.joinToString("&") { "${it.key}=${it.value}" }}"
     }
+    data class StartActivity(val intent: Intent): Event
 }

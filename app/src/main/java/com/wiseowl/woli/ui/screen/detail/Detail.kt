@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
+import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
@@ -60,6 +61,15 @@ fun Detail(
                             onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
                         )
                     }
+                }
+
+                if(it.detailModel.setWallpaperPopupVisible){
+                    ChooserDialog(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        onEvent = viewModel::onEvent
+                    )
                 }
             }
         }

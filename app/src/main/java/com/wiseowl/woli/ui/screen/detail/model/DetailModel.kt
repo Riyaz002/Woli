@@ -4,5 +4,6 @@ import coil3.Bitmap
 
 data class DetailModel(
     val image: Bitmap? = null,
-    val imagePreviewPopupVisible: Boolean = false
+    val imagePreviewPopupVisible: Boolean = false,
+    val setWallpaperPopupVisible: Boolean = false
 )

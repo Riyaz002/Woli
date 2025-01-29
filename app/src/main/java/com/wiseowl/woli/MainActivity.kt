@@ -29,9 +29,10 @@ class MainActivity : ComponentActivity() {
             }
 
             EventHandler.subscribe { event ->
-                when (event) {
+                when(event) {
                     is Event.Navigate -> navController.navigate(event.toRoute())
-                    is Event.Progress -> progressVisible = true
+                    is Event.Progress -> progressVisible = event.show
+                    is Event.StartActivity -> startActivity(event.intent)
                 }
             }
             WoliTheme {

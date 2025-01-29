@@ -29,7 +29,7 @@ class WoliApplication: Application() {
         //Use Case
         singleOf(::GetImageUseCase)
         single{ GetBitmapUseCase(this@WoliApplication, get()) }
-        single{ SetWallpaperUseCase(getSystemService(WallpaperManager::class.java), getSystemService(WindowManager::class.java)) }
+        single{ SetWallpaperUseCase(this@WoliApplication) }
         singleOf(::PageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)

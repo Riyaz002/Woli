@@ -8,8 +8,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -23,13 +25,14 @@ fun TextRoundButton(
 ) {
     Box(
         modifier = modifier
-
             .background(color = color, shape = RoundedCornerShape(radius))
             .clickable { onClick() },
+        contentAlignment = Alignment.Center
     ){
         Text(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
-            text = text
+            text = text,
+            textAlign = TextAlign.Center
         )
     }
 }

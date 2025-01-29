@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Woli</string>
+    <string name="wallpaper_setter_choosing_dialog_title">Set Using...</string>
 </resources>
