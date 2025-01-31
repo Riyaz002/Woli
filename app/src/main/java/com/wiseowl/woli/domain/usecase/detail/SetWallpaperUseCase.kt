@@ -9,7 +9,7 @@ import com.wiseowl.woli.R
 import com.wiseowl.woli.domain.event.Event
 import com.wiseowl.woli.domain.event.EventHandler
 import com.wiseowl.woli.domain.usecase.util.bitmapToUri
-import com.wiseowl.woli.domain.usecase.util.centerCropBitmap
+import com.wiseowl.woli.domain.usecase.util.getCenterCroppedBitmap
 import com.wiseowl.woli.domain.usecase.util.getScreenProperties
 
 class SetWallpaperUseCase(
@@ -21,9 +21,13 @@ class SetWallpaperUseCase(
     operator fun invoke(bitmap: Bitmap, setType: SetWallpaperType){
         val screenProperties = getScreenProperties(windowManager)
         when(setType){
-            SetWallpaperType.ONLY_HOME -> wallpaperManager.setBitmap(centerCropBitmap(bitmap, screenProperties.width, screenProperties.height), null, true, WallpaperManager.FLAG_SYSTEM)
-            SetWallpaperType.ONLY_LOCK -> wallpaperManager.setBitmap(centerCropBitmap(bitmap, screenProperties.width, screenProperties.height), null, true, WallpaperManager.FLAG_LOCK)
-            SetWallpaperType.FOR_BOTH -> wallpaperManager.setBitmap(centerCropBitmap(bitmap, screenProperties.width, screenProperties.height), null, true, WallpaperManager.FLAG_SYSTEM)
+            SetWallpaperType.ONLY_HOME -> wallpaperManager.setBitmap(getCenterCroppedBitmap(bitmap, screenProperties.width, screenProperties.height), null, true, WallpaperManager.FLAG_SYSTEM)
+            SetWallpaperType.ONLY_LOCK -> wallpaperManager.setBitmap(getCenterCroppedBitmap(bitmap, screenProperties.width, screenProperties.height), null, true, WallpaperManager.FLAG_LOCK)
+            SetWallpaperType.FOR_BOTH -> {
+                val croppedBitmap = getCenterCroppedBitmap(bitmap, screenProperties.width, screenProperties.height)
+                wallpaperManager.setBitmap(croppedBitmap, null, true, WallpaperManager.FLAG_LOCK)
+                wallpaperManager.setBitmap(croppedBitmap, null, true, WallpaperManager.FLAG_SYSTEM)
+            }
             SetWallpaperType.USE_OTHER_APP -> {
                 val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
                     addCategory(Intent.CATEGORY_DEFAULT)

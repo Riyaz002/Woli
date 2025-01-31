@@ -7,7 +7,7 @@ import coil3.Bitmap
 import java.io.File
 import kotlin.math.max
 
-fun centerCropBitmap(source: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
+fun getCenterCroppedBitmap(source: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
     val sourceWidth = source.width
     val sourceHeight = source.height
 
