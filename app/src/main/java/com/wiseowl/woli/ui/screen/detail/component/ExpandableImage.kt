@@ -48,8 +48,7 @@ fun ExpandableImageCard(
             if (!targ) {
                 with(this@SharedTransitionLayout) {
                     ImageCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        modifier = modifier
                             .sharedBounds(
                                 rememberSharedContentState(key = "bounds"),
                                 exit = fadeOut(),
@@ -66,7 +65,8 @@ fun ExpandableImageCard(
             } else {
                 with(this@SharedTransitionLayout) {
                     ImageCard(
-                        modifier = modifier
+                        modifier = Modifier
+                            .fillMaxWidth()
                             .pointerInput(Unit) {
                                 detectTransformGestures { _, pan, zoom, _ ->
                                     // Update the scale based on zoom gestures.
