@@ -13,14 +13,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import kotlin.reflect.KFunction1
 
 @Composable
 fun ChooserDialog(
     modifier: Modifier = Modifier,
-    onEvent: KFunction1<Event, Unit>
+    onEvent: KFunction1<Action, Unit>
 ) {
 
     BackHandler {

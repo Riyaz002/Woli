@@ -6,8 +6,8 @@ import android.content.Intent
 import android.view.WindowManager
 import coil3.Bitmap
 import com.wiseowl.woli.R
-import com.wiseowl.woli.domain.event.Event
-import com.wiseowl.woli.domain.event.EventHandler
+import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.util.bitmapToUri
 import com.wiseowl.woli.domain.usecase.util.getCenterCroppedBitmap
 import com.wiseowl.woli.domain.usecase.util.getScreenProperties
@@ -36,7 +36,7 @@ class SetWallpaperUseCase(
                     flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 }
                 val superIntent = Intent.createChooser(intent, context.getString(R.string.wallpaper_setter_choosing_dialog_title))
-                EventHandler.sendEvent(Event.StartActivity(superIntent))
+                ActionHandler.perform(Action.StartActivity(superIntent))
             }
         }
     }

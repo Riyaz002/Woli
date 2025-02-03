@@ -8,8 +8,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.gestures.detectTransformGestures
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,7 +18,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import coil3.Bitmap
-import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import kotlin.reflect.KFunction1
@@ -32,7 +30,7 @@ fun ExpandableImageCard(
     image: Bitmap,
     expanded: Boolean = false,
     onDismiss: (() -> Unit),
-    onClick: KFunction1<Event, Unit>
+    onClick: KFunction1<Action, Unit>
 ) {
     val scale = remember { mutableFloatStateOf(1f) }
     val offset = remember { mutableStateOf(Offset(0f, 0f)) }
@@ -49,7 +47,6 @@ fun ExpandableImageCard(
                 with(this@SharedTransitionLayout) {
                     ImageCard(
                         modifier = Modifier
-                            .fillMaxWidth()
                             .sharedBounds(
                                 rememberSharedContentState(key = "bounds"),
                                 exit = fadeOut(),
@@ -66,7 +63,7 @@ fun ExpandableImageCard(
             } else {
                 with(this@SharedTransitionLayout) {
                     ImageCard(
-                        modifier = modifier
+                        modifier = Modifier
                             .pointerInput(Unit) {
                                 detectTransformGestures { _, pan, zoom, _ ->
                                     // Update the scale based on zoom gestures.
@@ -81,8 +78,7 @@ fun ExpandableImageCard(
                             .graphicsLayer(
                                 scaleX = scale.floatValue, scaleY = scale.floatValue,
                                 translationX = offset.value.x, translationY = offset.value.y
-                            ).fillMaxWidth()
-                            .sharedBounds(
+                            ).sharedBounds(
                                 rememberSharedContentState(key = "bounds"),
                                 enter = fadeIn(),
                                 exit = fadeOut(),
