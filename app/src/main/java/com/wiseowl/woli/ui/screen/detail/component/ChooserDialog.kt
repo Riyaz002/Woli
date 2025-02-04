@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.usecase.detail.SetWallpaperType
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import kotlin.reflect.KFunction1
 
@@ -35,13 +36,13 @@ fun ChooserDialog(
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.size(10.dp))
-            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Home Screen", onClick = { onEvent(DetailEvent.OnClickSetAsHomeScreen) })
+            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Home Screen", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.ONLY_HOME)) })
             Spacer(modifier = Modifier.size(10.dp))
-            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Lock Screen", onClick = { onEvent(DetailEvent.OnClickSetAsLockScreen) })
+            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Lock Screen", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.ONLY_LOCK)) })
             Spacer(modifier = Modifier.size(10.dp))
-            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Both", onClick = { onEvent(DetailEvent.OnClickSetAsBoth) })
+            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Set for Both", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.FOR_BOTH)) })
             Spacer(modifier = Modifier.size(10.dp))
-            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Use other app", onClick = { onEvent(DetailEvent.OnClickUseOtherApp) })
+            TextRoundButton(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), text = "Use other app", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.USE_OTHER_APP)) })
             Spacer(modifier = Modifier.size(10.dp))
         }
     }

@@ -47,48 +47,12 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                 } else state
             }
 
-            is DetailEvent.OnClickSetAsHomeScreen -> _state.value.let { state ->
+            is DetailEvent.OnClickSetAs -> _state.value.let { state ->
                 if (state is DetailState.Success) {
                     ActionHandler.perform(Action.Progress(true))
                     detailUseCase.setWallpaperUseCase(
                         state.detailModel.image!!,
-                        SetWallpaperType.ONLY_HOME
-                    )
-                    ActionHandler.perform(Action.Progress(false))
-                }
-            }
-
-
-            is DetailEvent.OnClickSetAsLockScreen -> _state.value.let { state ->
-                if (state is DetailState.Success) {
-                    ActionHandler.perform(Action.Progress(true))
-                    detailUseCase.setWallpaperUseCase(
-                        state.detailModel.image!!,
-                        SetWallpaperType.ONLY_LOCK
-                    )
-                    ActionHandler.perform(Action.Progress(false))
-                }
-            }
-
-
-            is DetailEvent.OnClickSetAsBoth -> _state.value.let { state ->
-                if (state is DetailState.Success) {
-                    ActionHandler.perform(Action.Progress(true))
-                    detailUseCase.setWallpaperUseCase(
-                        state.detailModel.image!!,
-                        SetWallpaperType.FOR_BOTH
-                    )
-                    ActionHandler.perform(Action.Progress(false))
-                }
-            }
-
-
-            is DetailEvent.OnClickUseOtherApp -> _state.value.let { state ->
-                if (state is DetailState.Success) {
-                    ActionHandler.perform(Action.Progress(true))
-                    detailUseCase.setWallpaperUseCase(
-                        state.detailModel.image!!,
-                        SetWallpaperType.USE_OTHER_APP
+                        event.setWallpaperType
                     )
                     ActionHandler.perform(Action.Progress(false))
                 }
