@@ -37,8 +37,7 @@ fun Detail(
                     it.detailModel.image?.let { image ->
                         ExpandableImageCard(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 40.dp, horizontal = 20.dp),
+                                .padding(top = 100.dp, start = 20.dp, end = 20.dp),
                             image = image,
                             expanded = it.detailModel.imagePreviewPopupVisible,
                             onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },

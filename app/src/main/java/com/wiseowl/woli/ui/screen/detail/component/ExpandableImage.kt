@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import coil3.Bitmap
-import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import kotlin.reflect.KFunction1
@@ -32,7 +32,7 @@ fun ExpandableImageCard(
     image: Bitmap,
     expanded: Boolean = false,
     onDismiss: (() -> Unit),
-    onClick: KFunction1<Event, Unit>
+    onClick: KFunction1<Action, Unit>
 ) {
     val scale = remember { mutableFloatStateOf(1f) }
     val offset = remember { mutableStateOf(Offset(0f, 0f)) }
