@@ -2,6 +2,7 @@ package com.wiseowl.woli.ui.screen.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
@@ -48,13 +49,16 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             }
 
             is DetailEvent.OnClickSetAs -> _state.value.let { state ->
+                onEvent(DetailEvent.OnDismissSetWallpaperDialog)
                 if (state is DetailState.Success) {
-                    ActionHandler.perform(Action.Progress(true))
-                    detailUseCase.setWallpaperUseCase(
-                        state.detailModel.image!!,
-                        event.setWallpaperType
-                    )
-                    ActionHandler.perform(Action.Progress(false))
+                    viewModelScope.launch(Dispatcher.IO) {
+                        ActionHandler.perform(Action.Progress(true))
+                        detailUseCase.setWallpaperUseCase(
+                            state.detailModel.image!!,
+                            event.setWallpaperType
+                        )
+                        ActionHandler.perform(Action.Progress(false))
+                    }
                 }
             }
 
