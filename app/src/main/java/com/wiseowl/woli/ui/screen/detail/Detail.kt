@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
@@ -53,10 +54,12 @@ fun Detail(
                     ) {
                         TextRoundButton(
                             text = "Preview",
+                            color = Color(it.detailModel.dominantColor!!),
                             onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
                         )
                         TextRoundButton(
                             text = "Set",
+                            color = Color(it.detailModel.dominantColor),
                             onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
                         )
                     }
@@ -67,6 +70,7 @@ fun Detail(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
+                        buttonColor = Color(it.detailModel.dominantColor!!),
                         onEvent = viewModel::onEvent
                     )
                 }

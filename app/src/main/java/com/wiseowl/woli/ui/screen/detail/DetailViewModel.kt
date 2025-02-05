@@ -18,7 +18,8 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
             val image = detailUseCase.getBitmapUseCase(imageId.toInt())
-            it.emit(DetailState.Success(DetailModel(image)))
+            val color = detailUseCase.getImageDominantColorUseCase(image!!)
+            it.emit(DetailState.Success(DetailModel(image = image, dominantColor = color)))
         }
     }
     val state = _state.asStateFlow()
