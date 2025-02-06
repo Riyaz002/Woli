@@ -1,5 +1,6 @@
 package com.wiseowl.woli.ui.screen.detail
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -29,8 +31,10 @@ fun Detail(
     val detailUseCase: DetailUseCase by inject(DetailUseCase::class.java)
     val viewModel = viewModel{ DetailViewModel(imageId, detailUseCase) }
     val state = viewModel.state.collectAsState()
+    val detailState = if(state.value is DetailState.Success) state.value as DetailState.Success else null
+    val complementaryColor = detailState?.detailModel?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onBackground
     Box(
-        modifier.fillMaxSize()
+        modifier.fillMaxSize().background(complementaryColor)
     ) {
         state.value.let {
             if(it is DetailState.Success){
@@ -54,12 +58,14 @@ fun Detail(
                     ) {
                         TextRoundButton(
                             text = "Preview",
-                            color = Color(it.detailModel.dominantColor!!),
+                            backgroundColor = Color(it.detailModel.accentColor!!),
+                            textColor = complementaryColor,
                             onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
                         )
                         TextRoundButton(
                             text = "Set",
-                            color = Color(it.detailModel.dominantColor),
+                            backgroundColor = Color(it.detailModel.accentColor),
+                            textColor = complementaryColor,
                             onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
                         )
                     }
@@ -70,7 +76,8 @@ fun Detail(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        buttonColor = Color(it.detailModel.dominantColor!!),
+                        buttonColor = Color(it.detailModel.accentColor!!),
+                        backgroundColor = complementaryColor,
                         onEvent = viewModel::onEvent
                     )
                 }

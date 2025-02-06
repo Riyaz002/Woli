@@ -6,7 +6,6 @@ import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
-import com.wiseowl.woli.domain.usecase.detail.SetWallpaperType
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,8 +17,9 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
             val image = detailUseCase.getBitmapUseCase(imageId.toInt())
-            val color = detailUseCase.getImageDominantColorUseCase(image!!)
-            it.emit(DetailState.Success(DetailModel(image = image, dominantColor = color)))
+            val color = detailUseCase.colorUseCase.getDominantColor(image!!)
+            val complementaryColor = detailUseCase.colorUseCase.getComplementaryColor(color)
+            it.emit(DetailState.Success(DetailModel(image = image, accentColor = color, complementaryColor = complementaryColor)))
         }
     }
     val state = _state.asStateFlow()

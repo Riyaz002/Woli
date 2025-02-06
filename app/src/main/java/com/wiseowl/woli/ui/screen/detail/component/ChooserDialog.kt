@@ -23,6 +23,7 @@ import kotlin.reflect.KFunction1
 fun ChooserDialog(
     modifier: Modifier = Modifier,
     buttonColor: Color,
+    backgroundColor: Color = MaterialTheme.colorScheme.background,
     onEvent: KFunction1<Action, Unit>
 ) {
 
@@ -34,34 +35,38 @@ fun ChooserDialog(
         onDismissRequest = { onEvent(DetailEvent.OnDismissSetWallpaperDialog) }
     ) {
         Column(
-            modifier = modifier.background(color = MaterialTheme.colorScheme.background, shape = RoundedCornerShape(32.dp)),
+            modifier = modifier.background(color = backgroundColor, shape = RoundedCornerShape(32.dp)),
             horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(32.dp))
             TextRoundButton(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp), text = "Set for Home Screen", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.ONLY_HOME)) },
-                color = buttonColor
+                backgroundColor = buttonColor,
+                textColor = backgroundColor
             )
             Spacer(modifier = Modifier.size(10.dp))
             TextRoundButton(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp), text = "Set for Lock Screen", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.ONLY_LOCK)) },
-                color = buttonColor
+                backgroundColor = buttonColor,
+                textColor = backgroundColor
             )
             Spacer(modifier = Modifier.size(10.dp))
             TextRoundButton(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp), text = "Set for Both", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.FOR_BOTH)) },
-                color = buttonColor
+                backgroundColor = buttonColor,
+                textColor = backgroundColor
             )
             Spacer(modifier = Modifier.size(10.dp))
             TextRoundButton(modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp), text = "Use other app", onClick = { onEvent(DetailEvent.OnClickSetAs(SetWallpaperType.USE_OTHER_APP)) },
-                color = buttonColor
+                backgroundColor = buttonColor,
+                textColor = backgroundColor
             )
-            Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(32.dp))
         }
     }
 }

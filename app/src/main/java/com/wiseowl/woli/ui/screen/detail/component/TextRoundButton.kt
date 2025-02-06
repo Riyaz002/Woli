@@ -19,20 +19,22 @@ import androidx.compose.ui.unit.dp
 fun TextRoundButton(
     modifier: Modifier = Modifier,
     radius: Dp = 32.dp,
-    color: Color = MaterialTheme.colorScheme.primary,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
     text: String,
+    textColor: Color = MaterialTheme.colorScheme.onPrimary,
     onClick: () -> Unit,
 ) {
     Box(
         modifier = modifier
-            .background(color = color, shape = RoundedCornerShape(radius))
+            .background(color = backgroundColor, shape = RoundedCornerShape(radius))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ){
         Text(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
             text = text,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            color = textColor
         )
     }
 }
