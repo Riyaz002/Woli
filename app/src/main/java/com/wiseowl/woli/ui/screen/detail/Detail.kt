@@ -32,7 +32,7 @@ fun Detail(
     val viewModel = viewModel{ DetailViewModel(imageId, detailUseCase) }
     val state = viewModel.state.collectAsState()
     val detailState = if(state.value is DetailState.Success) state.value as DetailState.Success else null
-    val complementaryColor = detailState?.detailModel?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.onBackground
+    val complementaryColor = detailState?.detailModel?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     Box(
         modifier.fillMaxSize().background(complementaryColor)
     ) {

@@ -16,10 +16,11 @@ import kotlinx.coroutines.launch
 class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase): ViewModel() {
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
+            ActionHandler.perform(Action.Progress(true))
             val image = detailUseCase.getBitmapUseCase(imageId.toInt())
-            val color = detailUseCase.colorUseCase.getDominantColor(image!!)
-            val complementaryColor = detailUseCase.colorUseCase.getComplementaryColor(color)
-            it.emit(DetailState.Success(DetailModel(image = image, accentColor = color, complementaryColor = complementaryColor)))
+            val color = detailUseCase.getColorUseCase(image!!)
+            it.emit(DetailState.Success(DetailModel(image = image, accentColor = color.primary, complementaryColor = color.secondary)))
+            ActionHandler.perform(Action.Progress(false))
         }
     }
     val state = _state.asStateFlow()
