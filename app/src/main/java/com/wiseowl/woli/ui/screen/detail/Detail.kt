@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -30,6 +31,7 @@ import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
+import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable
@@ -137,6 +139,20 @@ fun Detail(
                                 fontWeight = FontWeight.Bold,
                                 color = Color(it.detailModel.complementaryColor)
                             )
+                            it.detailModel.similarImages?.let { similarImages ->
+                                LazyRow {
+                                    items(similarImages){ image ->
+                                        ImageCard(
+                                            modifier = Modifier.size(100.dp),
+                                            image = image,
+                                            cornerRadius = 20.dp,
+                                            aspectRatio = 1f,
+                                            onClick = { viewModel.onEvent(DetailEvent.OnClickSimilarImage(image.id)) }
+                                        )
+                                        Spacer(modifier = Modifier.size(10.dp))
+                                    }
+                                }
+                            }
                         }
                     }
                 }

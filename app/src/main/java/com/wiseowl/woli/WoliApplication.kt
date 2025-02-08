@@ -14,6 +14,7 @@ import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetColorUseCase
+import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -29,6 +30,7 @@ class WoliApplication: Application() {
         singleOf(::GetImageUseCase)
         single{ GetBitmapUseCase(this@WoliApplication, get()) }
         single{ SetWallpaperUseCase(this@WoliApplication) }
+        single{ GetImagesForCategoryUseCase(get()) }
         singleOf(::GetColorUseCase)
         singleOf(::PageUseCase)
         singleOf(::HomeUseCase)

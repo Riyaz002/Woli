@@ -4,5 +4,6 @@ data class DetailUseCase(
     val getImageUseCase: GetImageUseCase,
     val getBitmapUseCase: GetBitmapUseCase,
     val setWallpaperUseCase: SetWallpaperUseCase,
-    val getColorUseCase: GetColorUseCase
+    val getColorUseCase: GetColorUseCase,
+    val getImagesForCategoryUseCase: GetImagesForCategoryUseCase
 )

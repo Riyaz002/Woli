@@ -1,11 +1,14 @@
 package com.wiseowl.woli.ui.screen.detail
 
+import kotlin.collections.flatten
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,20 +17,22 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : ViewModel() {
-    private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
+    private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also { s ->
         viewModelScope.launch {
             ActionHandler.perform(Action.Progress(true))
             val image = detailUseCase.getImageUseCase(imageId.toInt())
             val bitmap = detailUseCase.getBitmapUseCase(imageId.toInt())
             val color = detailUseCase.getColorUseCase(bitmap!!)
-            it.emit(
+            val similarImages = (image?.categories?.map { detailUseCase.getImagesForCategoryUseCase(it) } as List<List<Image>>).flatten().distinctBy { it.id }.filter { it.id != image.id }
+            s.emit(
                 DetailState.Success(
                     DetailModel(
                         image = bitmap,
-                        description = image?.description,
-                        categories = image?.categories ?: listOf(),
+                        description = image.description,
+                        categories = image.categories ?: listOf(),
                         accentColor = color.primary,
-                        complementaryColor = color.secondary
+                        complementaryColor = color.secondary,
+                        similarImages = similarImages
                     )
                 )
             )
@@ -79,6 +84,10 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                 if (state is DetailState.Success) {
                     DetailState.Success(state.detailModel.copy(setWallpaperPopupVisible = false))
                 } else state
+            }
+
+            is DetailEvent.OnClickSimilarImage -> {
+                ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))
             }
         }
     }
