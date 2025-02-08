@@ -13,20 +13,31 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase): ViewModel() {
+class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : ViewModel() {
     private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also {
         viewModelScope.launch {
             ActionHandler.perform(Action.Progress(true))
-            val image = detailUseCase.getBitmapUseCase(imageId.toInt())
-            val color = detailUseCase.getColorUseCase(image!!)
-            it.emit(DetailState.Success(DetailModel(image = image, accentColor = color.primary, complementaryColor = color.secondary)))
+            val image = detailUseCase.getImageUseCase(imageId.toInt())
+            val bitmap = detailUseCase.getBitmapUseCase(imageId.toInt())
+            val color = detailUseCase.getColorUseCase(bitmap!!)
+            it.emit(
+                DetailState.Success(
+                    DetailModel(
+                        image = bitmap,
+                        description = image?.description,
+                        categories = image?.categories ?: listOf(),
+                        accentColor = color.primary,
+                        complementaryColor = color.secondary
+                    )
+                )
+            )
             ActionHandler.perform(Action.Progress(false))
         }
     }
     val state = _state.asStateFlow()
 
-    fun onEvent(event: Action){
-        when(event){
+    fun onEvent(event: Action) {
+        when (event) {
             is DetailEvent.OnClickImage -> {
                 _state.update { state ->
                     if (state is DetailState.Success) {
