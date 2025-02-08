@@ -33,6 +33,13 @@ class FirebaseDataService: RemoteDataService {
         return image
     }
 
+    override suspend fun getImages(category: String): List<ImageDTO>? {
+        val result = firestore.collection(CATEGORY_COLLECTION).getDocumentOrNull(category)?.data
+        val imagesData = result?.get(DATA) as List<DocumentReference>?
+        val images = imagesData?.map { it.get() }?.map { it.await() }
+        return images?.map { it.data!!.toImages() }
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"

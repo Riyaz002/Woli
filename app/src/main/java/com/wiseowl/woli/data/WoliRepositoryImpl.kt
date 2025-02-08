@@ -46,4 +46,10 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
             result.image.toBitmap()
         }
     }
+
+    override suspend fun getImages(category: String): List<Image>? {
+        return withContext(Dispatcher.IO){
+            return@withContext remoteDataService.getImages(category)?.map { it.toImage() }
+        }
+    }
 }

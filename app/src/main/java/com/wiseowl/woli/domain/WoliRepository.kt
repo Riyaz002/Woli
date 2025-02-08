@@ -9,4 +9,5 @@ interface WoliRepository {
     suspend fun getTotalPageCount(): Int
     suspend fun getImage(id: Int): Image?
     suspend fun getImageBitmap(context: Context, id: Int): Bitmap?
+    suspend fun getImages(category: String): List<Image>?
 }
