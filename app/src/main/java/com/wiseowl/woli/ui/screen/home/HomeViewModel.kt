@@ -3,8 +3,8 @@ package com.wiseowl.woli.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.domain.event.Event
-import com.wiseowl.woli.domain.event.EventHandler
+import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.ui.screen.home.model.HomeState
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.ui.navigation.Screen
@@ -27,10 +27,10 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): ViewModel() {
         }
     }
 
-    fun onEvent(event: Event){
+    fun onEvent(event: Action){
         when(event){
             is HomeEvent.OnClickImage -> {
-                EventHandler.sendEvent(Event.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))
+                ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))
             }
             is HomeEvent.LoadNextPage -> loadNextPage(event.page)
         }

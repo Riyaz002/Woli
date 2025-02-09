@@ -12,6 +12,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import coil3.Bitmap
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -38,6 +39,33 @@ fun ImageCard(
                 .crossfade(true)
                 .build(),
             contentDescription = image.description,
+            contentScale = ContentScale.Crop
+        )
+    }
+}
+
+@Composable
+fun ImageCard(
+    modifier: Modifier = Modifier,
+    image: Bitmap,
+    description: String? = null,
+    cornerRadius: Dp = 0.dp,
+    aspectRatio: Float? = null,
+    onClick: (() -> Unit)? = null
+) {
+    Box(
+        modifier = modifier.clickable { onClick?.invoke() }
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .clip(RoundedCornerShape(cornerRadius))
+                .fillMaxWidth()
+                .aspectRatio(aspectRatio),
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(image)
+                .crossfade(true)
+                .build(),
+            contentDescription = description,
             contentScale = ContentScale.Crop
         )
     }

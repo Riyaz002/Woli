@@ -1,6 +1,7 @@
 package com.wiseowl.woli.data.local
 
 import androidx.room.TypeConverter
+import com.wiseowl.woli.data.local.entity.ColorDTO
 
 object TypeConvertor {
     @TypeConverter
@@ -11,5 +12,24 @@ object TypeConvertor {
     @TypeConverter
     fun toCategory(categoryString: String): List<String>{
         return categoryString.split("#")
+    }
+
+    @TypeConverter
+    fun fromColorDTOString(color: ColorDTO): String{
+        return listOf(
+            color.primary.toString(),
+            color.secondary.toString()
+        ).joinToString("#")
+    }
+
+    @TypeConverter
+    fun toColorDTO(colorDTOString: String): ColorDTO{
+        val result = colorDTOString.split("#")
+        val primary = result.first()
+        val secondary = result.last()
+        return ColorDTO(
+            primary = primary.toInt(),
+            secondary = secondary.toInt()
+        )
     }
 }
