@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteDataService
 import kotlinx.coroutines.tasks.await
@@ -48,12 +49,20 @@ class FirebaseDataService: RemoteDataService {
         const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
 
-        private fun Map<String, Any>.toImages(): ImageDTO {
+        fun Map<String, Any>.toImages(): ImageDTO {
             return ImageDTO(
                 id = getValue(ImageDTO::id.name).toString().toInt(),
                 url = getValue(ImageDTO::url.name).toString(),
                 description = getValue(ImageDTO::description.name).toString(),
-                categories = getValue(ImageDTO::categories.name) as List<String>
+                categories = getValue(ImageDTO::categories.name) as List<String>,
+                color = (getValue(ImageDTO::color.name) as Map<String, Int>?)?.toColorDTO(),
+            )
+        }
+
+        private fun Map<String, Any>.toColorDTO(): ColorDTO {
+            return ColorDTO(
+                primary = getValue(ColorDTO::primary.name).toString().toInt(),
+                secondary = getValue(ColorDTO::secondary.name).toString().toInt()
             )
         }
 

@@ -33,7 +33,7 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
         }
     }
 
-    override suspend fun getImageBitmap(context: Context, id: Int): Bitmap {
+    override suspend fun getImageBitmap(context: Context, id: Int): Bitmap? {
         return withContext(Dispatcher.IO){
             val image = getImage(id)
             val loader = ImageLoader(context)
@@ -42,8 +42,8 @@ class WoliRepositoryImpl(private val remoteDataService: RemoteDataService): Woli
                 .allowHardware(false) // Disable hardware bitmaps.
                 .build()
 
-            val result = (loader.execute(request) as SuccessResult)
-            result.image.toBitmap()
+            val result = (loader.execute(request))
+            result.image?.toBitmap()
         }
     }
 
