@@ -33,15 +33,13 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
 
                 // Ensure bitmap is not null before proceeding
                 if (bitmap != null) {
-                    val colorDeferred = async { detailUseCase.getColorUseCase(bitmap) }
 
                     // Fetch similar images concurrently for each category
                     val similarImagesDeferred = image?.categories?.map { category ->
                         async { detailUseCase.getImagesForCategoryUseCase(category) }
                     } ?: emptyList()
 
-                    // Await color and similar images results
-                    val color = colorDeferred.await()
+                    // Await similar images result
                     val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>)
                         .flatten()
                         .distinctBy { it.id }
@@ -54,8 +52,8 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                                 image = bitmap,
                                 description = image?.description.orEmpty(),
                                 categories = image?.categories.orEmpty(),
-                                accentColor = color.primary,
-                                complementaryColor = color.secondary,
+                                accentColor = image?.color?.primary,
+                                complementaryColor = image?.color?.secondary,
                                 similarImages = similarImages
                             )
                         )

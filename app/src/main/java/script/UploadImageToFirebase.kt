@@ -34,7 +34,7 @@ class UploadImageToFirebase {
 
             val image = it?.toImages()
             val bitmap = detailUseCase.getBitmapUseCase(image!!.id) ?: return@forEveryDocumentInside
-            val color = detailUseCase.getColorUseCase(bitmap).toColorDTO()
+            val color = GetColorUseCase().invoke(bitmap).toColorDTO()
             image.color = color
             images.add(image)
         }

@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.usecase.detail
+package script
 
 import android.graphics.Color
 import coil3.Bitmap
