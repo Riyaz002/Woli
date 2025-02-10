@@ -8,6 +8,6 @@ interface WoliRepository {
     suspend fun getPage(page: Int): List<Image>?
     suspend fun getTotalPageCount(): Int
     suspend fun getImage(id: Int): Image?
-    suspend fun getImageBitmap(context: Context, id: Int): Bitmap?
+    suspend fun getImageBitmap(context: Context, url: String): Bitmap?
     suspend fun getImages(category: String): List<Image>?
 }
