@@ -14,12 +14,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +34,8 @@ import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
+import com.wiseowl.woli.ui.screen.home.component.aspectRatio
+import com.wiseowl.woli.ui.shared.component.Shimmer
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable
@@ -54,15 +58,25 @@ fun Detail(
         state.value.let {
             if(it is DetailState.Success){
                 Column {
-                    it.detailModel.image?.let { image ->
-                        ExpandableImageCard(
-                            modifier = Modifier
-                                .padding(top = 100.dp, start = 20.dp, end = 20.dp),
-                            image = image,
-                            expanded = it.detailModel.imagePreviewPopupVisible,
-                            onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
-                            onClick = viewModel::onEvent
-                        )
+                    it.detailModel.image.let { image ->
+                        if (image == null) {
+                            Shimmer(
+                                modifier = Modifier
+                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp)
+                                    .fillMaxWidth()
+                                    .aspectRatio(1f)
+                                    .clip(RoundedCornerShape(20.dp))
+                            )
+                        } else{
+                            ExpandableImageCard(
+                                modifier = Modifier
+                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp),
+                                image = image,
+                                expanded = it.detailModel.imagePreviewPopupVisible,
+                                onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
+                                onClick = viewModel::onEvent
+                            )
+                        }
                     }
 
                     Row(

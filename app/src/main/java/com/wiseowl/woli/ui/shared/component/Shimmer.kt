@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.shared
+package com.wiseowl.woli.ui.shared.component
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -22,6 +22,7 @@ fun Shimmer(
     angleOfAxisY: Float = 270f,
     durationMillis: Int = 1000,
 ) {
+
 
     val shimmerColors = listOf(
         Color.White.copy(alpha = 0.3f),
