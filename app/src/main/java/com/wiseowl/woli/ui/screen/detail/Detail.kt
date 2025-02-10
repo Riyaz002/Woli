@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -147,27 +148,43 @@ fun Detail(
                                 )
                             }
                         }
-                        it.detailModel.similarImages?.let { similarImages ->
-                            if(similarImages.isNotEmpty()){
-                                Text(
-                                    modifier = Modifier.padding(top = 20.dp),
-                                    text = "Similar",
-                                    fontSize = 32.sp,
-                                    textAlign = TextAlign.Start,
-                                    lineHeight = 42.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(it.detailModel.complementaryColor)
-                                )
-                                LazyRow {
-                                    items(similarImages){ image ->
-                                        ImageCard(
-                                            modifier = Modifier.size(100.dp),
-                                            image = image,
-                                            cornerRadius = 20.dp,
-                                            aspectRatio = 1f,
-                                            onClick = { viewModel.onEvent(DetailEvent.OnClickSimilarImage(image.id)) }
+                        it.detailModel.similarImage.let { similarImage ->
+                            if(similarImage.shimmer){
+                                Shimmer(modifier = Modifier.width(100.dp).height(50.dp).padding(top = 20.dp))
+                                Row {
+                                    repeat(3){
+                                        Shimmer(modifier = Modifier
+                                            .padding(top = 16.dp)
+                                            .size(100.dp)
+                                            .clip(RoundedCornerShape(20.dp))
                                         )
-                                        Spacer(modifier = Modifier.size(10.dp))
+                                        Spacer(modifier = Modifier.width(20.dp))
+                                    }
+                                }
+                            } else{
+                                if(similarImage.images?.isNotEmpty() == true){
+                                    Text(
+                                        modifier = Modifier.padding(top = 20.dp),
+                                        text = "Similar",
+                                        fontSize = 32.sp,
+                                        textAlign = TextAlign.Start,
+                                        lineHeight = 42.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(it.detailModel.complementaryColor)
+                                    )
+                                    LazyRow {
+                                        similarImage.images.let { images ->
+                                            items(images){ image ->
+                                                ImageCard(
+                                                    modifier = Modifier.size(100.dp),
+                                                    image = image,
+                                                    cornerRadius = 20.dp,
+                                                    aspectRatio = 1f,
+                                                    onClick = { viewModel.onEvent(DetailEvent.OnClickSimilarImage(image.id)) }
+                                                )
+                                                Spacer(modifier = Modifier.size(10.dp))
+                                            }
+                                        }
                                     }
                                 }
                             }

@@ -11,6 +11,7 @@ import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
+import com.wiseowl.woli.ui.screen.detail.model.SimilarImageModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,7 +49,7 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             } ?: emptyList()
             val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>).flatten().filter { it.id!=image?.id }
             _state.update { s ->
-                if(s is DetailState.Success) s.copy(s.detailModel.copy(similarImages = similarImages))
+                if(s is DetailState.Success) s.copy(s.detailModel.copy(similarImage =SimilarImageModel(images = similarImages, false)))
                 else DetailState.Success(DetailModel(image = bitmap))
             }
         }
