@@ -40,28 +40,16 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             }
             val bitmap = viewModelScope.async {  detailUseCase.getBitmapUseCase(image?.url!!) }.await()
             _state.update { s ->
-                if(s is DetailState.Success) s.copy(
-                    s.detailModel.copy(
-                        image = bitmap
-                    )
-                )
-                else DetailState.Success(DetailModel(
-                    image = bitmap
-                ))
+                if(s is DetailState.Success) s.copy(s.detailModel.copy(image = bitmap))
+                else DetailState.Success(DetailModel(image = bitmap))
             }
             val similarImagesDeferred = image?.categories?.map { category ->
                 async { detailUseCase.getImagesForCategoryUseCase(category) }
             } ?: emptyList()
             val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>).flatten()
             _state.update { s ->
-                if(s is DetailState.Success) s.copy(
-                    s.detailModel.copy(
-                        similarImages = similarImages
-                    )
-                )
-                else DetailState.Success(DetailModel(
-                    image = bitmap
-                ))
+                if(s is DetailState.Success) s.copy(s.detailModel.copy(similarImages = similarImages))
+                else DetailState.Success(DetailModel(image = bitmap))
             }
         }
     }
