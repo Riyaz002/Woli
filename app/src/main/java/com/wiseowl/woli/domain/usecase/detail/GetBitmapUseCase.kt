@@ -5,7 +5,7 @@ import coil3.Bitmap
 import com.wiseowl.woli.domain.WoliRepository
 
 class GetBitmapUseCase(private val context: Context, private val repository: WoliRepository) {
-    suspend operator fun invoke(id: Int): Bitmap?{
-        return repository.getImageBitmap(context, id)
+    suspend operator fun invoke(url: String): Bitmap?{
+        return repository.getImageBitmap(context, url)
     }
 }
