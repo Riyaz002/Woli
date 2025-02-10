@@ -11,6 +11,7 @@ import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailState
+import com.wiseowl.woli.ui.screen.detail.model.SimilarImageModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,54 +20,37 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : ViewModel() {
-    private val _state = MutableStateFlow<DetailState>(DetailState.Loading).also { s ->
+    private val _state = MutableStateFlow<DetailState>(DetailState.Loading)
+    init {
         viewModelScope.launch {
-            ActionHandler.perform(Action.Progress(true))
-            try {
-                // Initiate asynchronous API calls
-                val imageDeferred = async { detailUseCase.getImageUseCase(imageId.toInt()) }
-                val bitmapDeferred = async { detailUseCase.getBitmapUseCase(imageId.toInt()) }
-
-                // Await results
-                val image = imageDeferred.await()
-                val bitmap = bitmapDeferred.await()
-
-                // Ensure bitmap is not null before proceeding
-                if (bitmap != null) {
-
-                    // Fetch similar images concurrently for each category
-                    val similarImagesDeferred = image?.categories?.map { category ->
-                        async { detailUseCase.getImagesForCategoryUseCase(category) }
-                    } ?: emptyList()
-
-                    // Await similar images result
-                    val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>)
-                        .flatten()
-                        .distinctBy { it.id }
-                        .filter { it.id != image?.id }
-
-                    // Emit success state with the combined data
-                    s.emit(
-                        DetailState.Success(
-                            DetailModel(
-                                image = bitmap,
-                                description = image?.description.orEmpty(),
-                                categories = image?.categories.orEmpty(),
-                                accentColor = image?.color?.primary,
-                                complementaryColor = image?.color?.secondary,
-                                similarImages = similarImages
-                            )
-                        )
+            val image = viewModelScope.async(Dispatcher.IO) { detailUseCase.getImageUseCase(imageId.toInt()) }.await()
+            _state.update { s ->
+                if(s is DetailState.Success) s.copy(
+                    s.detailModel.copy(
+                        description = image?.description,
+                        categories = image?.categories ?: listOf(),
+                        accentColor = image?.color?.primary,
+                        complementaryColor = image?.color?.secondary
                     )
-                } else {
-                    // Handle the case where bitmap is null
-                    s.emit(DetailState.Error("Bitmap is null"))
-                }
-            } catch (e: Exception) {
-                // Handle exceptions and emit error state
-                s.emit(DetailState.Error(e.message ?: "An error occurred"))
-            } finally {
-                ActionHandler.perform(Action.Progress(false))
+                ) else DetailState.Success(DetailModel(
+                    description = image?.description,
+                    categories = image?.categories ?: listOf(),
+                    accentColor = image?.color?.primary,
+                    complementaryColor = image?.color?.secondary
+                ))
+            }
+            val bitmap = viewModelScope.async {  detailUseCase.getBitmapUseCase(image?.url!!) }.await()
+            _state.update { s ->
+                if(s is DetailState.Success) s.copy(s.detailModel.copy(image = bitmap))
+                else DetailState.Success(DetailModel(image = bitmap))
+            }
+            val similarImagesDeferred = image?.categories?.map { category ->
+                async { detailUseCase.getImagesForCategoryUseCase(category) }
+            } ?: emptyList()
+            val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>).flatten().filter { it.id!=image?.id }
+            _state.update { s ->
+                if(s is DetailState.Success) s.copy(s.detailModel.copy(similarImage =SimilarImageModel(images = similarImages, false)))
+                else DetailState.Success(DetailModel(image = bitmap))
             }
         }
     }
