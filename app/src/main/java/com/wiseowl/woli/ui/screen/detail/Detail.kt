@@ -148,7 +148,7 @@ fun Detail(
                                     text = category,
                                     backgroundColor = Color(currentState.data.complementaryColor),
                                     textColor = Color(currentState.data.accentColor),
-                                    onClick = { }
+                                    onClick = { viewModel.onEvent(DetailEvent.OnClickCategory(category)) }
                                 )
                             }
                         }

@@ -104,6 +104,10 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             is DetailEvent.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))
             }
+
+            is DetailEvent.OnClickCategory -> {
+                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to event.category)))
+            }
         }
     }
 }
