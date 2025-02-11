@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.screen.category.model.CategoryModel
@@ -22,5 +23,7 @@ class CategoryViewModel(category: String, repository: CategoryRepository): ViewM
         }
     }
 
-    fun onEvent(action: Action) = Unit
+    fun onEvent(action: Action){
+        ActionHandler.perform(action)
+    }
 }
