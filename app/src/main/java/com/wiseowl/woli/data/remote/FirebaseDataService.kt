@@ -1,17 +1,25 @@
 package com.wiseowl.woli.data.remote
 
+import android.content.Context
+import coil3.Bitmap
+import coil3.ImageLoader
+import coil3.request.ImageRequest
+import coil3.request.allowHardware
+import coil3.toBitmap
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteDataService
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseDataService: RemoteDataService {
+class FirebaseDataService(val context: Context): RemoteDataService {
     private val firestore = Firebase.firestore
 
     override suspend fun getPage(page: Int): List<ImageDTO>? {
@@ -39,6 +47,19 @@ class FirebaseDataService: RemoteDataService {
         val imagesData = result?.get(DATA) as List<DocumentReference>?
         val images = imagesData?.map { it.get() }?.map { it.await() }
         return images?.map { it.data!!.toImages() }
+    }
+
+    override suspend fun getImageBitmap(url: String): Bitmap? {
+        return withContext(Dispatcher.IO){
+            val loader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(url)
+                .allowHardware(false) // Disable hardware bitmaps.
+                .build()
+
+            val result = (loader.execute(request))
+            result.image?.toBitmap()
+        }
     }
 
     companion object{
