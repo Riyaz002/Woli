@@ -28,11 +28,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
+import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
-import com.wiseowl.woli.ui.screen.detail.model.DetailState
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
 import com.wiseowl.woli.ui.shared.component.Shimmer
@@ -47,23 +49,25 @@ fun Detail(
     val detailUseCase: DetailUseCase by inject(DetailUseCase::class.java)
     val viewModel = viewModel{ DetailViewModel(imageId, detailUseCase) }
     val state = viewModel.state.collectAsState()
-    val detailState = if(state.value is DetailState.Success) state.value as DetailState.Success else null
-    val complementaryColor = detailState?.detailModel?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
-    val accent = detailState?.detailModel?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
+    val detailState = if(state.value is Result.Success) state.value as Result.Success else null
+    val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
+    val accent = detailState?.data?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     Column(
         modifier
             .fillMaxSize()
             .background(accent)
             .verticalScroll(scrollState)
     ) {
-        state.value.let {
-            if(it is DetailState.Success){
+        when(val currentState = state.value){
+            is Result.Loading -> ActionHandler.perform(Action.Progress(true))
+            is Result.Success -> {
+                ActionHandler.perform(Action.Progress(false))
                 Column(
                     modifier = Modifier
                         .background(complementaryColor)
                         .padding(bottom = 20.dp)
                 ) {
-                    it.detailModel.image.let { image ->
+                    currentState.data.image.let { image ->
                         if (image == null) {
                             Shimmer(
                                 modifier = Modifier
@@ -77,7 +81,7 @@ fun Detail(
                                 modifier = Modifier
                                     .padding(top = 100.dp, start = 20.dp, end = 20.dp),
                                 image = image,
-                                expanded = it.detailModel.imagePreviewPopupVisible,
+                                expanded = currentState.data.imagePreviewPopupVisible,
                                 onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
                                 onClick = viewModel::onEvent
                             )
@@ -93,7 +97,7 @@ fun Detail(
                         TextRoundButton(
                             modifier = Modifier.weight(1f),
                             text = "Preview",
-                            backgroundColor = Color(it.detailModel.accentColor!!),
+                            backgroundColor = Color(currentState.data.accentColor!!),
                             textColor = complementaryColor,
                             onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
                         )
@@ -101,13 +105,13 @@ fun Detail(
                         TextRoundButton(
                             modifier = Modifier.weight(1f),
                             text = "Set",
-                            backgroundColor = Color(it.detailModel.accentColor),
+                            backgroundColor = Color(currentState.data.accentColor),
                             textColor = complementaryColor,
                             onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
                         )
                     }
 
-                    it.detailModel.description?.let { it1 ->
+                    currentState.data.description?.let { it1 ->
                         Text(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -117,15 +121,15 @@ fun Detail(
                             textAlign = TextAlign.Center,
                             lineHeight = 42.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color(it.detailModel.accentColor!!)
+                            color = Color(currentState.data.accentColor!!)
                         )
                     }
                 }
 
-                it.detailModel.categories.let { categories ->
+                currentState.data.categories.let { categories ->
                     Column(
                         modifier = Modifier
-                            .background(Color(it.detailModel.accentColor!!))
+                            .background(Color(currentState.data.accentColor!!))
                             .padding(20.dp)
                     ) {
                         Text(
@@ -135,20 +139,20 @@ fun Detail(
                             textAlign = TextAlign.Start,
                             lineHeight = 42.sp,
                             fontWeight = FontWeight.Bold,
-                            color = Color(it.detailModel.complementaryColor!!)
+                            color = Color(currentState.data.complementaryColor!!)
                         )
                         LazyRow(modifier = Modifier.padding(top = 16.dp)) {
                             items(categories){ category ->
                                 TextRoundButton(
                                     modifier = Modifier.padding(end = 10.dp),
                                     text = category,
-                                    backgroundColor = Color(it.detailModel.complementaryColor),
-                                    textColor = Color(it.detailModel.accentColor),
+                                    backgroundColor = Color(currentState.data.complementaryColor),
+                                    textColor = Color(currentState.data.accentColor),
                                     onClick = { }
                                 )
                             }
                         }
-                        it.detailModel.similarImage.let { similarImage ->
+                        currentState.data.similarImage.let { similarImage ->
                             if(similarImage.shimmer){
                                 Shimmer(modifier = Modifier.width(100.dp).height(50.dp).padding(top = 20.dp))
                                 Row {
@@ -170,7 +174,7 @@ fun Detail(
                                         textAlign = TextAlign.Start,
                                         lineHeight = 42.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = Color(it.detailModel.complementaryColor)
+                                        color = Color(currentState.data.complementaryColor)
                                     )
                                     LazyRow {
                                         similarImage.images.let { images ->
@@ -192,17 +196,18 @@ fun Detail(
                     }
                 }
 
-                if(it.detailModel.setWallpaperPopupVisible){
+                if(currentState.data.setWallpaperPopupVisible){
                     ChooserDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        buttonColor = Color(it.detailModel.accentColor!!),
+                        buttonColor = Color(currentState.data.accentColor!!),
                         backgroundColor = complementaryColor,
                         onEvent = viewModel::onEvent
                     )
                 }
             }
+            is Result.Error -> Unit
         }
     }
 }
