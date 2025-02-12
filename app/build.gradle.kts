@@ -101,4 +101,7 @@ dependencies {
     //Dependency Injection
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.android)
+
+    //constrain layout
+    implementation(libs.androidx.constraintlayout.compose)
 }
