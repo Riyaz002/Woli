@@ -9,8 +9,5 @@ package com.wiseowl.woli.domain.util
 sealed class Result<T> {
     class Loading<T>: Result<T>()
     data class Success<T>(val data: T): Result<T>()
-    data class Error<T>(val exception: Exception): Result<T>(){
-        constructor(message: String): this(Exception(message))
-        fun getMessage() = exception.message
-    }
+    data class Error<T>(val error: com.wiseowl.woli.domain.model.Error): Result<T>()
 }
