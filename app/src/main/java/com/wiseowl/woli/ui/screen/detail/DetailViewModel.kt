@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
@@ -40,6 +41,10 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                 ))
             }
             val bitmap = viewModelScope.async {  detailUseCase.getBitmapUseCase(image?.url!!) }.await()
+            if(bitmap==null){
+                _state.update { Result.Error(Error("Oops, Error Loading Image!")) }
+                return@launch
+            }
             _state.update { s ->
                 if(s is Result.Success) s.copy(s.data.copy(image = bitmap))
                 else Result.Success(DetailModel(image = bitmap))

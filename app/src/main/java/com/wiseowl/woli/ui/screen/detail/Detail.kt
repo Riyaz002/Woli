@@ -37,6 +37,7 @@ import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
+import com.wiseowl.woli.ui.shared.component.Error
 import com.wiseowl.woli.ui.shared.component.Shimmer
 import org.koin.java.KoinJavaComponent.inject
 
@@ -53,9 +54,7 @@ fun Detail(
     val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     val accent = detailState?.data?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     Column(
-        modifier
-            .fillMaxSize()
-            .background(accent)
+        modifier.fillMaxSize().background(accent)
             .verticalScroll(scrollState)
     ) {
         when(val currentState = state.value){
@@ -154,7 +153,10 @@ fun Detail(
                         }
                         currentState.data.similarImage.let { similarImage ->
                             if(similarImage.shimmer){
-                                Shimmer(modifier = Modifier.width(100.dp).height(50.dp).padding(top = 20.dp))
+                                Shimmer(modifier = Modifier
+                                    .width(100.dp)
+                                    .height(50.dp)
+                                    .padding(top = 20.dp))
                                 Row {
                                     repeat(3){
                                         Shimmer(modifier = Modifier
@@ -207,7 +209,7 @@ fun Detail(
                     )
                 }
             }
-            is Result.Error -> Unit
+            is Result.Error -> Error(modifier = modifier, error = currentState.error)
         }
     }
 }
