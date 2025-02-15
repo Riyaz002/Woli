@@ -74,8 +74,8 @@ class UploadImageToFirebase {
                 val url = keys.first()
                 val description = keys[1]
                 val categories = keys.filterIndexed { index, _ -> index > 1 }
-                TODO("UPDATE for color")
-
+                val bitmap = detailUseCase.getBitmapUseCase(url) ?: throw NullPointerException("Cannot get bitmap")
+                val color = GetColorUseCase().invoke(bitmap).toColorDTO()
                 val document = Firebase.firestore.collection(IMAGES_COLLECTION).document(url.hashCode().toString()).get().await()
                 if(document.exists()) throw Exception("Image already exists")
                 images.add(
@@ -84,7 +84,7 @@ class UploadImageToFirebase {
                         url = url,
                         description = description,
                         categories = categories,
-                        color = null
+                        color = color
                     )
                 )
             }
