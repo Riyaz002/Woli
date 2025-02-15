@@ -2,9 +2,9 @@ package com.wiseowl.woli
 
 import android.app.Application
 import androidx.room.Room
-import com.wiseowl.woli.domain.RemoteDataService
+import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.data.local.WoliDatabase
-import com.wiseowl.woli.data.remote.FirebaseDataService
+import com.wiseowl.woli.data.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
@@ -22,10 +22,15 @@ import org.koin.dsl.module
 
 class WoliApplication: Application() {
     private val appModule = module {
-        single{ FirebaseDataService(this@WoliApplication) } bind(RemoteDataService::class)
+        //RemoteApi
+        single{ FirebaseAPIService(this@WoliApplication) } bind(RemoteAPIService::class)
+        
+        //Repository
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)
         singleOf(::CategoryRepository) bind(com.wiseowl.woli.domain.repository.CategoryRepository::class)
+        
+        //Database
         single { Room.databaseBuilder(this@WoliApplication, WoliDatabase::class.java, WoliDatabase.NAME).build() }
 
         //Use Case

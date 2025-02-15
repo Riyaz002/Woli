@@ -14,12 +14,12 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
-import com.wiseowl.woli.domain.RemoteDataService
+import com.wiseowl.woli.domain.RemoteAPIService
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseDataService(val context: Context): RemoteDataService {
+class FirebaseAPIService(val context: Context): RemoteAPIService {
     private val firestore = Firebase.firestore
 
     override suspend fun getPage(page: Int): List<ImageDTO>? {
