@@ -11,6 +11,7 @@ import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
+import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
@@ -41,6 +42,7 @@ class WoliApplication: Application() {
         singleOf(::PageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
+        singleOf(::GetNavigationItemsUseCase)
     }
 
     override fun onCreate() {

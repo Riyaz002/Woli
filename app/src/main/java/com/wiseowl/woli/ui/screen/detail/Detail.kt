@@ -78,7 +78,8 @@ fun Detail(
                         } else{
                             ExpandableImageCard(
                                 modifier = Modifier
-                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp),
+                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp)
+                                    .clip(RoundedCornerShape(20.dp)),
                                 image = image,
                                 expanded = currentState.data.imagePreviewPopupVisible,
                                 onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },

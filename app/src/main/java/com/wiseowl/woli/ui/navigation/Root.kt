@@ -1,7 +1,5 @@
 package com.wiseowl.woli.ui.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -16,12 +14,11 @@ import com.wiseowl.woli.ui.screen.home.Home
 @Composable
 fun Root(
     modifier: Modifier,
-    innerPaddingValues: PaddingValues,
     navController: NavHostController,
     startScreen: String = Screen.HOME.route
 ) {
     NavHost(modifier = modifier, navController = navController, startDestination = startScreen) {
-        composable(route = Screen.HOME.route) { Home(modifier.padding(innerPaddingValues)) }
+        composable(route = Screen.HOME.route) { Home(modifier) }
         composable(
             route = Screen.DETAIL.route,
             arguments = listOf(
