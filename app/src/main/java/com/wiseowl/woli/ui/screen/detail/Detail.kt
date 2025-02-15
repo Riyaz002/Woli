@@ -156,7 +156,8 @@ fun Detail(
                                 Shimmer(modifier = Modifier
                                     .width(100.dp)
                                     .height(50.dp)
-                                    .padding(top = 20.dp))
+                                    .padding(top = 20.dp)
+                                    .clip(RoundedCornerShape(20.dp)))
                                 Row {
                                     repeat(3){
                                         Shimmer(modifier = Modifier
