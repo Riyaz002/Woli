@@ -53,10 +53,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { it
                     Box(
-                        Modifier.safeContentPadding()
+                        Modifier.fillMaxSize().safeContentPadding()
                     ) {
                         Root(
-                            modifier = Modifier.padding(bottom = 28.dp),
+                            modifier = Modifier.padding(bottom = 30.dp),
                             navController = navController
                         )
                         BottomNavigation(
