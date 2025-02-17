@@ -20,6 +20,7 @@ import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
+import com.wiseowl.woli.ui.shared.component.Error
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable

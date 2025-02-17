@@ -1,20 +1,16 @@
 package com.wiseowl.woli.ui.screen.category
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.screen.PageViewModel
 import com.wiseowl.woli.ui.screen.category.model.CategoryModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class CategoryViewModel(category: String, repository: CategoryRepository): ViewModel() {
-    private val _state = MutableStateFlow<Result<CategoryModel>>(Result.Loading())
-    val state: StateFlow<Result<CategoryModel>> get() = _state
+class CategoryViewModel(category: String, repository: CategoryRepository): PageViewModel<CategoryModel>() {
 
     init {
         viewModelScope.launch(Dispatcher.IO) {
@@ -23,7 +19,7 @@ class CategoryViewModel(category: String, repository: CategoryRepository): ViewM
         }
     }
 
-    fun onEvent(action: Action){
+    override fun onEvent(action: Action){
         ActionHandler.perform(action)
     }
 }
