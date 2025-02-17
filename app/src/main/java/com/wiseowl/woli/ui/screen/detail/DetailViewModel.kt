@@ -1,7 +1,6 @@
 package com.wiseowl.woli.ui.screen.detail
 
 import kotlin.collections.flatten
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
@@ -11,17 +10,15 @@ import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
+import com.wiseowl.woli.ui.screen.PageViewModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.SimilarImageModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : ViewModel() {
-    private val _state = MutableStateFlow<Result<DetailModel>>(Result.Loading())
+class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : PageViewModel<DetailModel>() {
     init {
         viewModelScope.launch {
             val image = viewModelScope.async(Dispatcher.IO) { detailUseCase.getImageUseCase(imageId.toInt()) }.await()
@@ -59,10 +56,9 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             }
         }
     }
-    val state = _state.asStateFlow()
 
-    fun onEvent(event: Action) {
-        when (event) {
+    override fun onEvent(action: Action) {
+        when (action) {
             is DetailEvent.OnClickImage -> {
                 _state.update { state ->
                     if (state is Result.Success) {
@@ -93,7 +89,7 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                         ActionHandler.perform(Action.Progress(true))
                         detailUseCase.setWallpaperUseCase(
                             state.data.image!!,
-                            event.setWallpaperType
+                            action.setWallpaperType
                         )
                         ActionHandler.perform(Action.Progress(false))
                     }
@@ -107,11 +103,11 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             }
 
             is DetailEvent.OnClickSimilarImage -> {
-                ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to event.imageId.toString())))
+                ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
 
             is DetailEvent.OnClickCategory -> {
-                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to event.category)))
+                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to action.category)))
             }
         }
     }
