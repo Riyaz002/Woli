@@ -1,6 +1,7 @@
 package com.wiseowl.woli.domain
 
 import coil3.Bitmap
+import com.wiseowl.woli.data.local.entity.CategoryDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 
 interface RemoteAPIService {
@@ -9,4 +10,5 @@ interface RemoteAPIService {
     suspend fun getImage(id: Int): ImageDTO?
     suspend fun getImages(category: String): List<ImageDTO>?
     suspend fun getImageBitmap(url: String): Bitmap?
+    suspend fun getCategories(): List<CategoryDTO>?
 }

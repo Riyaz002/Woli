@@ -12,6 +12,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
+import com.wiseowl.woli.data.local.entity.CategoryDTO
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
@@ -19,7 +20,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseAPIService(val context: Context): RemoteAPIService {
+class FirebaseAPIService(private val context: Context): RemoteAPIService {
     private val firestore = Firebase.firestore
 
     override suspend fun getPage(page: Int): List<ImageDTO>? {
@@ -62,10 +63,16 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         }
     }
 
+    override suspend fun getCategories(): List<CategoryDTO> {
+        val result = firestore.collection(CATEGORIES_COLLECTION).get().await()
+        return result.documents.map { it.data!!.toCategoryDTO() }
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
+        const val CATEGORIES_COLLECTION = "categories"
         const val COUNT = "count"
         const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
@@ -84,6 +91,13 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
             return ColorDTO(
                 primary = getValue(ColorDTO::primary.name).toString().toInt(),
                 secondary = getValue(ColorDTO::secondary.name).toString().toInt()
+            )
+        }
+
+        private fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
+            return CategoryDTO(
+                name = getValue(CategoryDTO::name.name).toString(),
+                cover = getValue(CategoryDTO::cover.name).toString()
             )
         }
 
