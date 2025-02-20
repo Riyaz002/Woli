@@ -7,7 +7,7 @@ import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.PageViewModel
+import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.home.model.HomePageModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch

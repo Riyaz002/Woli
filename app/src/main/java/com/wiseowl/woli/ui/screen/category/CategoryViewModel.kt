@@ -6,7 +6,7 @@ import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
-import com.wiseowl.woli.ui.screen.PageViewModel
+import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.category.model.CategoryModel
 import kotlinx.coroutines.launch
 
