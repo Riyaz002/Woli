@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen
+package com.wiseowl.woli.ui.screen.common
 
 import androidx.lifecycle.ViewModel
 import com.wiseowl.woli.domain.event.Action

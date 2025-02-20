@@ -10,7 +10,7 @@ import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.PageViewModel
+import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import com.wiseowl.woli.ui.screen.detail.model.SimilarImageModel
 import kotlinx.coroutines.async
