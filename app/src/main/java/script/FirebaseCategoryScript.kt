@@ -29,6 +29,7 @@ class FirebaseCategoryScript {
                 val images = data?.get(DATA) as List<DocumentReference>?
                 val newData = data as MutableMap<String, Any>
                 newData["cover"] = images?.get(0) as Any
+                newData["name"] = id
                 putDocumentIn(
                     CATEGORY_COLLECTION,
                     id,
