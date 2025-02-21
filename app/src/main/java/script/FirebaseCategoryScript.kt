@@ -1,5 +1,6 @@
 package script
 
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
@@ -19,8 +20,19 @@ class FirebaseCategoryScript {
         }
     }
 
+    private suspend fun getDocuments(collectionName: String) = Firebase.firestore.collection(collectionName).get().await()
+
     private suspend fun putDocumentIn(collectionName: String, documentId: String, document: Any){
         Firebase.firestore.collection(collectionName).document(documentId).set(document).await()
+    }
+
+    fun updateCategories(){
+        GlobalScope.launch {
+            getDocuments("category").documents.chunked(10).forEachIndexed { index, documentSnapshots ->
+                val documents = documentSnapshots.map { it.reference }
+                putDocumentIn("categories", index.plus(1).toString(), mapOf(DATA to documents))
+            }
+        }
     }
 
     fun setCategoriesCover(){
