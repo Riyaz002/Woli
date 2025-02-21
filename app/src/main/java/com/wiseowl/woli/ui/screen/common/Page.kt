@@ -13,14 +13,16 @@ import com.wiseowl.woli.ui.shared.component.Error
 fun <T> Page(
     modifier: Modifier = Modifier,
     data: Result<T>,
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable BoxScope.(T) -> Unit,
 ) {
     when(data){
         is Result.Error -> Error(modifier = modifier, error = data.error)
         is Result.Loading -> ActionHandler.perform(Action.Progress(true))
         is Result.Success -> {
             ActionHandler.perform(Action.Progress(false))
-            Box(modifier = modifier, content = content)
+            Box(modifier = modifier){
+                content(data.data)
+            }
         }
     }
 }
