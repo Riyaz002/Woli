@@ -1,21 +1,22 @@
 package com.wiseowl.woli.ui.screen.categories
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.wiseowl.woli.ui.screen.common.Page
 
 @Composable
 fun Categories(
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
-        Text(text = "Categories")
-        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
+    val viewModel = viewModel(modelClass = CategoriesViewModel::class)
+    val state = viewModel.state.collectAsStateWithLifecycle()
 
-        }
+    Page(
+        modifier = modifier,
+        data = state.value
+    ) {
+
     }
 }
