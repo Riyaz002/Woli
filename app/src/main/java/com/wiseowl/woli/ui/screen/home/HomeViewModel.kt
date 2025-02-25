@@ -18,7 +18,7 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): PageViewModel<HomePag
         viewModelScope.launch(Dispatcher.IO) {
             val totalPages = homeUseCase.getPageUseCase.getTotalPageCount()
             val page = homeUseCase.getPageUseCase.getPage(totalPages)
-            val homePageModel = HomePageModel(page.images, currentPage = totalPages)
+            val homePageModel = HomePageModel(page.data, currentPage = totalPages)
             _state.update { _ -> Result.Success(homePageModel) }
         }
     }
@@ -39,7 +39,7 @@ class HomeViewModel(private val homeUseCase: HomeUseCase): PageViewModel<HomePag
             if(currentState is Result.Success){
                 currentState.data
                 val homePageModel: HomePageModel = currentState.data.copy(
-                    images = currentState.data.images?.plus(page.images ?: listOf()),
+                    images = currentState.data.images?.plus(page.data ?: listOf()),
                     currentPage = pageNo
                 )
                 _state.update { Result.Success(homePageModel) }

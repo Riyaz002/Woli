@@ -5,5 +5,6 @@ import com.wiseowl.woli.domain.model.Image
 
 interface CategoryRepository {
     suspend fun getCategoryImages(category: String): List<Image>?
-    suspend fun getCategories(): List<Category>?
+    suspend fun getCategoryPage(pageNo: Int): List<Category>?
+    suspend fun getCategoryPageTotalCount(): Int
 }

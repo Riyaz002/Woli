@@ -12,7 +12,9 @@ class CategoryRepository(private val apiService: RemoteAPIService): CategoryRepo
         return apiService.getImages(category = category)?.map { it.toImage() }
     }
 
-    override suspend fun getCategories(): List<Category>? {
-        return apiService.getCategories()?.map { it.toCategory() }
+    override suspend fun getCategoryPage(pageNo: Int): List<Category>? {
+        return apiService.getCategoryPage(pageNo)?.map { it.toCategory() }
     }
+
+    override suspend fun getCategoryPageTotalCount() = apiService.getCategoriesTotalPageCount()
 }

@@ -63,9 +63,15 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
-    override suspend fun getCategories(): List<CategoryDTO> {
-        val result = firestore.collection(CATEGORIES_COLLECTION).get().await()
-        return result.documents.map { it.data!!.toCategoryDTO() }
+    override suspend fun getCategoryPage(page: Int): List<CategoryDTO>? {
+        val result = firestore.collection(CATEGORIES_COLLECTION).getDocumentOrNull(page.toString())?.data
+        val categoriesData = result?.get(DATA) as List<DocumentReference>?
+        val categories = categoriesData?.map { it.get() }?.map { it.await() }
+        return categories?.map { it.data!!.toCategoryDTO() }
+    }
+
+    override suspend fun getCategoriesTotalPageCount(): Int {
+        return (firestore.collection(CATEGORIES_COLLECTION).getDocumentOrNull(COUNT)?.data?.get(TOTAL_PAGE) as Long).toInt()
     }
 
     companion object{
@@ -94,10 +100,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
             )
         }
 
-        private fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
+        private suspend fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
             return CategoryDTO(
                 name = getValue(CategoryDTO::name.name).toString(),
-                cover = getValue(CategoryDTO::cover.name).toString()
+                cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get().await().data as Map<String, Any>).toImages()
             )
         }
 

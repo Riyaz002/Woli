@@ -10,7 +10,7 @@ class GetNavigationItemsUseCase {
     operator fun invoke(): List<NavigationItem>{
         return listOf(
             NavigationItem("Home", Icons.Default.Home, Action.Navigate(Screen.HOME)),
-            NavigationItem("Categories", Icons.Default.Home, Action.Navigate(Screen.CATEGORY))
+            NavigationItem("Categories", Icons.Default.Home, Action.Navigate(Screen.CATEGORIES))
         )
     }
 }

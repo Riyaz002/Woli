@@ -1,43 +1,56 @@
 package com.wiseowl.woli.ui.screen.categories.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
+import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
 
 @Composable
 fun Category(
     modifier: Modifier = Modifier,
     category: com.wiseowl.woli.domain.model.Category,
-    cornerRadius: Dp = 20.dp
+    cornerRadius: Dp = 20.dp,
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.clip(RoundedCornerShape(cornerRadius))
+        modifier = modifier
+            .background(Color.White)
+            .padding(16.dp)
+            .background(
+                brush = Brush.horizontalGradient(
+                    colors = listOf(
+                        Color(category.cover.color!!.primary).copy(0.3f),
+                        Color(category.cover.color.primary)
+                    )
+                ), shape = RoundedCornerShape(cornerRadius)
+            )
+            .clickable { onClick() }
+            .padding(10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = category.name, fontSize = 22.sp)
-        AsyncImage(
+        Text(text = category.name, fontSize = 32.sp, fontWeight = FontWeight.SemiBold)
+        ImageCard(
             modifier = Modifier
-                .clip(RoundedCornerShape(cornerRadius))
-                .fillMaxWidth()
-                .aspectRatio(1f),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(category.cover)
-                .crossfade(true)
-                .build(),
-            contentDescription = category.name,
-            contentScale = ContentScale.Crop
+                .fillMaxHeight()
+                .aspectRatio(1f)
+                .padding(vertical = 10.dp),
+            image = category.cover
         )
     }
 }

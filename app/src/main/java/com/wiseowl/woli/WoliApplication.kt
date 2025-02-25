@@ -7,12 +7,14 @@ import com.wiseowl.woli.data.local.WoliDatabase
 import com.wiseowl.woli.data.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
+import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
+import com.wiseowl.woli.domain.usecase.categories.CategoriesUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
@@ -40,9 +42,11 @@ class WoliApplication: Application() {
         single{ SetWallpaperUseCase(this@WoliApplication) }
         singleOf(::GetImagesForCategoryUseCase)
         singleOf(::PageUseCase)
+        singleOf(::CategoriesPageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
         singleOf(::GetNavigationItemsUseCase)
+        singleOf(::CategoriesUseCase)
     }
 
     override fun onCreate() {
