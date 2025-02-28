@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { it
                     Box(
-                        Modifier.safeContentPadding()
+                        Modifier
                     ) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
