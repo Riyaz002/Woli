@@ -15,6 +15,4 @@ class CategoryRepository(private val apiService: RemoteAPIService): CategoryRepo
     override suspend fun getCategoryPage(pageNo: Int): List<Category>? {
         return apiService.getCategoryPage(pageNo)?.map { it.toCategory() }
     }
-
-    override suspend fun getCategoryPageTotalCount() = apiService.getCategoriesTotalPageCount()
 }

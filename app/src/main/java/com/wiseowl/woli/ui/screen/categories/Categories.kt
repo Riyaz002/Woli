@@ -1,13 +1,13 @@
 package com.wiseowl.woli.ui.screen.categories
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,13 +43,15 @@ fun Categories(
                 fontWeight = FontWeight.Bold
             )
 
-            LazyColumn(
+            LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),
+                columns = GridCells.Fixed(3)
             ) {
-                items(it.categories.orEmpty()){ category ->
+                items(
+                    it.categories.orEmpty()
+                ){ category ->
                     Category(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(160.dp),
+                        .fillMaxWidth().padding(5.dp),
                         category = category,
                         onClick = {
                             viewModel.onEvent(
@@ -61,12 +63,12 @@ fun Categories(
                         }
                     )
                 }
+
                 item {
-                    if(it.currentPage > 0){
-                        viewModel.onEvent(CategoriesEvent.LoadPage(it.currentPage.minus(1)))
+                    if(it.hasNext){
+                        viewModel.onEvent(CategoriesEvent.LoadPage(it.currentPage.plus(1)))
                         LoaderFooter(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth()
                         )
                     }
                 }

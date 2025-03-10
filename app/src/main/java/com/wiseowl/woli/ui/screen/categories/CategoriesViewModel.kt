@@ -14,9 +14,9 @@ import kotlinx.coroutines.launch
 class CategoriesViewModel(private val categoriesUseCase: CategoriesUseCase): PageViewModel<CategoriesModel>() {
     init {
         viewModelScope.launch(Dispatcher.IO) {
-            val totalPageCount = categoriesUseCase.getCategoriesUseCase.getTotalPageCount()
-            val data = categoriesUseCase.getCategoriesUseCase.getPage(totalPageCount).data
-            _state.update { Result.Success(CategoriesModel(categories = data, totalPageCount)) }
+            val currentPage = 1
+            val data = categoriesUseCase.getCategoriesUseCase.getPage(currentPage).data
+            _state.update { Result.Success(CategoriesModel(categories = data, currentPage, !data.isNullOrEmpty())) }
         }
     }
 
@@ -27,11 +27,13 @@ class CategoriesViewModel(private val categoriesUseCase: CategoriesUseCase): Pag
                     _state.update { state ->
                         (state as Result.Success<CategoriesModel>).let {
                             val categories = it.data.categories as MutableList
-                            categories.addAll(categoriesUseCase.getCategoriesUseCase.getPage(action.pageNo).data.orEmpty())
+                            val pageData = categoriesUseCase.getCategoriesUseCase.getPage(action.pageNo).data.orEmpty()
+                            categories.addAll(pageData)
                             Result.Success(
                                 it.data.copy(
                                     categories = categories,
-                                    currentPage = action.pageNo
+                                    currentPage = action.pageNo,
+                                    hasNext = pageData.isNotEmpty()
                                 )
                             )
                         }

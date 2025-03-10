@@ -70,10 +70,6 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return categories?.map { it.data!!.toCategoryDTO() }
     }
 
-    override suspend fun getCategoriesTotalPageCount(): Int {
-        return (firestore.collection(CATEGORIES_COLLECTION).getDocumentOrNull(COUNT)?.data?.get(TOTAL_PAGE) as Long).toInt()
-    }
-
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"

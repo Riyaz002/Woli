@@ -2,16 +2,12 @@ package com.wiseowl.woli
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,6 +37,14 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf(false)
             }
 
+            onBackPressedDispatcher.addCallback(
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        progressVisible = false
+                    }
+                }
+            )
+
             ActionHandler.listen { event ->
                 when(event) {
                     is Action.Navigate -> navController.navigate(event.toRoute())
@@ -52,9 +56,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { it
-                    Box(
-                        Modifier
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController
@@ -62,10 +64,8 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .height(58.dp)
-                                .fillMaxWidth()
-                                .background(color = MaterialTheme.colorScheme.primary),
-                            navigationItems = getNavigationItemsUseCase()
+                                .padding(bottom = 80.dp, start = 20.dp, end = 20.dp),
+                            navigationItems = getNavigationItemsUseCase(),
                         )
                     }
                     if(progressVisible) CircularProgressBar(Modifier.fillMaxSize())

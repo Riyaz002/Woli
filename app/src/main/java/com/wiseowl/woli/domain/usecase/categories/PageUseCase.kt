@@ -8,7 +8,4 @@ class PageUseCase(private val repository: CategoryRepository) {
     suspend fun getPage(pageNo: Int): Page<Category> {
         return Page(pageNo, repository.getCategoryPage(pageNo))
     }
-    suspend fun getTotalPageCount(): Int{
-        return repository.getCategoryPageTotalCount()
-    }
 }

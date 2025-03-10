@@ -11,5 +11,4 @@ interface RemoteAPIService {
     suspend fun getImages(category: String): List<ImageDTO>?
     suspend fun getImageBitmap(url: String): Bitmap?
     suspend fun getCategoryPage(page: Int): List<CategoryDTO>?
-    suspend fun getCategoriesTotalPageCount(): Int
 }
