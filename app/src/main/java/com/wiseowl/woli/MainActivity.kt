@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.wiseowl.woli.domain.event.Action
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { it
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.2f))) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController
