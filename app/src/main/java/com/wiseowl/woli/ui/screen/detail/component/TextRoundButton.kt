@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -22,6 +23,7 @@ fun TextRoundButton(
     radius: Dp = 32.dp,
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     text: String,
+    textStyle: TextStyle = TextStyle(),
     textColor: Color = MaterialTheme.colorScheme.onPrimary,
     onClick: () -> Unit,
 ) {
@@ -36,7 +38,8 @@ fun TextRoundButton(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp),
             text = text,
             textAlign = TextAlign.Center,
-            color = textColor
+            color = textColor,
+            style = textStyle
         )
     }
 }

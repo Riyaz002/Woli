@@ -11,4 +11,5 @@ sealed class DetailEvent: Action {
     data object OnDismissSetWallpaperDialog: DetailEvent()
     data class OnClickSetAs(val setWallpaperType: SetWallpaperType): DetailEvent()
     data class OnClickSimilarImage(val imageId: Int): DetailEvent()
+    data class OnClickCategory(val category: String): DetailEvent()
 }

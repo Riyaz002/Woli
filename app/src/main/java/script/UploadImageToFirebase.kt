@@ -6,11 +6,11 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import com.wiseowl.woli.data.local.entity.ColorDTO.Companion.toColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.CATEGORY_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.DATA
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.IMAGES_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.PAGES_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseDataService.Companion.toImages
+import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.CATEGORY_COLLECTION
+import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.DATA
+import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.IMAGES_COLLECTION
+import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.PAGES_COLLECTION
+import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.toImages
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import kotlinx.coroutines.tasks.await
 import org.koin.java.KoinJavaComponent.inject
@@ -43,29 +43,6 @@ class UploadImageToFirebase {
         }
     }
 
-    suspend fun updateAllCategory(){
-        forEveryDocumentInside(IMAGES_COLLECTION){
-            val categories = it?.getValue(ImageDTO::categories.name) as List<String>
-            val id = it.getValue(ImageDTO::id.name).toString().toInt()
-            categories.forEach { category ->
-                val imageRef = Firebase.firestore.collection(IMAGES_COLLECTION).document(id.toString())
-                val categoryData = Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).get().await().data?.get(DATA) as List<DocumentReference>?
-                var categoryNewData = categoryData?.toMutableList() ?: mutableListOf()
-                categoryNewData.add(imageRef)
-                categoryNewData = categoryNewData.distinctBy { it.id }.toMutableList()
-                Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).set(mapOf(DATA to categoryNewData))
-            }
-        }
-    }
-
-    suspend fun updateCategory(category: String, documentReference: DocumentReference) {
-        val categoryData = Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).get().await().data?.get(DATA) as List<DocumentReference>?
-        var categoryNewData = categoryData?.toMutableList() ?: mutableListOf()
-        categoryNewData.add(documentReference)
-        categoryNewData = categoryNewData.distinctBy { it.id }.toMutableList()
-        Firebase.firestore.collection(CATEGORY_COLLECTION).document(category).set(mapOf(DATA to categoryNewData))
-    }
-
     suspend fun startUploadingImages(applicationContext: Context) {
         applicationContext.assets.open("imagedata.csv").bufferedReader().use {
             val images = arrayListOf<ImageDTO>()
@@ -74,8 +51,8 @@ class UploadImageToFirebase {
                 val url = keys.first()
                 val description = keys[1]
                 val categories = keys.filterIndexed { index, _ -> index > 1 }
-                TODO("UPDATE for color")
-
+                val bitmap = detailUseCase.getBitmapUseCase(url) ?: throw NullPointerException("Cannot get bitmap")
+                val color = GetColorUseCase().invoke(bitmap).toColorDTO()
                 val document = Firebase.firestore.collection(IMAGES_COLLECTION).document(url.hashCode().toString()).get().await()
                 if(document.exists()) throw Exception("Image already exists")
                 images.add(
@@ -84,15 +61,16 @@ class UploadImageToFirebase {
                         url = url,
                         description = description,
                         categories = categories,
-                        color = null
+                        color = color
                     )
                 )
             }
+            val categoryScript = FirebaseCategoryScript()
             images.forEach {
                 putDocumentIn(IMAGES_COLLECTION, it.id.toString(), it)
                 it.categories.forEach { category ->
                     val imageRef = Firebase.firestore.collection(IMAGES_COLLECTION).document(it.id.toString())
-                    updateCategory(category, imageRef)
+                    categoryScript.updateCategory(category, imageRef)
                 }
             }
             uploadPage(applicationContext)
