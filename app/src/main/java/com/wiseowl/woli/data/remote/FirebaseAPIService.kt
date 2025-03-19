@@ -15,6 +15,7 @@ import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.model.User
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -62,10 +63,27 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         }
     }
 
+    override suspend fun createUser(user: User) {
+        firestore.collection(USERS_COLLECTION).document(user.uid).set(user)
+    }
+
+    override suspend fun deleteUser(userId: String) {
+        firestore.collection(USERS_COLLECTION).document(userId).delete()
+    }
+
+    override suspend fun isUserValid(userId: String): Boolean {
+        return firestore.collection(USERS_COLLECTION).getDocumentOrNull(userId) == null
+    }
+
+    override suspend fun updateUser(user: User) {
+        firestore.collection(USERS_COLLECTION).document(user.uid).set(user)
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
+        const val USERS_COLLECTION = "users"
         const val COUNT = "count"
         const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"

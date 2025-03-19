@@ -16,6 +16,7 @@ import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
+import com.wiseowl.woli.data.repository.UserRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -30,6 +31,7 @@ class WoliApplication: Application() {
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)
         singleOf(::CategoryRepository) bind(com.wiseowl.woli.domain.repository.CategoryRepository::class)
+        singleOf(::UserRepository) bind(com.wiseowl.woli.domain.repository.UserRepository::class)
         
         //Database
         single { Room.databaseBuilder(this@WoliApplication, WoliDatabase::class.java, WoliDatabase.NAME).build() }
