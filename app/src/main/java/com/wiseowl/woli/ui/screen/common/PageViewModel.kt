@@ -5,6 +5,7 @@ import com.wiseowl.woli.domain.event.Action
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 
 /**
  * Base class for all ViewModels in the app.
@@ -16,4 +17,11 @@ abstract class PageViewModel<T>: ViewModel() {
     val state: StateFlow<Result<T>> = _state
 
     abstract fun onEvent(action: Action)
+
+    fun MutableStateFlow<Result<T>>.ifSuccess(block: (T) -> T) {
+        if (this.value is Result.Success) {
+            update { Result.Success(block((this.value as Result.Success<T>).data))  }
+        }
+    }
 }
+
