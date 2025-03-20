@@ -2,9 +2,9 @@ package com.wiseowl.woli.data.repository
 
 import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.model.User
-import com.wiseowl.woli.domain.repository.UserRepository
+import com.wiseowl.woli.domain.repository.AccountRepository
 
-class UserRepository(private val remoteApiService: RemoteAPIService): UserRepository {
+class AccountRepository(private val remoteApiService: RemoteAPIService): AccountRepository {
     override suspend fun createUser(user: User) {
         remoteApiService.createUser(user)
     }
@@ -13,11 +13,11 @@ class UserRepository(private val remoteApiService: RemoteAPIService): UserReposi
         remoteApiService.deleteUser(userId)
     }
 
-    override suspend fun isUserValid(userId: String): Boolean? {
-        return remoteApiService.isUserValid(userId)
-    }
-
     override suspend fun updateUser(user: User) {
         remoteApiService.updateUser(user)
+    }
+
+    override suspend fun isEmailRegistered(email: String): Boolean {
+        return remoteApiService.isEmailRegistered(email)
     }
 }

@@ -11,9 +11,9 @@ interface RemoteAPIService {
     suspend fun getImages(category: String): List<ImageDTO>?
     suspend fun getImageBitmap(url: String): Bitmap?
 
-    //User
+    //Account
     suspend fun createUser(user: User)
     suspend fun deleteUser(userId: String)
-    suspend fun isUserValid(userId: String): Boolean?
     suspend fun updateUser(user: User)
+    suspend fun isEmailRegistered(email: String): Boolean
 }

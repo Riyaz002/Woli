@@ -71,12 +71,12 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         firestore.collection(USERS_COLLECTION).document(userId).delete()
     }
 
-    override suspend fun isUserValid(userId: String): Boolean {
-        return firestore.collection(USERS_COLLECTION).getDocumentOrNull(userId) == null
+    override suspend fun updateUser(user: User) {
+        firestore.collection(USERS_COLLECTION).document(user.email).set(user)
     }
 
-    override suspend fun updateUser(user: User) {
-        firestore.collection(USERS_COLLECTION).document(user.uid).set(user)
+    override suspend fun isEmailRegistered(email: String): Boolean {
+        return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
     }
 
     companion object{
