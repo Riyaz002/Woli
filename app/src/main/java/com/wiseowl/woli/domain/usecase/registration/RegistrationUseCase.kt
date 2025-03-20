@@ -1,9 +1,9 @@
 package com.wiseowl.woli.domain.usecase.registration
 
-import com.wiseowl.woli.domain.repository.UserRepository
+import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.util.Result
 
-class RegistrationUseCase(user: UserRepository) {
+class RegistrationUseCase(private val accountRepository: AccountRepository) {
     fun validateEmail(email: String): Boolean{
         return EmailValidator().isValidEmail(email)
     }
@@ -12,8 +12,7 @@ class RegistrationUseCase(user: UserRepository) {
         return PasswordValidator().isPasswordValid(password)
     }
 
-    fun isEmailRegistered(email: String): Boolean{
-        //TODO: Implement
-        return false
+    suspend fun isEmailRegistered(email: String): Boolean{
+        return accountRepository.isEmailRegistered(email)
     }
 }
