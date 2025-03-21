@@ -20,4 +20,8 @@ class AccountRepository(private val remoteApiService: RemoteAPIService): Account
     override suspend fun isEmailRegistered(email: String): Boolean {
         return remoteApiService.isEmailRegistered(email)
     }
+
+    override suspend fun getUser(email: String): User? {
+        return remoteApiService.getUser(email)
+    }
 }

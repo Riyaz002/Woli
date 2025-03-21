@@ -6,7 +6,7 @@ import com.wiseowl.woli.domain.util.Result
 const val  MIN_PASSWORD_LENGTH = 8
 
 class PasswordValidator {
-    fun isPasswordValid(password: String): Result<PasswordResult> {
+    fun isPasswordValid(password: String): Result.Success<PasswordResult> {
         if(password.isEmpty()) Result.Success(PasswordResult.INVALID_EMPTY_PASSWORD)
         if(password.length < MIN_PASSWORD_LENGTH) return Result.Success(PasswordResult.INVALID_SHORT_PASSWORD)
         val passwordRegexCapitalChar = Regex("^(?=.*[A-Z]).+\$")

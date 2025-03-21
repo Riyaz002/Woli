@@ -79,6 +79,10 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
     }
 
+    override suspend fun getUser(email: String): User? {
+        return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
@@ -102,6 +106,16 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
             return ColorDTO(
                 primary = getValue(ColorDTO::primary.name).toString().toInt(),
                 secondary = getValue(ColorDTO::secondary.name).toString().toInt()
+            )
+        }
+
+        private fun Map<String, Any>.toUser(): User {
+            return User(
+                firstName = getValue(User::firstName.name).toString(),
+                lastName = getValue(User::lastName.name).toString(),
+                uid = getValue(User::uid.name).toString(),
+                email = getValue(User::email.name).toString(),
+                favourites = null
             )
         }
 

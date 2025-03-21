@@ -1,6 +1,9 @@
 package com.wiseowl.woli.domain.usecase.registration
 
+import com.wiseowl.woli.domain.model.User
+import com.wiseowl.woli.domain.repository.TestAccountRepository
 import com.wiseowl.woli.domain.util.Result
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -50,7 +53,7 @@ class RegistrationUseCaseTest {
 
     @Before
     fun setUp() {
-        registrationUseCase = RegistrationUseCase()
+        registrationUseCase = RegistrationUseCase(TestAccountRepository())
     }
 
     @Test
@@ -83,5 +86,57 @@ class RegistrationUseCaseTest {
             val result = registrationUseCase.validatePassword(it) as Result.Success
             Assert.assertNotEquals(result.data, PasswordResult.VALID)
         }
+    }
+
+    @Test
+    fun `isEmailRegistered return true if user with email exists`() = runBlocking{
+        val email = "email@example.com"
+        val user = User(
+            firstName = "Riyaz",
+            lastName = "Uddin",
+            uid = "acoimcsomecem",
+            email = email,
+            favourites = null
+        )
+        registrationUseCase.createUser(user)
+        val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
+
+        Assert.assertTrue(isEmailRegistered)
+    }
+
+    @Test
+    fun `deleteUser deletes user with email`() = runBlocking{
+        val email = "email@example.com"
+        val user = User(
+            firstName = "Riyaz",
+            lastName = "Uddin",
+            uid = "acoimcsomecem",
+            email = email,
+            favourites = null
+        )
+        registrationUseCase.createUser(user)
+        val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
+        registrationUseCase.deleteUser(email)
+        val userDeleted = registrationUseCase.isEmailRegistered(email)
+        Assert.assertTrue(isEmailRegistered)
+        Assert.assertFalse(userDeleted)
+    }
+
+    @Test
+    fun `updateUser updates user with the email`() = runBlocking{
+        val email = "email@example.com"
+        val user = User(
+            firstName = "Riyaz",
+            lastName = "Uddin",
+            uid = "acoimcsomecem",
+            email = email,
+            favourites = null
+        )
+        registrationUseCase.createUser(user)
+        val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
+        registrationUseCase.deleteUser(email)
+        val userDeleted = registrationUseCase.isEmailRegistered(email)
+        Assert.assertTrue(isEmailRegistered)
+        Assert.assertFalse(userDeleted)
     }
 }
