@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
@@ -27,7 +26,6 @@ import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
-import com.wiseowl.woli.ui.theme.WoliTheme
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -48,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     is Action.StartActivity -> startActivity(event.intent)
                 }
             }
-            WoliTheme {
+            MaterialTheme {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { it
