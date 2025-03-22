@@ -30,11 +30,11 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                 _state.ifSuccess {
                     val result = registrationUseCase.validatePassword(action.password)
                     val newState = when(result.data){
-                        PasswordResult.INVALID_EMPTY_PASSWORD -> it.copy(password = it.password.copy(error = "Password cannot be empty"))
-                        PasswordResult.INVALID_NO_UPPERCASE -> it.copy(password = it.password.copy(error = "Password should contain at least one uppercase character letter"))
-                        PasswordResult.INVALID_NO_SPECIAL_CHARACTERS -> it.copy(password = it.password.copy(error = "Password should contain at least one special character"))
-                        PasswordResult.INVALID_SHORT_PASSWORD -> it.copy(password = it.password.copy(error = "Password should contain at least one special character"))
-                        PasswordResult.VALID -> it.copy(password = it.password.copy(error = null))
+                        PasswordResult.INVALID_EMPTY_PASSWORD -> it.copy(password = it.password.copy(value = action.password, error = "Password cannot be empty"))
+                        PasswordResult.INVALID_NO_UPPERCASE -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one uppercase character letter"))
+                        PasswordResult.INVALID_NO_SPECIAL_CHARACTERS -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one special character"))
+                        PasswordResult.INVALID_SHORT_PASSWORD -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one special character"))
+                        PasswordResult.VALID -> it.copy(password = it.password.copy(value = action.password, error = null))
                     }
                     newState.copy(password = it.password)
                 }
