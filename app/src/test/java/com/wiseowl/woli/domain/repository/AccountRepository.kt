@@ -1,6 +1,7 @@
 package com.wiseowl.woli.domain.repository
 
 import com.wiseowl.woli.domain.model.User
+import com.wiseowl.woli.domain.util.Result
 import java.util.UUID
 
 class TestAccountRepository: AccountRepository {
@@ -10,8 +11,9 @@ class TestAccountRepository: AccountRepository {
         password: String,
         firstName: String,
         lastName: String,
-    ) {
+    ): Result<Boolean> {
         users.add(User(firstName, lastName, UUID.randomUUID().toString(), email, null))
+        return Result.Success(true)
     }
 
     override suspend fun deleteUser(email: String) {

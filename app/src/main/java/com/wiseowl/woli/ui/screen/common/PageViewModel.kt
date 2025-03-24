@@ -11,9 +11,11 @@ import kotlinx.coroutines.flow.update
  * Base class for all ViewModels in the app.
  * Complimenting MVI pattern by have a common method that handles [Action].
  */
-abstract class PageViewModel<T>: ViewModel() {
+abstract class PageViewModel<T>(
+    initialValue: Result<T> = Result.Loading()
+): ViewModel() {
     //State hoisting for the page
-    protected val _state = MutableStateFlow<Result<T>>(Result.Loading())
+    protected val _state = MutableStateFlow(initialValue)
     val state: StateFlow<Result<T>> = _state
 
     abstract fun onEvent(action: Action)

@@ -17,6 +17,7 @@ import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.model.User
+import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -69,13 +70,18 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         password: String,
         firstName: String,
         lastName: String,
-    ) {
+    ): Result<Boolean> {
         val result = Firebase.auth.createUserWithEmailAndPassword(
             email, password
         ).await()
 
-        val user = User(firstName, lastName, result.user!!.uid, email, null)
-        firestore.collection(USERS_COLLECTION).document(email).set(user)
+        return if(result.user!=null){
+            val user = User(firstName, lastName, result.user!!.uid, email, null)
+            firestore.collection(USERS_COLLECTION).document(email).set(user)
+            Result.Success(true)
+        } else{
+            Result.Success(false)
+        }
     }
 
     override suspend fun deleteUser(email: String) {

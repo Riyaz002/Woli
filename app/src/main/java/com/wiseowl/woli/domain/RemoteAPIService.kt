@@ -3,6 +3,7 @@ package com.wiseowl.woli.domain
 import coil3.Bitmap
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.model.User
+import com.wiseowl.woli.domain.util.Result
 
 interface RemoteAPIService {
     suspend fun getPage(page: Int): List<ImageDTO>?
@@ -12,7 +13,7 @@ interface RemoteAPIService {
     suspend fun getImageBitmap(url: String): Bitmap?
 
     //Account
-    suspend fun createUser(email: String, password: String, firstName: String, lastName: String)
+    suspend fun createUser(email: String, password: String, firstName: String, lastName: String): Result<Boolean>
     suspend fun deleteUser(email: String)
     suspend fun updateUser(user: User)
     suspend fun isEmailRegistered(email: String): Boolean

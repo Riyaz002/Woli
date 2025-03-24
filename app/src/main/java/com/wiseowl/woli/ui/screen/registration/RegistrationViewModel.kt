@@ -7,14 +7,9 @@ import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>() {
-
-    init {
-        _state.update { (Result.Success(RegistrationModel())) }
-    }
+class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
 
     override fun onEvent(action: Action) {
         when(action){
@@ -37,7 +32,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                         PasswordResult.INVALID_SHORT_PASSWORD -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one special character"))
                         PasswordResult.VALID -> it.copy(password = it.password.copy(value = action.password, error = null))
                     }
-                    newState.copy(password = it.password)
+                    newState
                 }
             }
             is RegistrationEvent.OnRegisterClick -> {
