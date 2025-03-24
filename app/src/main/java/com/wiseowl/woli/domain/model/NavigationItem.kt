@@ -6,5 +6,6 @@ import com.wiseowl.woli.domain.event.Action
 data class NavigationItem(
     val title: String,
     val icon: ImageVector,
-    val action: Action
+    val action: Action,
+    val selected: Boolean = false
 )

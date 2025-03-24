@@ -13,7 +13,7 @@ class FirebaseAPIServiceTest{
     @Test
     fun getPageReturnAValidPage() = runBlocking{
         Firebase.initialize(getApplicationContext())
-        val result = FirebaseAPIService().getPage(1)
+        val result = FirebaseAPIService(getApplicationContext()).getPage(1)
         Assert.assertNotNull(result?.isNotEmpty())
     }
 }
