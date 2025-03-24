@@ -14,8 +14,8 @@ class TestAccountRepository: AccountRepository {
         users.add(User(firstName, lastName, UUID.randomUUID().toString(), email, null))
     }
 
-    override suspend fun deleteUser(userId: String) {
-        users.removeIf { it.email == userId }
+    override suspend fun deleteUser(email: String) {
+        users.removeIf { it.email == email }
     }
 
     override suspend fun updateUser(user: User) {
