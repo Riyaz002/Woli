@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -66,7 +67,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
             AppTheme(dynamicColor = false) {
-                Box(Modifier) {
+                Scaffold { it ->
+                    Box(Modifier) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController,
@@ -74,20 +76,22 @@ class MainActivity : ComponentActivity() {
                         )
                         BottomNavigation(
                             modifier = Modifier
+                                .padding(bottom = it.calculateBottomPadding())
                                 .align(Alignment.BottomCenter)
-                                .height(58.dp)
+                                .height(78.dp)
                                 .fillMaxWidth()
-                                .background(color = MaterialTheme.colorScheme.primary),
+                                .background(color = MaterialTheme.colorScheme.surface),
                             navigationItems = getNavigationItemsUseCase()
                         )
-                    SnackbarHost(
-                        snackBarHostState,
-                        modifier = Modifier.padding(top = 30.dp),
-                        snackbar = { snackBarData ->
-                            Snackbar(snackBarData, shape = RoundedCornerShape(20.dp))
-                        }
-                    )
+                        SnackbarHost(
+                            snackBarHostState,
+                            modifier = Modifier.padding(top = 30.dp),
+                            snackbar = { snackBarData ->
+                                Snackbar(snackBarData, shape = RoundedCornerShape(20.dp))
+                            }
+                        )
                     }
+                }
                 if (progressVisible) CircularProgressBar(Modifier.fillMaxSize())
             }
         }
