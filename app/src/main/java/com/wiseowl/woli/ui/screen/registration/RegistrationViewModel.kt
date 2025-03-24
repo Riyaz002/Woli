@@ -2,6 +2,7 @@ package com.wiseowl.woli.ui.screen.registration
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.perform
 import com.wiseowl.woli.domain.usecase.registration.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
@@ -43,9 +44,8 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
                         }
-
                     } else{
-                        //TODO("tell user that all field must be valid")
+                        Action.SnackBar("All fields must be valid").perform()
                     }
                 }
             }

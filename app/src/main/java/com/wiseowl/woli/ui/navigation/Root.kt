@@ -16,7 +16,7 @@ import com.wiseowl.woli.ui.screen.registration.Registration
 fun Root(
     modifier: Modifier,
     navController: NavHostController,
-    startScreen: String = Screen.REGISTRATION.route
+    startScreen: String
 ) {
     NavHost(modifier = modifier, navController = navController, startDestination = startScreen) {
         composable(route = Screen.HOME.route) { Home(modifier) }

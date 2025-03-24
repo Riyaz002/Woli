@@ -11,3 +11,7 @@ object ActionHandler {
         mSubscriber!!.invoke(action)
     }
 }
+
+fun Action.perform(){
+    ActionHandler.perform(this)
+}

@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wiseowl.woli.ui.shared.Constant
@@ -39,37 +38,12 @@ fun BasicTextField(
         mutableStateOf(false)
     }
     val boxStokeWidth = animateIntAsState(targetValue = if(isFocused.value) 3 else 1, label = "")
-    val infiniteTransition = rememberInfiniteTransition(label = "infinite")
-    val translateAnimation = infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 2f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 10000,
-                easing = LinearEasing,
-            ),
-            repeatMode = RepeatMode.Restart,
-        ),
-        label = "Shimmer loading animation",
-    )
 
     OutlinedTextField(
         modifier = modifier
             .border(
-                BorderStroke(
-                    width = boxStokeWidth.value.dp,
-                    brush = Brush.horizontalGradient(
-                        Pair(
-                            translateAnimation.value-1f,
-                            if (data.error != null) MaterialTheme.colorScheme.error
-                            else MaterialTheme.colorScheme.primary
-                        ),
-                        Pair(
-                            translateAnimation.value,
-                            if (data.error != null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.secondary
-                        ),
-                    )
-                ),
+                width = boxStokeWidth.value.dp,
+                color = if(data.error!=null) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
                 shape = RoundedCornerShape(Constant.DEFAULT_CORNER_RADIUS.dp)
             )
             .onFocusChanged { isFocused.value = it.isFocused },

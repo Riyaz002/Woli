@@ -24,11 +24,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.ui.navigation.Root
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
@@ -66,7 +69,8 @@ class MainActivity : ComponentActivity() {
                 Box(Modifier) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
-                            navController = navController
+                            navController = navController,
+                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.REGISTRATION.route
                         )
                         BottomNavigation(
                             modifier = Modifier
