@@ -6,6 +6,7 @@ import coil3.ImageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -69,7 +70,12 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         firstName: String,
         lastName: String,
     ) {
-        //TODO("Not yet implemented")
+        val result = Firebase.auth.createUserWithEmailAndPassword(
+            email, password
+        ).await()
+
+        val user = User(firstName, lastName, result.user!!.uid, email, null)
+        firestore.collection(USERS_COLLECTION).document(email).set(user)
     }
 
     override suspend fun deleteUser(email: String) {

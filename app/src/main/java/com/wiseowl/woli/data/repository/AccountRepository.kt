@@ -13,7 +13,7 @@ class AccountRepository(private val remoteApiService: RemoteAPIService): Account
         firstName: String,
         lastName: String,
     ) {
-        TODO("Not yet implemented")
+        remoteApiService.createUser(email, password, firstName, lastName)
     }
 
     override suspend fun deleteUser(email: String) {
