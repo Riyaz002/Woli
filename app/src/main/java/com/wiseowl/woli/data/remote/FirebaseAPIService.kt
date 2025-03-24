@@ -63,12 +63,17 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         }
     }
 
-    override suspend fun createUser(user: User) {
-        firestore.collection(USERS_COLLECTION).document(user.uid).set(user)
+    override suspend fun createUser(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+    ) {
+        //TODO("Not yet implemented")
     }
 
-    override suspend fun deleteUser(userId: String) {
-        firestore.collection(USERS_COLLECTION).document(userId).delete()
+    override suspend fun deleteUser(email: String) {
+        firestore.collection(USERS_COLLECTION).document(email).delete()
     }
 
     override suspend fun updateUser(user: User) {

@@ -98,7 +98,7 @@ class RegistrationUseCaseTest {
             email = email,
             favourites = null
         )
-        registrationUseCase.createUser(user)
+        registrationUseCase.createAccount(user.email, "RANDOM", user.firstName, user.lastName)
         val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
 
         Assert.assertTrue(isEmailRegistered)
@@ -114,9 +114,9 @@ class RegistrationUseCaseTest {
             email = email,
             favourites = null
         )
-        registrationUseCase.createUser(user)
+        registrationUseCase.createAccount(user.email, "RANDOM", user.firstName, user.lastName)
         val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
-        registrationUseCase.deleteUser(email)
+        registrationUseCase.deleteAccount(email)
         val userDeleted = registrationUseCase.isEmailRegistered(email)
         Assert.assertTrue(isEmailRegistered)
         Assert.assertFalse(userDeleted)
@@ -132,9 +132,9 @@ class RegistrationUseCaseTest {
             email = email,
             favourites = null
         )
-        registrationUseCase.createUser(user)
+        registrationUseCase.createAccount(user.email, "RANDOM", user.firstName, user.lastName)
         val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
-        registrationUseCase.deleteUser(email)
+        registrationUseCase.deleteAccount(email)
         val userDeleted = registrationUseCase.isEmailRegistered(email)
         Assert.assertTrue(isEmailRegistered)
         Assert.assertFalse(userDeleted)

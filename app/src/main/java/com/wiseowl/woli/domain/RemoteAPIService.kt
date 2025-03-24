@@ -12,8 +12,8 @@ interface RemoteAPIService {
     suspend fun getImageBitmap(url: String): Bitmap?
 
     //Account
-    suspend fun createUser(user: User)
-    suspend fun deleteUser(userId: String)
+    suspend fun createUser(email: String, password: String, firstName: String, lastName: String)
+    suspend fun deleteUser(email: String)
     suspend fun updateUser(user: User)
     suspend fun isEmailRegistered(email: String): Boolean
     suspend fun getUser(email: String): User?

@@ -1,13 +1,14 @@
 package com.wiseowl.woli.ui.screen.registration
 
+import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.usecase.registration.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>() {
 
@@ -40,7 +41,18 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                 }
             }
             is RegistrationEvent.OnRegisterClick -> {
+                (state.value as Result.Success).let {
+                    if(it.data.firstName.valid && it.data.lastName.valid && it.data.email.valid && it.data.password.valid) {
+                        viewModelScope.launch {
+                            registrationUseCase.createAccount(
+                                it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
+                            )
+                        }
 
+                    } else{
+                        //TODO("tell user that all field must be valid")
+                    }
+                }
             }
         }
     }

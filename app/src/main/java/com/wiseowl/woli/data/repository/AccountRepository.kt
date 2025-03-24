@@ -5,12 +5,19 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 
 class AccountRepository(private val remoteApiService: RemoteAPIService): AccountRepository {
-    override suspend fun createUser(user: User) {
-        remoteApiService.createUser(user)
+
+
+    override suspend fun createAccount(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+    ) {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun deleteUser(userId: String) {
-        remoteApiService.deleteUser(userId)
+    override suspend fun deleteUser(email: String) {
+        remoteApiService.deleteUser(email)
     }
 
     override suspend fun updateUser(user: User) {

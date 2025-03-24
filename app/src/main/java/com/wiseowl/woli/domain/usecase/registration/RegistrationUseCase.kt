@@ -17,11 +17,11 @@ class RegistrationUseCase(private val accountRepository: AccountRepository) {
         return accountRepository.isEmailRegistered(email)
     }
 
-    suspend fun createUser(user: User){
-        return accountRepository.createUser(user)
+    suspend fun createAccount(email: String, password: String, firstName: String, lastName: String){
+        return accountRepository.createAccount(email, password, firstName, lastName)
     }
 
-    suspend fun deleteUser(email: String){
+    suspend fun deleteAccount(email: String){
         return accountRepository.deleteUser(email)
     }
 
