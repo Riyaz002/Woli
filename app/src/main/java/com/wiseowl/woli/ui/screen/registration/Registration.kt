@@ -29,7 +29,11 @@ fun Registration(
     val registrationUseCase by inject<RegistrationUseCase>(RegistrationUseCase::class.java)
     val viewModel = viewModel { RegistrationViewModel(registrationUseCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    Page(modifier.fillMaxSize(), data = state.value) {
+    Page(
+        modifier.fillMaxSize(),
+        data = state.value,
+        navigationBarVisible = false
+    ) {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
