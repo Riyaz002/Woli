@@ -11,7 +11,6 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
-import com.wiseowl.woli.ui.shared.validate
 
 class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>(Result.Success(LoginModel())) {
 
