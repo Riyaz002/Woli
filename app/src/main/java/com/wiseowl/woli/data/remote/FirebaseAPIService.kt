@@ -6,6 +6,7 @@ import coil3.ImageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
@@ -80,6 +81,17 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
             firestore.collection(USERS_COLLECTION).document(email).set(user)
             Result.Success(true)
         } else{
+            Result.Success(false)
+        }
+    }
+
+    override suspend fun login(email: String, password: String): Result<Boolean> {
+        return try {
+            val result = Firebase.auth.signInWithEmailAndPassword(
+                email, password
+            ).await()
+            Result.Success(result.user!=null)
+        } catch (e: FirebaseAuthInvalidCredentialsException){
             Result.Success(false)
         }
     }

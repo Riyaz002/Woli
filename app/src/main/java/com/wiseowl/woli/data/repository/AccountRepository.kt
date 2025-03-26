@@ -17,6 +17,10 @@ class AccountRepository(private val remoteApiService: RemoteAPIService): Account
         return remoteApiService.createUser(email, password, firstName, lastName)
     }
 
+    override suspend fun login(email: String, password: String): Result<Boolean> {
+        return remoteApiService.login(email, password)
+    }
+
     override suspend fun deleteUser(email: String) {
         remoteApiService.deleteUser(email)
     }

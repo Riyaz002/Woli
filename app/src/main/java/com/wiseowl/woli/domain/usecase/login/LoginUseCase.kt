@@ -18,4 +18,8 @@ class LoginUseCase(private val accountRepository: AccountRepository) {
     suspend fun isEmailRegistered(email: String): Boolean{
         return accountRepository.isEmailRegistered(email)
     }
+
+    suspend fun login(email: String, password: String): Result<Boolean> {
+        return accountRepository.login(email, password)
+    }
 }

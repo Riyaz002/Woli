@@ -7,17 +7,13 @@ import com.wiseowl.woli.domain.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.validate
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>() {
-
-    init {
-        _state.update { (Result.Success(LoginModel())) }
-    }
+class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>(Result.Success(LoginModel())) {
 
     override fun onEvent(action: Action) {
         when(action){
@@ -49,11 +45,13 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                 (state.value as Result.Success).let {
                     if(it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launch {
-//                            val result = loginUseCase.createAccount(
-//                                it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
-//                            )
-//                            if((result as Result.Success).data) Action.Navigate(Screen.HOME)
-//                            else Action.SnackBar("Oops! something went wrong.")
+                            val result = loginUseCase.isEmailRegistered(it.data.email.value)
+                            if(result){
+                                val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
+                                if((loginResult as Result.Success).data){
+                                    onEvent(Action.Navigate(Screen.HOME))
+                                } else Action.SnackBar("Password is incorrect").perform()
+                            } else Action.SnackBar("This email is not registered").perform()
                         }
                     } else Action.SnackBar("All fields must be valid").perform()
                 }
