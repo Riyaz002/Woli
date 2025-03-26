@@ -10,6 +10,7 @@ interface Action{
     }
     data class StartActivity(val intent: Intent): Action
     data class SnackBar(val text: String): Action
+    class NavigationBarVisible(val visible: Boolean): Action
 }
 
 class UnhandledActionException(action: Action) : Exception("Unhandled action: $action")
