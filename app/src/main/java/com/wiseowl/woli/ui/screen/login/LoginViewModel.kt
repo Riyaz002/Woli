@@ -2,11 +2,13 @@ package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
+import com.wiseowl.woli.ui.shared.validate
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -19,38 +21,40 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
     override fun onEvent(action: Action) {
         when(action){
             is LoginEvent.OnEmailChange -> {
-                _state.ifSuccess {
+                _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
+                validate("Email") {
                     val isValid = loginUseCase.validateEmail(action.email)
                     val error = if(isValid) null else "Invalid Email"
-                    it.copy(email = it.email.copy(value = action.email, error = error))
+                    _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
                 }
             }
             is LoginEvent.OnPasswordChange -> {
                 _state.ifSuccess {
-                    val result = loginUseCase.validatePassword(action.password)
-                    val newState = when(result.data){
-                        PasswordResult.INVALID_EMPTY_PASSWORD -> it.copy(password = it.password.copy(value = action.password, error = "Password cannot be empty"))
-                        PasswordResult.INVALID_NO_UPPERCASE -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one uppercase character letter"))
-                        PasswordResult.INVALID_NO_SPECIAL_CHARACTERS -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one special character"))
-                        PasswordResult.INVALID_SHORT_PASSWORD -> it.copy(password = it.password.copy(value = action.password, error = "Password should contain at least one special character"))
-                        PasswordResult.VALID -> it.copy(password = it.password.copy(value = action.password, error = null))
+                    validate("Password") {
+                        val result = loginUseCase.validatePassword(action.password)
+                        val error = when(result.data){
+                            PasswordResult.INVALID_EMPTY_PASSWORD -> "Password cannot be empty"
+                            PasswordResult.INVALID_NO_UPPERCASE -> "Password should contain at least one uppercase character letter"
+                            PasswordResult.INVALID_NO_SPECIAL_CHARACTERS -> "Password should contain at least one special character"
+                            PasswordResult.INVALID_SHORT_PASSWORD -> "Password should contain at least one special character"
+                            PasswordResult.VALID -> null
+                        }
+                        _state.ifSuccess { current -> current.copy(password = current.password.copy(error = error)) }
                     }
-                    newState.copy(password = it.password)
+                    it.copy(password = it.password.copy(value = action.password))
                 }
             }
             is LoginEvent.OnLoginClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launch {
-
-//                            loginUseCase.isEmailRegistered(
+//                            val result = loginUseCase.createAccount(
 //                                it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
 //                            )
+//                            if((result as Result.Success).data) Action.Navigate(Screen.HOME)
+//                            else Action.SnackBar("Oops! something went wrong.")
                         }
-
-                    } else{
-                        //TODO("tell user that all field must be valid")
-                    }
+                    } else Action.SnackBar("All fields must be valid").perform()
                 }
             }
         }
