@@ -10,7 +10,6 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
-import com.wiseowl.woli.ui.shared.validate
 
 class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
 
