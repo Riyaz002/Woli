@@ -9,8 +9,8 @@ import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
+import com.wiseowl.woli.ui.shared.launchWithProgress
 import com.wiseowl.woli.ui.shared.validate
-import kotlinx.coroutines.launch
 
 class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
 
@@ -45,12 +45,12 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
             is RegistrationEvent.OnRegisterClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.firstName.valid && it.data.lastName.valid && it.data.email.valid && it.data.password.valid) {
-                        viewModelScope.launch {
+                        viewModelScope.launchWithProgress {
                             val result = registrationUseCase.createAccount(
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
-                            if((result as Result.Success).data) Action.Navigate(Screen.HOME)
-                            else Action.SnackBar("Oops! something went wrong.")
+                            if((result as Result.Success).data) Action.Navigate(Screen.HOME).perform()
+                            else Action.SnackBar("Oops! something went wrong.").perform()
                         }
                     } else Action.SnackBar("All fields must be valid").perform()
                 }
