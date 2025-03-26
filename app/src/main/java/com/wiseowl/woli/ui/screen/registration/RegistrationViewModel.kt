@@ -9,14 +9,10 @@ import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
-import kotlinx.coroutines.Dispatchers
+import com.wiseowl.woli.ui.shared.validate
 import kotlinx.coroutines.launch
-import java.util.Timer
-import java.util.TimerTask
 
 class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
-
-    private var timer: Timer? = null
 
     override fun onEvent(action: Action) {
         when(action){
@@ -24,7 +20,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
             is RegistrationEvent.OnLastNameChange -> _state.ifSuccess { it.copy(lastName = it.lastName.copy(value = action.value)) }
             is RegistrationEvent.OnEmailChange -> {
                 _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
-                validate {
+                validate("Email") {
                     val isValid = registrationUseCase.validateEmail(action.email)
                     val error = if(isValid) null else "Invalid Email"
                     _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
@@ -32,7 +28,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
             }
             is RegistrationEvent.OnPasswordChange -> {
                 _state.ifSuccess {
-                    validate {
+                    validate("Password") {
                         val result = registrationUseCase.validatePassword(action.password)
                         val error = when(result.data){
                             PasswordResult.INVALID_EMPTY_PASSWORD -> "Password cannot be empty"
@@ -60,17 +56,5 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                 }
             }
         }
-    }
-
-    fun validate(validation: () -> Unit){
-        timer?.cancel()
-        timer = Timer()
-        timer?.schedule(
-            object : TimerTask() {
-                override fun run() {
-                    validation()
-                }
-            }, 1000
-        )
     }
 }
