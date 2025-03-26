@@ -80,7 +80,7 @@ class MainActivity : ComponentActivity() {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController,
-                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.REGISTRATION.route
+                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
                         )
                         BottomNavigation(
                             modifier = Modifier
