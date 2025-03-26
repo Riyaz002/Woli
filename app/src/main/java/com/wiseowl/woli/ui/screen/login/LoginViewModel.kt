@@ -2,6 +2,7 @@ package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
@@ -57,6 +58,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                     } else Action.SnackBar("All fields must be valid").perform()
                 }
             }
+            else -> ActionHandler.perform(action)
         }
     }
 }

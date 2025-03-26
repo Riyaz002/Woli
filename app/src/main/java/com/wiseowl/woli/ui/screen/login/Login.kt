@@ -8,15 +8,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.shared.component.BasicButton
 import com.wiseowl.woli.ui.shared.component.BasicTextField
@@ -51,9 +55,14 @@ fun Login(
             )
             BasicButton(
                 data = it.cta,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 onClick = { viewModel.onEvent(LoginEvent.OnLoginClick) }
             )
+            TextButton(modifier = Modifier.padding(top = 10.dp).align(Alignment.CenterHorizontally), onClick = {viewModel.onEvent(Action.Navigate(Screen.REGISTRATION))}){
+                Text(text = "Don't have an account? Register", textDecoration = TextDecoration.Underline)
+            }
         }
     }
 }
