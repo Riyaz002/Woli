@@ -12,7 +12,6 @@ import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 import com.wiseowl.woli.ui.shared.validate
-import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>(Result.Success(LoginModel())) {
 
