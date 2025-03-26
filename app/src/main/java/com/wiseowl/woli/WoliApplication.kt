@@ -8,6 +8,7 @@ import com.wiseowl.woli.data.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
+import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
@@ -46,6 +47,7 @@ class WoliApplication: Application() {
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
         singleOf(::RegistrationUseCase)
+        singleOf(::LoginUseCase)
         singleOf(::GetNavigationItemsUseCase)
     }
 

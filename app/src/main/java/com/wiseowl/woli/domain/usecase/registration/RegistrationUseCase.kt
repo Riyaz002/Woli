@@ -2,6 +2,9 @@ package com.wiseowl.woli.domain.usecase.registration
 
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
+import com.wiseowl.woli.domain.usecase.common.EmailValidator
+import com.wiseowl.woli.domain.usecase.common.PasswordResult
+import com.wiseowl.woli.domain.usecase.common.PasswordValidator
 import com.wiseowl.woli.domain.util.Result
 
 class RegistrationUseCase(private val accountRepository: AccountRepository) {

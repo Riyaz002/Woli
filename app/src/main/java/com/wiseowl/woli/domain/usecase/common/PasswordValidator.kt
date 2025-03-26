@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.usecase.registration
+package com.wiseowl.woli.domain.usecase.common
 
 import com.wiseowl.woli.domain.util.Result
 

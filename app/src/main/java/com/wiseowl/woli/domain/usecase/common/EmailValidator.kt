@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.usecase.registration
+package com.wiseowl.woli.domain.usecase.common
 
 class EmailValidator {
     fun isValidEmail(email: String): Boolean {
