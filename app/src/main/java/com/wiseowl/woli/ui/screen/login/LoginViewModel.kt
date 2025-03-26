@@ -10,6 +10,7 @@ import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
+import com.wiseowl.woli.ui.shared.launchWithProgress
 import com.wiseowl.woli.ui.shared.validate
 import kotlinx.coroutines.launch
 
@@ -44,7 +45,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
             is LoginEvent.OnLoginClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.email.valid && it.data.password.valid) {
-                        viewModelScope.launch {
+                        viewModelScope.launchWithProgress {
                             val result = loginUseCase.isEmailRegistered(it.data.email.value)
                             if(result){
                                 val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
