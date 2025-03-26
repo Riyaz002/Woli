@@ -16,4 +16,5 @@ sealed class Screen {
         override var route: String = super.route + "?$ARG_CATEGORY={$ARG_CATEGORY}"
     }
     @Serializable data object REGISTRATION: Screen()
+    @Serializable data object LOGIN: Screen()
 }

@@ -29,11 +29,15 @@ fun Login(
     val registrationUseCase: LoginUseCase by inject(LoginUseCase::class.java)
     val viewModel = viewModel { LoginViewModel(registrationUseCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    Page(modifier.fillMaxSize(), data = state.value) {
+    Page(
+        modifier.fillMaxSize(),
+        data = state.value,
+        navigationBarVisible = false
+    ) {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Text(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                text = "Registration",
+                text = "Login",
                 style = TextStyle(fontSize = 54.sp)
             )
             Spacer(modifier = Modifier.height(40.dp))
