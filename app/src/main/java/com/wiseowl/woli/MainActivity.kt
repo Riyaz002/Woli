@@ -82,6 +82,14 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
                         )
+                        SnackbarHost(
+                            snackBarHostState,
+                            modifier = Modifier.padding(top = 30.dp),
+                            snackbar = { snackBarData ->
+                                Snackbar(snackBarData, shape = RoundedCornerShape(20.dp))
+                            }
+                        )
+                        if (progressVisible) CircularProgressBar(Modifier.fillMaxSize())
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
@@ -90,16 +98,8 @@ class MainActivity : ComponentActivity() {
                                 .alpha(navigationBarAlpha.value),
                             navigationItems = getNavigationItemsUseCase()
                         )
-                        SnackbarHost(
-                            snackBarHostState,
-                            modifier = Modifier.padding(top = 30.dp),
-                            snackbar = { snackBarData ->
-                                Snackbar(snackBarData, shape = RoundedCornerShape(20.dp))
-                            }
-                        )
                     }
                 }
-                if (progressVisible) CircularProgressBar(Modifier.fillMaxSize())
             }
         }
     }

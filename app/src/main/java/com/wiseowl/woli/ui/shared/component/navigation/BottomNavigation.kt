@@ -1,6 +1,8 @@
 package com.wiseowl.woli.ui.shared.component.navigation
 
+import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,38 +41,41 @@ fun BottomNavigation(
     modifier: Modifier = Modifier,
     navigationItems: List<NavigationItem> = GetNavigationItemsUseCase().invoke()
 ) {
+    val currentIndex = remember { mutableStateOf(navigationItems.indexOfFirst { it.selected }.plus(1)) }
     val itemSize = remember { mutableStateOf(0) }
-    val ballAnimation =
-        animateFloatAsState(targetValue = (itemSize.value.toFloat() / 2) * (0.5 * (-2 + (navigationItems
-            .indexOfFirst { it.selected }
-            .plus(1) * 4))).toFloat()
-        )
+    val offset = (itemSize.value.toFloat() / 2) * (0.5 * (-2 + (currentIndex.value * 4))).toFloat()
+    val ballAnimation = if(itemSize.value!=0) animateFloatAsState(targetValue = offset, animationSpec = tween(400, easing = EaseOutBounce)) else null
     Row(
         modifier
             .clip(RoundedCornerShape(100.dp))
             .background(Color.White)
             .drawBehind {
                 drawIntoCanvas {
-                    drawCircle(
-                        Color.Black,
-                        (size.minDimension / 2.0f) - 10,
-                        center = Offset(
-                            x = ballAnimation.value,
-                            y = size.height / 2
+
+                    if(itemSize.value!=0 && ballAnimation?.value!=null){
+                        drawCircle(
+                            Color.Black,
+                            (size.minDimension / 2.0f) - 10,
+                            center = Offset(
+                                x = ballAnimation.value,
+                                y = size.height / 2
+                            )
                         )
-                    )
+                    }
                 }
-            },
+            }
+        ,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        navigationItems.forEach { navigationItem ->
+        navigationItems.forEachIndexed { index, navigationItem ->
+            val isSelected = currentIndex.value == index+1
             Column(
                 Modifier
-                    .onSizeChanged {
-                        itemSize.value = it.width
-                    }
+                    .onSizeChanged { itemSize.value = it.width }
                     .padding(5.dp)
-                    .clickable { ActionHandler.perform(navigationItem.action) },
+                    .clickable {
+                        ActionHandler.perform(navigationItem.action)
+                        currentIndex.value = index+1 },
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Column(
                     modifier = Modifier
@@ -81,8 +86,7 @@ fun BottomNavigation(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    val tintColor =
-                        if (navigationItem.selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                    val tintColor = if(isSelected) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.primary
                     Image(
                         modifier = Modifier.size(24.dp),
                         imageVector = navigationItem.icon,
