@@ -20,6 +20,7 @@ import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
+import com.wiseowl.woli.ui.shared.component.Error
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable
@@ -40,7 +41,9 @@ fun Category(
         is Result.Success -> {
             Column(modifier) {
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(top = 100.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 100.dp),
                     text = currentState.data.category,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
@@ -64,6 +67,6 @@ fun Category(
                 }
             }
         }
-        is Result.Error -> Unit
+        is Result.Error -> Error(error = currentState.error)
     }
 }
