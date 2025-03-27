@@ -8,6 +8,8 @@ import com.wiseowl.woli.data.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
+import com.wiseowl.woli.domain.usecase.login.LoginUseCase
+import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
@@ -16,6 +18,7 @@ import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
+import com.wiseowl.woli.data.repository.AccountRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -30,6 +33,7 @@ class WoliApplication: Application() {
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)
         singleOf(::CategoryRepository) bind(com.wiseowl.woli.domain.repository.CategoryRepository::class)
+        singleOf(::AccountRepository) bind(com.wiseowl.woli.domain.repository.AccountRepository::class)
         
         //Database
         single { Room.databaseBuilder(this@WoliApplication, WoliDatabase::class.java, WoliDatabase.NAME).build() }
@@ -42,6 +46,8 @@ class WoliApplication: Application() {
         singleOf(::PageUseCase)
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
+        singleOf(::RegistrationUseCase)
+        singleOf(::LoginUseCase)
         singleOf(::GetNavigationItemsUseCase)
     }
 
