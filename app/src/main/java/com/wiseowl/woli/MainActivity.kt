@@ -82,17 +82,6 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
                         )
-                        BottomNavigation(
-                            modifier = Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding())
-                                .height(navigationBarHeight)
-                                .offset(y = navigationBarOffset.value)
-                                .alpha(navigationBarAlpha.value)
-                                .fillMaxWidth()
-                                .background(color = MaterialTheme.colorScheme.surface),
-                            navigationItems = getNavigationItemsUseCase()
-                        )
                         SnackbarHost(
                             snackBarHostState,
                             modifier = Modifier.padding(top = 30.dp),
@@ -100,9 +89,17 @@ class MainActivity : ComponentActivity() {
                                 Snackbar(snackBarData, shape = RoundedCornerShape(20.dp))
                             }
                         )
+                        if (progressVisible) CircularProgressBar(Modifier.fillMaxSize())
+                        BottomNavigation(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = padding.calculateBottomPadding())
+                                .offset(y = navigationBarOffset.value)
+                                .alpha(navigationBarAlpha.value),
+                            navigationItems = getNavigationItemsUseCase()
+                        )
                     }
                 }
-                if (progressVisible) CircularProgressBar(Modifier.fillMaxSize())
             }
         }
     }
