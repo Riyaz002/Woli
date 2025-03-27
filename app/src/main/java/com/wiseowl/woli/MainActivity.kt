@@ -86,11 +86,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .padding(bottom = padding.calculateBottomPadding())
-                                .height(navigationBarHeight)
                                 .offset(y = navigationBarOffset.value)
-                                .alpha(navigationBarAlpha.value)
-                                .fillMaxWidth()
-                                .background(color = MaterialTheme.colorScheme.surface),
+                                .alpha(navigationBarAlpha.value),
                             navigationItems = getNavigationItemsUseCase()
                         )
                         SnackbarHost(
