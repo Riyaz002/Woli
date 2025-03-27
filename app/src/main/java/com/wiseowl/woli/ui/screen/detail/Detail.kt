@@ -28,16 +28,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
-import com.wiseowl.woli.ui.shared.component.Error
 import com.wiseowl.woli.ui.shared.component.Shimmer
 import org.koin.java.KoinJavaComponent.inject
 
@@ -53,145 +51,161 @@ fun Detail(
     val detailState = if(state.value is Result.Success) state.value as Result.Success else null
     val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     val accent = detailState?.data?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
-    Column(
-        modifier.fillMaxSize().background(accent)
-            .verticalScroll(scrollState)
-    ) {
-        when(val currentState = state.value){
-            is Result.Loading -> ActionHandler.perform(Action.Progress(true))
-            is Result.Success -> {
-                ActionHandler.perform(Action.Progress(false))
-                Column(
-                    modifier = Modifier
-                        .background(complementaryColor)
-                        .padding(bottom = 20.dp)
-                ) {
-                    currentState.data.image.let { image ->
-                        if (image == null) {
-                            Shimmer(
-                                modifier = Modifier
-                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp)
-                                    .fillMaxWidth()
-                                    .aspectRatio(1f)
-                                    .clip(RoundedCornerShape(20.dp))
-                            )
-                        } else{
-                            ExpandableImageCard(
-                                modifier = Modifier
-                                    .padding(top = 100.dp, start = 20.dp, end = 20.dp)
-                                    .clip(RoundedCornerShape(20.dp)),
-                                image = image,
-                                expanded = currentState.data.imagePreviewPopupVisible,
-                                onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
-                                onClick = viewModel::onEvent
-                            )
-                        }
-                    }
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        horizontalArrangement = Arrangement.Absolute.SpaceAround,
-                    ) {
-                        TextRoundButton(
-                            modifier = Modifier.weight(1f),
-                            text = "Preview",
-                            backgroundColor = Color(currentState.data.accentColor!!),
-                            textColor = complementaryColor,
-                            onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
-                        )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        TextRoundButton(
-                            modifier = Modifier.weight(1f),
-                            text = "Set",
-                            backgroundColor = Color(currentState.data.accentColor),
-                            textColor = complementaryColor,
-                            onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper)}
-                        )
-                    }
-
-                    currentState.data.description?.let { it1 ->
-                        Text(
+    Page(
+        data = state.value,
+        navigationBarVisible = false
+    ) { data ->
+        Column(
+            modifier
+                .fillMaxSize()
+                .background(accent)
+                .verticalScroll(scrollState)
+        ) {
+            Column(
+                modifier = Modifier
+                    .background(complementaryColor)
+                    .padding(bottom = 20.dp)
+            ) {
+                data.image.let { image ->
+                    if (image == null) {
+                        Shimmer(
                             modifier = Modifier
+                                .padding(top = 100.dp, start = 20.dp, end = 20.dp)
                                 .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                            text = it1,
-                            fontSize = 32.sp,
-                            textAlign = TextAlign.Center,
-                            lineHeight = 42.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color(currentState.data.accentColor!!)
+                                .aspectRatio(1f)
+                                .clip(RoundedCornerShape(20.dp))
+                        )
+                    } else {
+                        ExpandableImageCard(
+                            modifier = Modifier
+                                .padding(top = 100.dp, start = 20.dp, end = 20.dp)
+                                .clip(RoundedCornerShape(20.dp)),
+                            image = image,
+                            expanded = data.imagePreviewPopupVisible,
+                            onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
+                            onClick = viewModel::onEvent
                         )
                     }
                 }
 
-                currentState.data.categories.let { categories ->
-                    Column(
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.Absolute.SpaceAround,
+                ) {
+                    TextRoundButton(
+                        modifier = Modifier.weight(1f),
+                        text = "Preview",
+                        backgroundColor = Color(data.accentColor!!),
+                        textColor = complementaryColor,
+                        onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    TextRoundButton(
+                        modifier = Modifier.weight(1f),
+                        text = "Set",
+                        backgroundColor = Color(data.accentColor),
+                        textColor = complementaryColor,
+                        onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper) }
+                    )
+                }
+
+                data.description?.let { it1 ->
+                    Text(
                         modifier = Modifier
-                            .background(Color(currentState.data.accentColor!!))
-                            .padding(20.dp)
-                    ) {
-                        Text(
-                            modifier = Modifier.fillMaxWidth(),
-                            text = "Category",
-                            fontSize = 32.sp,
-                            textAlign = TextAlign.Start,
-                            lineHeight = 42.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color(currentState.data.complementaryColor!!)
-                        )
-                        LazyRow(modifier = Modifier.padding(top = 16.dp)) {
-                            items(categories){ category ->
-                                TextRoundButton(
-                                    modifier = Modifier.padding(end = 10.dp),
-                                    text = category,
-                                    backgroundColor = Color(currentState.data.complementaryColor),
-                                    textColor = Color(currentState.data.accentColor),
-                                    onClick = { viewModel.onEvent(DetailEvent.OnClickCategory(category)) }
-                                )
-                            }
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        text = it1,
+                        fontSize = 32.sp,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 42.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color(data.accentColor!!)
+                    )
+                }
+            }
+
+            data.categories.let { categories ->
+                Column(
+                    modifier = Modifier
+                        .background(Color(data.accentColor!!))
+                        .padding(20.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Category",
+                        fontSize = 32.sp,
+                        textAlign = TextAlign.Start,
+                        lineHeight = 42.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(data.complementaryColor!!)
+                    )
+                    LazyRow(modifier = Modifier.padding(top = 16.dp)) {
+                        items(categories) { category ->
+                            TextRoundButton(
+                                modifier = Modifier.padding(end = 10.dp),
+                                text = category,
+                                backgroundColor = Color(data.complementaryColor),
+                                textColor = Color(data.accentColor),
+                                onClick = {
+                                    viewModel.onEvent(
+                                        DetailEvent.OnClickCategory(
+                                            category
+                                        )
+                                    )
+                                }
+                            )
                         }
-                        currentState.data.similarImage.let { similarImage ->
-                            if(similarImage.shimmer){
-                                Shimmer(modifier = Modifier
+                    }
+                    data.similarImage.let { similarImage ->
+                        if (similarImage.shimmer) {
+                            Shimmer(
+                                modifier = Modifier
                                     .width(100.dp)
                                     .height(50.dp)
                                     .padding(top = 20.dp)
-                                    .clip(RoundedCornerShape(20.dp)))
-                                Row {
-                                    repeat(3){
-                                        Shimmer(modifier = Modifier
+                                    .clip(RoundedCornerShape(20.dp))
+                            )
+                            Row {
+                                repeat(3) {
+                                    Shimmer(
+                                        modifier = Modifier
                                             .padding(top = 16.dp)
                                             .size(100.dp)
                                             .clip(RoundedCornerShape(20.dp))
-                                        )
-                                        Spacer(modifier = Modifier.width(20.dp))
-                                    }
-                                }
-                            } else{
-                                if(similarImage.images?.isNotEmpty() == true){
-                                    Text(
-                                        modifier = Modifier.padding(top = 20.dp),
-                                        text = "Similar",
-                                        fontSize = 32.sp,
-                                        textAlign = TextAlign.Start,
-                                        lineHeight = 42.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = Color(currentState.data.complementaryColor)
                                     )
-                                    LazyRow {
-                                        similarImage.images.let { images ->
-                                            items(images){ image ->
-                                                ImageCard(
-                                                    modifier = Modifier.size(100.dp),
-                                                    image = image,
-                                                    cornerRadius = 20.dp,
-                                                    aspectRatio = 1f,
-                                                    onClick = { viewModel.onEvent(DetailEvent.OnClickSimilarImage(image.id)) }
-                                                )
-                                                Spacer(modifier = Modifier.size(10.dp))
-                                            }
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                }
+                            }
+                        } else {
+                            if (similarImage.images?.isNotEmpty() == true) {
+                                Text(
+                                    modifier = Modifier.padding(top = 20.dp),
+                                    text = "Similar",
+                                    fontSize = 32.sp,
+                                    textAlign = TextAlign.Start,
+                                    lineHeight = 42.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(data.complementaryColor)
+                                )
+                                LazyRow {
+                                    similarImage.images.let { images ->
+                                        items(images) { image ->
+                                            ImageCard(
+                                                modifier = Modifier.size(100.dp),
+                                                image = image,
+                                                cornerRadius = 20.dp,
+                                                aspectRatio = 1f,
+                                                onClick = {
+                                                    viewModel.onEvent(
+                                                        DetailEvent.OnClickSimilarImage(
+                                                            image.id
+                                                        )
+                                                    )
+                                                }
+                                            )
+                                            Spacer(modifier = Modifier.size(10.dp))
                                         }
                                     }
                                 }
@@ -199,19 +213,18 @@ fun Detail(
                         }
                     }
                 }
-
-                if(currentState.data.setWallpaperPopupVisible){
-                    ChooserDialog(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        buttonColor = Color(currentState.data.accentColor!!),
-                        backgroundColor = complementaryColor,
-                        onEvent = viewModel::onEvent
-                    )
-                }
             }
-            is Result.Error -> Error(modifier = modifier, error = currentState.error)
+
+            if (data.setWallpaperPopupVisible) {
+                ChooserDialog(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    buttonColor = Color(data.accentColor!!),
+                    backgroundColor = complementaryColor,
+                    onEvent = viewModel::onEvent
+                )
+            }
         }
     }
 }

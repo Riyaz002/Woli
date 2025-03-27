@@ -1,10 +1,12 @@
 package com.wiseowl.woli.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.googlefonts.GoogleFont
-import androidx.compose.ui.text.googlefonts.Font
+
 import com.wiseowl.woli.R
+import androidx.compose.ui.text.googlefonts.Font
+import androidx.compose.ui.text.googlefonts.GoogleFont
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",

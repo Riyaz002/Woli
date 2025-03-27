@@ -6,6 +6,8 @@ import coil3.ImageLoader
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -15,6 +17,8 @@ import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.model.User
+import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
@@ -62,10 +66,57 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         }
     }
 
+    override suspend fun createUser(
+        email: String,
+        password: String,
+        firstName: String,
+        lastName: String,
+    ): Result<Boolean> {
+        val result = Firebase.auth.createUserWithEmailAndPassword(
+            email, password
+        ).await()
+
+        return if(result.user!=null){
+            val user = User(firstName, lastName, result.user!!.uid, email, null)
+            firestore.collection(USERS_COLLECTION).document(email).set(user)
+            Result.Success(true)
+        } else{
+            Result.Success(false)
+        }
+    }
+
+    override suspend fun login(email: String, password: String): Result<Boolean> {
+        return try {
+            val result = Firebase.auth.signInWithEmailAndPassword(
+                email, password
+            ).await()
+            Result.Success(result.user!=null)
+        } catch (e: FirebaseAuthInvalidCredentialsException){
+            Result.Success(false)
+        }
+    }
+
+    override suspend fun deleteUser(email: String) {
+        firestore.collection(USERS_COLLECTION).document(email).delete()
+    }
+
+    override suspend fun updateUser(user: User) {
+        firestore.collection(USERS_COLLECTION).document(user.email).set(user)
+    }
+
+    override suspend fun isEmailRegistered(email: String): Boolean {
+        return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
+    }
+
+    override suspend fun getUser(email: String): User? {
+        return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
+        const val USERS_COLLECTION = "users"
         const val COUNT = "count"
         const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
@@ -84,6 +135,16 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
             return ColorDTO(
                 primary = getValue(ColorDTO::primary.name).toString().toInt(),
                 secondary = getValue(ColorDTO::secondary.name).toString().toInt()
+            )
+        }
+
+        private fun Map<String, Any>.toUser(): User {
+            return User(
+                firstName = getValue(User::firstName.name).toString(),
+                lastName = getValue(User::lastName.name).toString(),
+                uid = getValue(User::uid.name).toString(),
+                email = getValue(User::email.name).toString(),
+                favourites = null
             )
         }
 
