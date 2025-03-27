@@ -41,7 +41,9 @@ fun Category(
         is Result.Success -> {
             Column(modifier) {
                 Text(
-                    modifier = Modifier.fillMaxWidth().padding(top = 100.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 100.dp),
                     text = currentState.data.category,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
@@ -64,6 +66,6 @@ fun Category(
                 }
             }
         }
-        is Result.Error -> Unit
+        is Result.Error -> Error(error = currentState.error)
     }
 }

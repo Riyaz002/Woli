@@ -10,8 +10,8 @@ import com.wiseowl.woli.ui.navigation.Screen
 class GetNavigationItemsUseCase {
     operator fun invoke(): List<NavigationItem>{
         return listOf(
-            NavigationItem("Home", Icons.Default.Home, Action.Navigate(Screen.HOME)),
-            NavigationItem("Categories", Icons.Default.Menu, Action.Navigate(Screen.CATEGORIES))
+            NavigationItem("Home", Icons.Default.Home, Action.Navigate(Screen.HOME), true),
+            NavigationItem("Categories", Icons.Default.Menu, Action.Navigate(Screen.CATEGORY))
         )
     }
 }

@@ -11,12 +11,14 @@ import com.wiseowl.woli.ui.screen.categories.Categories
 import com.wiseowl.woli.ui.screen.category.Category
 import com.wiseowl.woli.ui.screen.detail.Detail
 import com.wiseowl.woli.ui.screen.home.Home
+import com.wiseowl.woli.ui.screen.login.Login
+import com.wiseowl.woli.ui.screen.registration.Registration
 
 @Composable
 fun Root(
     modifier: Modifier,
     navController: NavHostController,
-    startScreen: String = Screen.HOME.route
+    startScreen: String
 ) {
     NavHost(modifier = modifier, navController = navController, startDestination = startScreen) {
         composable(route = Screen.HOME.route) { Home(modifier) }
@@ -32,6 +34,8 @@ fun Root(
                 navArgument(Screen.CATEGORY.ARG_CATEGORY) { type = NavType.StringType }
             )
         ) { Category(modifier, category = it.arguments!!.getString(Screen.CATEGORY.ARG_CATEGORY)!!) }
+        composable(route = Screen.REGISTRATION.route) { Registration(modifier) }
+        composable(route = Screen.LOGIN.route) { Login(modifier) }
 
         composable(route = Screen.CATEGORIES.route) { Categories(modifier) }
     }

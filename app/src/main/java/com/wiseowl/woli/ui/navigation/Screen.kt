@@ -15,6 +15,8 @@ sealed class Screen {
         const val ARG_CATEGORY = "category"
         override var route: String = super.route + "?$ARG_CATEGORY={$ARG_CATEGORY}"
     }
+    @Serializable data object REGISTRATION: Screen()
+    @Serializable data object LOGIN: Screen()
 
     @Serializable data object CATEGORIES: Screen()
 }
