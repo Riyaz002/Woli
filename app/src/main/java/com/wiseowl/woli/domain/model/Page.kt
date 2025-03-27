@@ -1,6 +1,6 @@
 package com.wiseowl.woli.domain.model
 
-data class Page(
+data class Page<T>(
     val page: Int,
-    val images: List<Image>?
+    val data: List<T>?
 )

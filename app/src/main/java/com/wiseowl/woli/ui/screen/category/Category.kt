@@ -58,7 +58,6 @@ fun Category(
                             ImageCard(
                                 modifier = Modifier.padding(10.dp),
                                 image = image,
-                                cornerRadius = 20.dp,
                                 aspectRatio = 0.6f,
                                 onClick = { viewModel.onEvent(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to image.id.toString()))) }
                             )

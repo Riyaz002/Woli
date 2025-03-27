@@ -30,12 +30,14 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                         accentColor = image?.color?.primary,
                         complementaryColor = image?.color?.secondary
                     )
-                ) else Result.Success(DetailModel(
-                    description = image?.description,
-                    categories = image?.categories ?: listOf(),
-                    accentColor = image?.color?.primary,
-                    complementaryColor = image?.color?.secondary
-                ))
+                ) else Result.Success(
+                    DetailModel(
+                        description = image?.description,
+                        categories = image?.categories ?: listOf(),
+                        accentColor = image?.color?.primary,
+                        complementaryColor = image?.color?.secondary
+                    )
+                )
             }
             val bitmap = viewModelScope.async {  detailUseCase.getBitmapUseCase(image?.url!!) }.await()
             if(bitmap==null){

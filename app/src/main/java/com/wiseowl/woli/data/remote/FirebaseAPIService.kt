@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
+import com.wiseowl.woli.data.local.entity.CategoryDTO
 import com.wiseowl.woli.data.local.entity.ColorDTO
 import com.wiseowl.woli.data.local.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
@@ -23,7 +24,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseAPIService(val context: Context): RemoteAPIService {
+class FirebaseAPIService(private val context: Context): RemoteAPIService {
     private val firestore = Firebase.firestore
 
     override suspend fun getPage(page: Int): List<ImageDTO>? {
@@ -112,10 +113,18 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 
+    override suspend fun getCategoryPage(page: Int): List<CategoryDTO>? {
+        val result = firestore.collection(CATEGORIES_COLLECTION).getDocumentOrNull(page.toString())?.data
+        val categoriesData = result?.get(DATA) as List<DocumentReference>?
+        val categories = categoriesData?.map { it.get() }?.map { it.await() }
+        return categories?.map { it.data!!.toCategoryDTO() }
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
+        const val CATEGORIES_COLLECTION = "categories"
         const val USERS_COLLECTION = "users"
         const val COUNT = "count"
         const val TOTAL_PAGE = "totalPages"
@@ -145,6 +154,13 @@ class FirebaseAPIService(val context: Context): RemoteAPIService {
                 uid = getValue(User::uid.name).toString(),
                 email = getValue(User::email.name).toString(),
                 favourites = null
+            )
+        }
+
+        private suspend fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
+            return CategoryDTO(
+                name = getValue(CategoryDTO::name.name).toString(),
+                cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get().await().data as Map<String, Any>).toImages()
             )
         }
 

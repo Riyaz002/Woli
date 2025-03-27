@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.wiseowl.woli.ui.screen.categories.Categories
 import com.wiseowl.woli.ui.screen.category.Category
 import com.wiseowl.woli.ui.screen.detail.Detail
 import com.wiseowl.woli.ui.screen.home.Home
@@ -35,5 +36,7 @@ fun Root(
         ) { Category(modifier, category = it.arguments!!.getString(Screen.CATEGORY.ARG_CATEGORY)!!) }
         composable(route = Screen.REGISTRATION.route) { Registration(modifier) }
         composable(route = Screen.LOGIN.route) { Login(modifier) }
+
+        composable(route = Screen.CATEGORIES.route) { Categories(modifier) }
     }
 }

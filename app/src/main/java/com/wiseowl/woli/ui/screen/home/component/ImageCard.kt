@@ -22,7 +22,7 @@ import com.wiseowl.woli.domain.model.Image
 fun ImageCard(
     modifier: Modifier = Modifier,
     image: Image,
-    cornerRadius: Dp = 0.dp,
+    cornerRadius: Dp = 20.dp,
     aspectRatio: Float? = null,
     onClick: (() -> Unit)? = null
 ) {
