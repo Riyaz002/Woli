@@ -4,17 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -44,22 +37,13 @@ import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
-    val getNavigationItemsUseCase by inject<GetNavigationItemsUseCase>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            var progressVisible by remember {
-                mutableStateOf(false)
-            }
-            var navigationBarVisible by remember { mutableStateOf(false) }
-            val navigationBarHeight = 78.dp
-            val navigationBarOffset = animateDpAsState(targetValue = if (navigationBarVisible) 0.dp else navigationBarHeight)
-            val navigationBarAlpha = animateFloatAsState(targetValue = if (navigationBarVisible) 1f else 0f)
-            val snackBarHostState = remember {
-                SnackbarHostState()
-            }
+            var progressVisible by remember { mutableStateOf(false) }
+            val snackBarHostState = remember { SnackbarHostState() }
 
             ActionHandler.listen { action ->
                 when (action) {
@@ -70,7 +54,6 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState.currentSnackbarData?.dismiss()
                         snackBarHostState.showSnackbar(action.text)
                     }
-                    is Action.NavigationBarVisible -> navigationBarVisible = action.visible
                     else -> throw UnhandledActionException(action)
                 }
             }
@@ -93,10 +76,8 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding())
-                                .offset(y = navigationBarOffset.value)
-                                .alpha(navigationBarAlpha.value),
-                            navigationItems = getNavigationItemsUseCase()
+                                .padding(bottom = padding.calculateBottomPadding()),
+                            navController
                         )
                     }
                 }
