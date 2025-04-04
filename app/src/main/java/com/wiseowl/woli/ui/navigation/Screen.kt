@@ -17,6 +17,6 @@ sealed class Screen {
     }
     @Serializable data object REGISTRATION: Screen()
     @Serializable data object LOGIN: Screen()
-
     @Serializable data object CATEGORIES: Screen()
+    @Serializable data object Profile: Screen()
 }

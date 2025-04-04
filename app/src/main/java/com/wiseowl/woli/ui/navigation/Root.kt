@@ -12,6 +12,7 @@ import com.wiseowl.woli.ui.screen.category.Category
 import com.wiseowl.woli.ui.screen.detail.Detail
 import com.wiseowl.woli.ui.screen.home.Home
 import com.wiseowl.woli.ui.screen.login.Login
+import com.wiseowl.woli.ui.screen.profile.Profile
 import com.wiseowl.woli.ui.screen.registration.Registration
 
 @Composable
@@ -36,7 +37,7 @@ fun Root(
         ) { Category(modifier, category = it.arguments!!.getString(Screen.CATEGORY.ARG_CATEGORY)!!) }
         composable(route = Screen.REGISTRATION.route) { Registration(modifier) }
         composable(route = Screen.LOGIN.route) { Login(modifier) }
-
         composable(route = Screen.CATEGORIES.route) { Categories(modifier) }
+        composable(route = Screen.Profile.route) { Profile(modifier) }
     }
 }
