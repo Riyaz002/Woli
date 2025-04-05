@@ -31,8 +31,7 @@ fun Registration(
     val state = viewModel.state.collectAsStateWithLifecycle()
     Page(
         modifier.fillMaxSize(),
-        data = state.value,
-        navigationBarVisible = false
+        data = state.value
     ) {
         Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Text(

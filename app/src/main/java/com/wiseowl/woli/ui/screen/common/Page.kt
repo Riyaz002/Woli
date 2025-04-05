@@ -14,12 +14,8 @@ import com.wiseowl.woli.ui.shared.component.Error
 fun <T> Page(
     modifier: Modifier = Modifier,
     data: Result<T>,
-    navigationBarVisible: Boolean = true,
     content: @Composable BoxScope.(T) -> Unit,
 ) {
-    LaunchedEffect(key1 = navigationBarVisible) {
-        ActionHandler.perform(Action.NavigationBarVisible(navigationBarVisible))
-    }
     when(data){
         is Result.Error -> Error(modifier = modifier, error = data.error)
         is Result.Loading -> ActionHandler.perform(Action.Progress(true))

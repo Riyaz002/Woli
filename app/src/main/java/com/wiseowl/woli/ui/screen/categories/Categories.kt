@@ -34,8 +34,7 @@ fun Categories(
 
     Page(
         modifier = modifier,
-        data = state.value,
-        navigationBarVisible = false
+        data = state.value
     ) {
         Column {
             Text(
