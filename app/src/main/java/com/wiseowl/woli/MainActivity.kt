@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,7 +58,7 @@ class MainActivity : ComponentActivity() {
             }
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
-                    Box(Modifier) {
+                    Box(Modifier.fillMaxHeight()) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController,
