@@ -21,6 +21,10 @@ class EncryptedSharedPreference(context: Context, private val encryptor: StringE
         return if (encryptedValue != null) encryptor.decrypt(encryptedValue) else null
     }
 
+    fun clear() {
+        sharedPreferences?.edit()?.clear()?.apply()
+    }
+
 
     companion object {
         private val lock = Any()

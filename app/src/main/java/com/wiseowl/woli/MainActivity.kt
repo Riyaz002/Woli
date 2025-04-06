@@ -27,14 +27,19 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
+import com.wiseowl.woli.domain.pubsub.EventListener
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : ComponentActivity() {
+
+    val eventListener by inject<EventListener>(EventListener::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
