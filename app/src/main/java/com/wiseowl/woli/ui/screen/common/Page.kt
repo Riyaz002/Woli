@@ -3,7 +3,6 @@ package com.wiseowl.woli.ui.screen.common
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler

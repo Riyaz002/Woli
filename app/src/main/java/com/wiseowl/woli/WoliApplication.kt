@@ -3,7 +3,9 @@ package com.wiseowl.woli
 import android.app.Application
 import androidx.room.Room
 import com.wiseowl.woli.domain.RemoteAPIService
-import com.wiseowl.woli.data.local.WoliDatabase
+import com.wiseowl.woli.data.local.db.WoliDatabase
+import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
+import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
 import com.wiseowl.woli.data.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
@@ -39,6 +41,10 @@ class WoliApplication: Application() {
         
         //Database
         single { Room.databaseBuilder(this@WoliApplication, WoliDatabase::class.java, WoliDatabase.NAME).build() }
+
+        //Encryption
+        single { StringEncryptor() }
+        single { EncryptedSharedPreference(this@WoliApplication, get()) }
 
         //Use Case
         singleOf(::GetImageUseCase)

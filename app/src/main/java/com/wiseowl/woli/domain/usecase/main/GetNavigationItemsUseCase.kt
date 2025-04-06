@@ -3,7 +3,6 @@ package com.wiseowl.woli.domain.usecase.main
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
-import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.model.NavigationItem
 import com.wiseowl.woli.ui.navigation.Screen
 

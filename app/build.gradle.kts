@@ -30,6 +30,7 @@ android {
             useSupportLibrary = true
         }
         resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
+        buildConfigField("String", "KEY_STORE_ALIAS", secrets["KEY_STORE_ALIAS"].toString())
     }
 
     buildTypes {
@@ -50,6 +51,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -74,6 +76,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.runner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

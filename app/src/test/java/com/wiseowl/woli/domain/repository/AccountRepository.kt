@@ -16,6 +16,10 @@ class TestAccountRepository: AccountRepository {
         return Result.Success(true)
     }
 
+    override suspend fun login(email: String, password: String): Result<User> {
+        return Result.Success(users.first { it.email == email })
+    }
+
     override suspend fun deleteUser(email: String) {
         users.removeIf { it.email == email }
     }
