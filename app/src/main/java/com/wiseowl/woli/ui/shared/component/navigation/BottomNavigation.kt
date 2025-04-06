@@ -73,6 +73,7 @@ fun BottomNavigation(
                 when (destination.route) {
                     Screen.HOME.route -> Screen.HOME
                     Screen.CATEGORIES.route -> Screen.CATEGORIES
+                    Screen.Profile.route -> Screen.Profile
                     else -> null
                 }.also { if(it==null) navigationBarVisible = false else navigationBarVisible = true }
             )
