@@ -52,7 +52,9 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState.currentSnackbarData?.dismiss()
                         snackBarHostState.showSnackbar(action.text)
                     }
-                    is Action.Logout -> Firebase.auth.signOut()
+                    is Action.Logout -> {
+                        Firebase.auth.signOut()
+                    }
                     else -> throw UnhandledActionException(action)
                 }
             }
