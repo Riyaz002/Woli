@@ -27,6 +27,7 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
+import com.wiseowl.woli.domain.pubsub.Event
 import com.wiseowl.woli.domain.pubsub.EventListener
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
@@ -59,6 +60,8 @@ class MainActivity : ComponentActivity() {
                     }
                     is Action.Logout -> {
                         Firebase.auth.signOut()
+                        eventListener.pushEvent(Event.Logout)
+                        navController.navigate(Screen.LOGIN.route)
                     }
                     else -> throw UnhandledActionException(action)
                 }
