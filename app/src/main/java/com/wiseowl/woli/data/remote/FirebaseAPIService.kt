@@ -14,10 +14,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.data.local.entity.CategoryDTO
-import com.wiseowl.woli.data.local.entity.ColorDTO
-import com.wiseowl.woli.data.local.entity.ImageDTO
+import com.wiseowl.woli.data.local.db.entity.CategoryDTO
+import com.wiseowl.woli.data.local.db.entity.ColorDTO
+import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.tasks.await
@@ -86,14 +87,18 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
-    override suspend fun login(email: String, password: String): Result<Boolean> {
+    override suspend fun login(email: String, password: String): Result<User> {
         return try {
-            val result = Firebase.auth.signInWithEmailAndPassword(
+            Firebase.auth.signInWithEmailAndPassword(
                 email, password
             ).await()
-            Result.Success(result.user!=null)
+
+            val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
+            if(user!=null) {
+                Result.Success(user)
+            } else Result.Error(Error("Something went wrong"))
         } catch (e: FirebaseAuthInvalidCredentialsException){
-            Result.Success(false)
+            Result.Error(Error("Invalid Credentials"))
         }
     }
 

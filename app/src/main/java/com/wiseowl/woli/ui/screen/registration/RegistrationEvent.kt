@@ -4,6 +4,7 @@ import com.wiseowl.woli.domain.event.Action
 
 sealed class RegistrationEvent: Action {
     data object OnRegisterClick : RegistrationEvent()
+    data class Login(val email: String, val password: String) : RegistrationEvent()
     data class OnFirstNameChange(val value: String) : RegistrationEvent()
     data class OnLastNameChange(val value: String) : RegistrationEvent()
     data class OnEmailChange(val email: String) : RegistrationEvent()

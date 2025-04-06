@@ -47,9 +47,10 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                             val result = loginUseCase.isEmailRegistered(it.data.email.value)
                             if(result){
                                 val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
-                                if((loginResult as Result.Success).data){
-                                    onEvent(Action.Navigate(Screen.HOME))
-                                } else Action.SnackBar("Password is incorrect").perform()
+                                when(loginResult){
+                                    is Result.Success -> onEvent(Action.Navigate(Screen.HOME))
+                                    else -> Action.SnackBar("Password or Email is incorrect").perform()
+                                }
                             } else Action.SnackBar("This email is not registered").perform()
                         }
                     } else Action.SnackBar("All fields must be valid").perform()

@@ -2,7 +2,7 @@ package com.wiseowl.woli.domain.usecase.registration
 
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.TestAccountRepository
-import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
@@ -75,7 +75,7 @@ class RegistrationUseCaseTest {
     @Test
     fun `valid passwords is accepted`() {
         validPasswords.forEach {
-            val result = registrationUseCase.validatePassword(it) as Result.Success
+            val result = registrationUseCase.validatePassword(it)
             Assert.assertEquals(result.data, PasswordResult.VALID)
         }
     }
@@ -83,7 +83,7 @@ class RegistrationUseCaseTest {
     @Test
     fun `invalid passwords are rejected`() {
         invalidPasswords.forEach {
-            val result = registrationUseCase.validatePassword(it) as Result.Success
+            val result = registrationUseCase.validatePassword(it)
             Assert.assertNotEquals(result.data, PasswordResult.VALID)
         }
     }

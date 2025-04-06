@@ -1,5 +1,6 @@
 package com.wiseowl.woli.domain.usecase.login
 
+import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.usecase.common.EmailValidator
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
@@ -19,7 +20,7 @@ class LoginUseCase(private val accountRepository: AccountRepository) {
         return accountRepository.isEmailRegistered(email)
     }
 
-    suspend fun login(email: String, password: String): Result<Boolean> {
+    suspend fun login(email: String, password: String): Result<User> {
         return accountRepository.login(email, password)
     }
 }

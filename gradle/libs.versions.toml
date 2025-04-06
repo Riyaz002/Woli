@@ -20,6 +20,7 @@ ksp = "2.0.21-1.0.27"
 crashlytics = "3.0.2"
 junitKtx = "1.2.1"
 uiTextGoogleFonts = "1.7.8"
+runner = "1.6.2"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
@@ -53,6 +54,7 @@ koin-android = { module = "io.insert-koin:koin-android" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
+androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

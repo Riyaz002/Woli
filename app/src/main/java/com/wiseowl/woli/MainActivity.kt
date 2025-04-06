@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
@@ -27,14 +26,12 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
-import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

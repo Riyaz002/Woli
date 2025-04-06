@@ -1,7 +1,7 @@
-package com.wiseowl.woli.data.local.entity
+package com.wiseowl.woli.data.local.db.entity
 
-import com.wiseowl.woli.data.local.entity.ImageDTO.Companion.toImage
-import com.wiseowl.woli.data.local.entity.ImageDTO.Companion.toImageDTO
+import com.wiseowl.woli.data.local.db.entity.ImageDTO.Companion.toImage
+import com.wiseowl.woli.data.local.db.entity.ImageDTO.Companion.toImageDTO
 import com.wiseowl.woli.domain.model.Category
 
 data class CategoryDTO(
