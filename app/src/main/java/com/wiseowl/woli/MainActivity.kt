@@ -39,7 +39,7 @@ import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : ComponentActivity() {
 
-    val eventListener by inject<EventListener>(EventListener::class.java)
+    private val eventListener by inject<EventListener>(EventListener::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
