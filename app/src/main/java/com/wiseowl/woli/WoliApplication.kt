@@ -22,6 +22,7 @@ import com.wiseowl.woli.domain.usecase.categories.CategoriesUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
+import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.repository.AccountRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
@@ -38,7 +39,10 @@ class WoliApplication: Application() {
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)
         singleOf(::CategoryRepository) bind(com.wiseowl.woli.domain.repository.CategoryRepository::class)
         singleOf(::AccountRepository) bind(com.wiseowl.woli.domain.repository.AccountRepository::class)
-        
+
+        //Event
+        singleOf(::EventListener) bind(com.wiseowl.woli.domain.pubsub.EventListener::class)
+
         //Database
         single { Room.databaseBuilder(this@WoliApplication, WoliDatabase::class.java, WoliDatabase.NAME).build() }
 
@@ -59,6 +63,7 @@ class WoliApplication: Application() {
         singleOf(::LoginUseCase)
         singleOf(::GetNavigationItemsUseCase)
         singleOf(::CategoriesUseCase)
+
     }
 
     override fun onCreate() {
