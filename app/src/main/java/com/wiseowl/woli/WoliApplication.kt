@@ -11,6 +11,7 @@ import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
@@ -61,6 +62,7 @@ class WoliApplication: Application() {
         singleOf(::HomeUseCase)
         singleOf(::DetailUseCase)
         singleOf(::RegistrationUseCase)
+        singleOf(::AccountUseCase)
         singleOf(::LoginUseCase)
         singleOf(::GetNavigationItemsUseCase)
         singleOf(::CategoriesUseCase)

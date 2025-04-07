@@ -9,6 +9,7 @@ import com.wiseowl.woli.domain.util.Result
 import kotlinx.serialization.json.Json
 
 class AccountRepository(private val remoteApiService: RemoteAPIService, private val sharedPreference: EncryptedSharedPreference): AccountRepository {
+    override fun isLoggedIn(): Boolean = remoteApiService.isLoggedIn()
 
 
     override suspend fun createAccount(

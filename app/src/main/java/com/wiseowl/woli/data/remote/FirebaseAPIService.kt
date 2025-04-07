@@ -125,6 +125,8 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return categories?.map { it.data!!.toCategoryDTO() }
     }
 
+    override fun isLoggedIn(): Boolean = Firebase.auth.currentUser!=null
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
