@@ -4,6 +4,7 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 
 interface AccountRepository {
+    fun isLoggedIn(): Boolean
     suspend fun createAccount(email: String, password: String, firstName: String, lastName: String): Result<Boolean>
     suspend fun login(email: String, password: String): Result<User>
     suspend fun deleteUser(email: String)

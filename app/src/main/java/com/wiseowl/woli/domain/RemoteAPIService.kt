@@ -15,6 +15,7 @@ interface RemoteAPIService {
     suspend fun getCategoryPage(page: Int): List<CategoryDTO>?
 
     //Account
+    fun isLoggedIn(): Boolean
     suspend fun createUser(email: String, password: String, firstName: String, lastName: String): Result<Boolean>
     suspend fun login(email: String, password: String): Result<User>
     suspend fun deleteUser(email: String)
