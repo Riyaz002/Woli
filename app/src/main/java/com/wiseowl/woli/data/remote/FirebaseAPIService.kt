@@ -104,6 +104,7 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
 
     override suspend fun deleteUser(email: String) {
         firestore.collection(USERS_COLLECTION).document(email).delete()
+        Firebase.auth.currentUser?.delete()
     }
 
     override suspend fun updateUser(user: User) {
