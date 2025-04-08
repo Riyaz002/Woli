@@ -87,11 +87,14 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
+
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
-            Firebase.auth.signInWithEmailAndPassword(
+            val result = Firebase.auth.signInWithEmailAndPassword(
                 email, password
             ).await()
+
+            if(result.user!=null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
 
             val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
             if(user!=null) {
