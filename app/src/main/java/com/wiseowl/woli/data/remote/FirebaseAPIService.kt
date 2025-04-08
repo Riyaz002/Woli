@@ -102,8 +102,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
-    override suspend fun deleteUser(email: String) {
-        firestore.collection(USERS_COLLECTION).document(email).delete()
+    override suspend fun deleteUser() {
+        if (!isLoggedIn()) throw IllegalStateException("User not logged in")
+        firestore.collection(USERS_COLLECTION).document().delete()
         Firebase.auth.currentUser?.delete()
     }
 
@@ -115,7 +116,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
     }
 
-    override suspend fun getUser(email: String): User? {
+    override suspend fun getUserInfo(): User? {
+        if(!isLoggedIn()) throw IllegalStateException("User not logged in")
+        val email = Firebase.auth.currentUser?.email!!
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 

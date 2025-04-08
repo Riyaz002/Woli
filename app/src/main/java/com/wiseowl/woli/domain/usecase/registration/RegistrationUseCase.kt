@@ -28,7 +28,7 @@ class RegistrationUseCase(private val accountUseCase: AccountUseCase) {
         return accountUseCase.login(email, password)
     }
 
-    suspend fun deleteAccount(email: String){
-        return accountUseCase.deleteAccount(email)
+    suspend fun deleteAccount(){
+        return accountUseCase.deleteAccount()
     }
 }

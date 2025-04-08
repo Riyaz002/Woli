@@ -25,8 +25,8 @@ class AccountRepository(private val remoteApiService: RemoteAPIService, private 
         return remoteApiService.login(email, password)
     }
 
-    override suspend fun deleteUser(email: String) {
-        remoteApiService.deleteUser(email)
+    override suspend fun deleteUser() {
+        remoteApiService.deleteUser()
     }
 
     override suspend fun updateUser(user: User) {
@@ -37,10 +37,10 @@ class AccountRepository(private val remoteApiService: RemoteAPIService, private 
         return remoteApiService.isEmailRegistered(email)
     }
 
-    override suspend fun getUser(email: String): User? {
+    override suspend fun getUserInfo(): User? {
         var user = getSavedUser()
         if(user!=null) return user
-        user = remoteApiService.getUser(email)
+        user = remoteApiService.getUserInfo()
         if(user!=null) saveUser(user)
         return user
     }

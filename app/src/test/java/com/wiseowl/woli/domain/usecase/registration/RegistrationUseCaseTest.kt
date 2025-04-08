@@ -2,6 +2,7 @@ package com.wiseowl.woli.domain.usecase.registration
 
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.TestAccountRepository
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -53,7 +54,7 @@ class RegistrationUseCaseTest {
 
     @Before
     fun setUp() {
-        registrationUseCase = RegistrationUseCase(TestAccountRepository())
+        registrationUseCase = RegistrationUseCase(AccountUseCase(TestAccountRepository()))
     }
 
     @Test
@@ -116,7 +117,7 @@ class RegistrationUseCaseTest {
         )
         registrationUseCase.createAccount(user.email, "RANDOM", user.firstName, user.lastName)
         val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
-        registrationUseCase.deleteAccount(email)
+        registrationUseCase.deleteAccount()
         val userDeleted = registrationUseCase.isEmailRegistered(email)
         Assert.assertTrue(isEmailRegistered)
         Assert.assertFalse(userDeleted)
@@ -134,7 +135,7 @@ class RegistrationUseCaseTest {
         )
         registrationUseCase.createAccount(user.email, "RANDOM", user.firstName, user.lastName)
         val isEmailRegistered = registrationUseCase.isEmailRegistered(email)
-        registrationUseCase.deleteAccount(email)
+        registrationUseCase.deleteAccount()
         val userDeleted = registrationUseCase.isEmailRegistered(email)
         Assert.assertTrue(isEmailRegistered)
         Assert.assertFalse(userDeleted)

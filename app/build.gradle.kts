@@ -74,6 +74,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    //Test
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.runner)
@@ -84,6 +86,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     //Firebase
     implementation(platform(libs.firebase.bom))

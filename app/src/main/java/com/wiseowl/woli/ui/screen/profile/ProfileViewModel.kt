@@ -19,7 +19,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): PageViewMode
     init {
         viewModelScope.launch {
             _state.update {
-                Result.Success(ProfileModel(profileUseCase.getUser(Firebase.auth.currentUser?.email!!)))
+                Result.Success(ProfileModel(profileUseCase.getUserInfo()))
             }
         }
     }
@@ -28,7 +28,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): PageViewMode
         when(action){
             ProfileAction.DeleteAccount -> {
                 viewModelScope.launch {
-                    profileUseCase.deleteAccount(Firebase.auth.currentUser?.email!!)
+                    profileUseCase.deleteAccount()
                     onEvent(Action.Navigate(Screen.LOGIN))
                 }
             }
