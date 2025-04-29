@@ -1,8 +1,6 @@
 package com.wiseowl.woli.ui.screen.profile
 
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
