@@ -11,6 +11,7 @@ interface Action{
     data class StartActivity(val intent: Intent): Action
     data class SnackBar(val text: String): Action
     object Logout: Action
+    class Notify(val params: Map<String, String>): Action
 }
 
 class UnhandledActionException(action: Action) : Exception("Unhandled action: $action")

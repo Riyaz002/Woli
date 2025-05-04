@@ -1,4 +1,4 @@
-package com.wiseowl.woli.data.remote
+package com.wiseowl.woli.data.service.remote
 
 import android.content.Context
 import coil3.Bitmap
@@ -94,7 +94,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 email, password
             ).await()
 
-            if(result.user!=null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
+            if(result.user!=null) throw FirebaseAuthInvalidCredentialsException(
+                "",
+                "Invalid Credentials"
+            )
 
             val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
             if(user!=null) {

@@ -6,7 +6,7 @@ import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.data.local.db.WoliDatabase
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
-import com.wiseowl.woli.data.remote.FirebaseAPIService
+import com.wiseowl.woli.data.service.remote.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase
@@ -26,6 +26,8 @@ import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.repository.AccountRepository
+import com.wiseowl.woli.data.service.notification.DakiyaNotificationHandler
+import com.wiseowl.woli.data.service.notification.NotificationHandler
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -33,9 +35,10 @@ import org.koin.dsl.module
 
 class WoliApplication: Application() {
     private val appModule = module {
-        //RemoteApi
+        //Service
         single{ FirebaseAPIService(this@WoliApplication) } bind(RemoteAPIService::class)
-        
+        singleOf(::DakiyaNotificationHandler) bind(NotificationHandler::class)
+
         //Repository
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)

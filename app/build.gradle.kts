@@ -95,6 +95,10 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.messaging)
+
+    //Notification
+    implementation(libs.dakiya)
 
     //Room
     implementation(libs.androidx.room.runtime)

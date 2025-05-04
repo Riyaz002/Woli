@@ -24,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.wiseowl.woli.data.service.notification.NotificationHandler
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
@@ -40,6 +41,7 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : ComponentActivity() {
 
     private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val notificationHandler by inject<NotificationHandler>(NotificationHandler::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,7 @@ class MainActivity : ComponentActivity() {
                         eventListener.pushEvent(Event.Logout)
                         navController.navigate(Screen.LOGIN.route)
                     }
+                    is Action.Notify -> notificationHandler.handle(action.params)
                     else -> throw UnhandledActionException(action)
                 }
             }
