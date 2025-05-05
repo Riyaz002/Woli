@@ -13,7 +13,7 @@ fun interface NotificationHandler {
 
     /**
      * handles notification.
-     * @param params notification parameters like [TITLE], [SUBTITLE], [IMAGE], etc.
+     * @param params - Object of [Notification] containing parameters like [TITLE], [SUBTITLE], [IMAGE], etc.
      *
      * @return true if notification is handled successfully, false otherwise.
      */
