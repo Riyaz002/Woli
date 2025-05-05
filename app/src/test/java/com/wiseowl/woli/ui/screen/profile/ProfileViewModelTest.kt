@@ -6,12 +6,12 @@ import com.wiseowl.woli.domain.repository.TestAccountRepository
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.ui.screen.profile.model.ProfileAction
+import junit.framework.TestCase.assertFalse
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
-import kotlin.test.assertFalse
 
 class ProfileViewModelTest {
 
