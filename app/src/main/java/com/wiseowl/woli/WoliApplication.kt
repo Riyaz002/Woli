@@ -21,6 +21,7 @@ import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
 import com.wiseowl.woli.domain.usecase.categories.CategoriesUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
+import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
@@ -67,6 +68,7 @@ class WoliApplication: Application() {
         singleOf(::GetNavigationItemsUseCase)
         singleOf(::CategoriesUseCase)
         singleOf(::ProfileUseCase)
+        singleOf(::GetPrivacyPolicyUseCase)
     }
 
     override fun onCreate() {

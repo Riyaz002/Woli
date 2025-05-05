@@ -70,9 +70,9 @@ class MainActivity : ComponentActivity() {
                 Scaffold { padding ->
                     Box(Modifier.fillMaxHeight()) {
                         Root(
-                            modifier = Modifier.padding(bottom = 28.dp),
+                            modifier = Modifier.padding(bottom = 28.dp).padding(top = 16.dp, start = 10.dp, end = 10.dp),
                             navController = navController,
-                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
+                            startScreen = Screen.PrivacyPolicy.route //if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
                         )
                         SnackbarHost(
                             snackBarHostState,
