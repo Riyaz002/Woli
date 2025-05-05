@@ -4,7 +4,7 @@ data class Notification(
     val title: String,
     val subtitle: String? = null,
     val image: String,
-    val progress: Progress
+    val progress: Progress? = null
 )
 
 enum class Progress{
