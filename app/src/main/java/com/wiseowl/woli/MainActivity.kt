@@ -24,7 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.wiseowl.woli.data.service.notification.NotificationHandler
+import com.wiseowl.woli.ui.notification.NotificationHandler
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.UnhandledActionException
@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
                         eventListener.pushEvent(Event.Logout)
                         navController.navigate(Screen.LOGIN.route)
                     }
-                    is Action.Notify -> notificationHandler.handle(action.params)
+                    is Action.Notify -> notificationHandler.handle(action.data)
                     else -> throw UnhandledActionException(action)
                 }
             }

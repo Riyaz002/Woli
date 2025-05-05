@@ -17,7 +17,7 @@ import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.db.entity.CategoryDTO
 import com.wiseowl.woli.data.local.db.entity.ColorDTO
 import com.wiseowl.woli.data.local.db.entity.ImageDTO
-import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.service.RemoteAPIService
 import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result

@@ -2,7 +2,7 @@ package com.wiseowl.woli.data.repository
 
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference.Companion.USER
-import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.service.RemoteAPIService
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.util.Result

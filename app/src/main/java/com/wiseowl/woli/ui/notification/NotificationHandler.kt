@@ -1,8 +1,9 @@
-package com.wiseowl.woli.data.service.notification
+package com.wiseowl.woli.ui.notification
 
-import com.wiseowl.woli.data.service.notification.ParamKey.TITLE
-import com.wiseowl.woli.data.service.notification.ParamKey.IMAGE
-import com.wiseowl.woli.data.service.notification.ParamKey.SUBTITLE
+import com.wiseowl.woli.ui.notification.ParamKey.TITLE
+import com.wiseowl.woli.ui.notification.ParamKey.IMAGE
+import com.wiseowl.woli.ui.notification.ParamKey.SUBTITLE
+import com.wiseowl.woli.domain.model.Notification
 
 
 /**
@@ -16,7 +17,7 @@ fun interface NotificationHandler {
      *
      * @return true if notification is handled successfully, false otherwise.
      */
-    fun handle(params: Map<String, String>): Boolean
+    fun handle(data: Notification): Boolean
 }
 
 enum class ParamKey(val key: String){

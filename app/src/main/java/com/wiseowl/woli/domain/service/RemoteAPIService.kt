@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain
+package com.wiseowl.woli.domain.service
 
 import coil3.Bitmap
 import com.wiseowl.woli.data.local.db.entity.CategoryDTO
@@ -7,11 +7,11 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 
 interface RemoteAPIService {
-    suspend fun getPage(page: Int): List<ImageDTO>?
+    suspend fun getPage(page: Int): List<ImageDTO>? //TODO: this layer doesn't need to know about data layer entities
     suspend fun getTotalPageCount(): Int
     suspend fun getImage(id: Int): ImageDTO?
     suspend fun getImages(category: String): List<ImageDTO>?
-    suspend fun getImageBitmap(url: String): Bitmap?
+    suspend fun getImageBitmap(url: String): Bitmap? //TODO: this layer doesn't need to know about bitmap
     suspend fun getCategoryPage(page: Int): List<CategoryDTO>?
 
     //Account

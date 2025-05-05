@@ -5,6 +5,7 @@ import com.wiseowl.woli.domain.pubsub.Event
 import com.wiseowl.woli.domain.pubsub.EventListener
 import org.koin.java.KoinJavaComponent.inject
 
+//TODO :  Why do we even need this?
 class EventListener: EventListener {
     private val sharedPreference by inject<EncryptedSharedPreference>(EncryptedSharedPreference::class.java)
     override fun pushEvent(event: Event) {

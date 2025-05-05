@@ -2,7 +2,7 @@ package com.wiseowl.woli
 
 import android.app.Application
 import androidx.room.Room
-import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.service.RemoteAPIService
 import com.wiseowl.woli.data.local.db.WoliDatabase
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
@@ -27,7 +27,7 @@ import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.service.notification.DakiyaNotificationHandler
-import com.wiseowl.woli.data.service.notification.NotificationHandler
+import com.wiseowl.woli.ui.notification.NotificationHandler
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
