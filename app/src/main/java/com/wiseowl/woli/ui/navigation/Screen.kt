@@ -1,6 +1,5 @@
 package com.wiseowl.woli.ui.navigation
 
-import android.util.Log
 import kotlinx.serialization.Serializable
 
 @Serializable
