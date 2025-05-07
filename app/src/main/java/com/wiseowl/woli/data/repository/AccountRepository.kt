@@ -17,8 +17,10 @@ class AccountRepository(private val remoteApiService: RemoteAPIService, private 
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
-        return remoteApiService.createUser(email, password, firstName, lastName)
+    ): Result<User> {
+        val result = remoteApiService.createUser(email, password, firstName, lastName)
+        if(result is Result.Success) saveUser(result.data)
+        return result
     }
 
     override suspend fun login(email: String, password: String): Result<User> {

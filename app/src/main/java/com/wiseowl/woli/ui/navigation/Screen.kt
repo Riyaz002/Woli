@@ -20,4 +20,20 @@ sealed class Screen {
     @Serializable data object CATEGORIES: Screen()
     @Serializable data object Profile: Screen()
     @Serializable data object PrivacyPolicy: Screen()
+
+    companion object {
+        fun fromRoute(route: String): Screen? {
+            val baseRoute = route.substringBefore("?")
+            return when (baseRoute) {
+                HOME.route -> HOME
+                DETAIL.route.substringBefore("?") -> DETAIL
+                CATEGORY.route.substringBefore("?") -> CATEGORY
+                REGISTRATION.route -> REGISTRATION
+                LOGIN.route -> LOGIN
+                CATEGORIES.route -> CATEGORIES
+                Profile.route -> Profile
+                else -> null
+            }
+        }
+    }
 }

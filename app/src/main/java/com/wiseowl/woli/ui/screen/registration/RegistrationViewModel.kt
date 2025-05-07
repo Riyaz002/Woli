@@ -2,8 +2,9 @@ package com.wiseowl.woli.ui.screen.registration
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.domain.event.Action.*
 import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
@@ -49,21 +50,13 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                             val result = registrationUseCase.createAccount(
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
-                            if((result as Result.Success).data){
-                                onEvent(RegistrationEvent.Login(it.data.email.value, it.data.password.value))
+                            when(result){
+                                is Result.Success<User> -> Navigate(Screen.HOME).perform()
+                                is Result.Error<*> -> SnackBar(result.error.reason).perform()
+                                else -> Unit
                             }
-                            else Action.SnackBar("Oops! something went wrong.").perform()
                         }
-                    } else Action.SnackBar("All fields must be valid").perform()
-                }
-            }
-            is RegistrationEvent.Login -> {
-                viewModelScope.launchWithProgress {
-                    when(val result = registrationUseCase.login(action.email, action.password)){
-                        is Result.Success -> Action.Navigate(Screen.HOME).perform()
-                        is Result.Error -> ActionHandler.perform(Action.SnackBar(result.error.reason))
-                        is Result.Loading -> Unit
-                    }
+                    } else SnackBar("All fields must be valid").perform()
                 }
             }
         }

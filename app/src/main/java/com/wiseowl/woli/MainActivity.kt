@@ -34,6 +34,7 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
+import com.wiseowl.woli.util.DeepLinkParser
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 
@@ -48,6 +49,8 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             var progressVisible by remember { mutableStateOf(false) }
             val snackBarHostState = remember { SnackbarHostState() }
+            val deepLinkParser = DeepLinkParser()
+            val screen = deepLinkParser.getPage(intent).getOrNull() ?: if(Firebase.auth.currentUser!=null) Screen.HOME else Screen.LOGIN
 
             ActionHandler.listen { action ->
                 when (action) {
@@ -72,7 +75,7 @@ class MainActivity : ComponentActivity() {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController,
-                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
+                            startScreen = screen.route
                         )
                         SnackbarHost(
                             snackBarHostState,
