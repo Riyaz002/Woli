@@ -96,12 +96,11 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 email, password
             ).await()
 
-            if(result.user!=null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
+            if(result.user==null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
 
             val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
-            if(user!=null) {
-                Result.Success(user)
-            } else Result.Error(Error("Something went wrong"))
+            if(user!=null) Result.Success(user)
+            else Result.Error(Error("Something went wrong"))
         } catch (e: FirebaseAuthInvalidCredentialsException){
             Result.Error(Error("Invalid Credentials"))
         }
