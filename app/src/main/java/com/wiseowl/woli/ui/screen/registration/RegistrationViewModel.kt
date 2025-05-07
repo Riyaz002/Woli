@@ -2,7 +2,9 @@ package com.wiseowl.woli.ui.screen.registration
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.Action.*
 import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
@@ -48,10 +50,13 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                             val result = registrationUseCase.createAccount(
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
-                            if((result as Result.Success).data) Action.Navigate(Screen.HOME).perform()
-                            else Action.SnackBar("Oops! something went wrong.").perform()
+                            when(result){
+                                is Result.Success<User> -> Navigate(Screen.HOME).perform()
+                                is Result.Error<*> -> SnackBar(result.error.reason).perform()
+                                else -> Unit
+                            }
                         }
-                    } else Action.SnackBar("All fields must be valid").perform()
+                    } else SnackBar("All fields must be valid").perform()
                 }
             }
         }

@@ -73,17 +73,19 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
+    ): Result<User> {
+        if(isEmailRegistered(email)) return Result.Error(Error("Account already exists"))
+
         val result = Firebase.auth.createUserWithEmailAndPassword(
             email, password
         ).await()
 
         return if(result.user!=null){
             val user = User(firstName, lastName, result.user!!.uid, email, null)
-            firestore.collection(USERS_COLLECTION).document(email).set(user)
-            Result.Success(true)
+            firestore.collection(USERS_COLLECTION).document(email).set(user).await()
+            Result.Success(user)
         } else{
-            Result.Success(false)
+            Result.Error(Error("Wrong credentials"))
         }
     }
 
@@ -107,8 +109,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
 
     override suspend fun deleteUser() {
         if (!isLoggedIn()) throw IllegalStateException("User not logged in")
-        firestore.collection(USERS_COLLECTION).document().delete()
+        val email = Firebase.auth.currentUser?.email ?: throw IllegalStateException("User not logged in")
+        firestore.collection(USERS_COLLECTION).document(email).delete()
         Firebase.auth.currentUser?.delete()
+        Firebase.auth.signOut()
     }
 
     override suspend fun updateUser(user: User) {

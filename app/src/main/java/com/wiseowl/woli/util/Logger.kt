@@ -6,19 +6,19 @@ const val TAG = "WOLI"
 
 object Logger {
     fun Logger.e(message: String){
-        Log.e(TAG, this.toString())
+        Log.e(TAG, message)
     }
 
     fun Logger.d(message: String){
-        Log.d(TAG, this.toString())
+        Log.d(TAG, message)
     }
 
     fun Logger.v(message: String){
-        Log.v(TAG, this.toString())
+        Log.v(TAG, message)
     }
 
     fun Logger.w(message: String){
-        Log.w(TAG, this.toString())
+        Log.w(TAG, message)
     }
 
     fun <T> tryWithLog(operation: () -> T?): T? {
