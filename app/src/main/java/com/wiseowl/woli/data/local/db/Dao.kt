@@ -1,9 +1,9 @@
-package com.wiseowl.woli.data.local
+package com.wiseowl.woli.data.local.db
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.wiseowl.woli.data.local.entity.ImageDTO
+import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import kotlinx.coroutines.flow.Flow
 
 @Dao

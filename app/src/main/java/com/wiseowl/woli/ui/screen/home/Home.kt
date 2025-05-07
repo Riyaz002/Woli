@@ -29,7 +29,7 @@ fun Home(
     val viewModel: HomeViewModel =  viewModel{ HomeViewModel(useCase) }
     val state = viewModel.state.collectAsState()
 
-    Page(data = state.value, navigationBarVisible = true){ data ->
+    Page(data = state.value){ data ->
         Box(modifier = modifier) {
             LazyVerticalGrid(
                 modifier = Modifier.fillMaxSize(),

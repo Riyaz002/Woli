@@ -2,6 +2,8 @@ package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.domain.event.Action.Navigate
+import com.wiseowl.woli.domain.event.Action.SnackBar
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
@@ -47,12 +49,13 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                             val result = loginUseCase.isEmailRegistered(it.data.email.value)
                             if(result){
                                 val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
-                                if((loginResult as Result.Success).data){
-                                    onEvent(Action.Navigate(Screen.HOME))
-                                } else Action.SnackBar("Password is incorrect").perform()
-                            } else Action.SnackBar("This email is not registered").perform()
+                                when(loginResult){
+                                    is Result.Success -> Navigate(Screen.HOME).perform()
+                                    else -> SnackBar("Password or Email is incorrect").perform()
+                                }
+                            } else SnackBar("This email is not registered").perform()
                         }
-                    } else Action.SnackBar("All fields must be valid").perform()
+                    } else SnackBar("All fields must be valid").perform()
                 }
             }
             else -> ActionHandler.perform(action)

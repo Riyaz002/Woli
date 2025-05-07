@@ -52,8 +52,7 @@ fun Detail(
     val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     val accent = detailState?.data?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     Page(
-        data = state.value,
-        navigationBarVisible = false
+        data = state.value
     ) { data ->
         Column(
             modifier

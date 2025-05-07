@@ -14,10 +14,11 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.data.local.entity.CategoryDTO
-import com.wiseowl.woli.data.local.entity.ColorDTO
-import com.wiseowl.woli.data.local.entity.ImageDTO
+import com.wiseowl.woli.data.local.db.entity.CategoryDTO
+import com.wiseowl.woli.data.local.db.entity.ColorDTO
+import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.tasks.await
@@ -72,33 +73,45 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
+    ): Result<User> {
+        if(isEmailRegistered(email)) return Result.Error(Error("Account already exists"))
+
         val result = Firebase.auth.createUserWithEmailAndPassword(
             email, password
         ).await()
 
         return if(result.user!=null){
             val user = User(firstName, lastName, result.user!!.uid, email, null)
-            firestore.collection(USERS_COLLECTION).document(email).set(user)
-            Result.Success(true)
+            firestore.collection(USERS_COLLECTION).document(email).set(user).await()
+            Result.Success(user)
         } else{
-            Result.Success(false)
+            Result.Error(Error("Wrong credentials"))
         }
     }
 
-    override suspend fun login(email: String, password: String): Result<Boolean> {
+
+    override suspend fun login(email: String, password: String): Result<User> {
         return try {
             val result = Firebase.auth.signInWithEmailAndPassword(
                 email, password
             ).await()
-            Result.Success(result.user!=null)
+
+            if(result.user==null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
+
+            val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
+            if(user!=null) Result.Success(user)
+            else Result.Error(Error("Something went wrong"))
         } catch (e: FirebaseAuthInvalidCredentialsException){
-            Result.Success(false)
+            Result.Error(Error("Invalid Credentials"))
         }
     }
 
-    override suspend fun deleteUser(email: String) {
+    override suspend fun deleteUser() {
+        if (!isLoggedIn()) throw IllegalStateException("User not logged in")
+        val email = Firebase.auth.currentUser?.email ?: throw IllegalStateException("User not logged in")
         firestore.collection(USERS_COLLECTION).document(email).delete()
+        Firebase.auth.currentUser?.delete()
+        Firebase.auth.signOut()
     }
 
     override suspend fun updateUser(user: User) {
@@ -109,7 +122,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
     }
 
-    override suspend fun getUser(email: String): User? {
+    override suspend fun getUserInfo(): User? {
+        if(!isLoggedIn()) throw IllegalStateException("User not logged in")
+        val email = Firebase.auth.currentUser?.email!!
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 
@@ -119,6 +134,8 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         val categories = categoriesData?.map { it.get() }?.map { it.await() }
         return categories?.map { it.data!!.toCategoryDTO() }
     }
+
+    override fun isLoggedIn(): Boolean = Firebase.auth.currentUser!=null
 
     companion object{
         const val IMAGES_COLLECTION = "images"

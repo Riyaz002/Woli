@@ -1,11 +1,11 @@
-package com.wiseowl.woli.data.local.entity
+package com.wiseowl.woli.data.local.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverters
-import com.wiseowl.woli.data.local.TypeConvertor
-import com.wiseowl.woli.data.local.entity.ColorDTO.Companion.toColor
-import com.wiseowl.woli.data.local.entity.ColorDTO.Companion.toColorDTO
+import com.wiseowl.woli.data.local.db.TypeConvertor
+import com.wiseowl.woli.data.local.db.entity.ColorDTO.Companion.toColor
+import com.wiseowl.woli.data.local.db.entity.ColorDTO.Companion.toColorDTO
 import com.wiseowl.woli.domain.model.Image
 
 @TypeConverters(TypeConvertor::class)

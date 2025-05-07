@@ -1,7 +1,7 @@
-package com.wiseowl.woli.data.local
+package com.wiseowl.woli.data.local.db
 
 import androidx.room.TypeConverter
-import com.wiseowl.woli.data.local.entity.ColorDTO
+import com.wiseowl.woli.data.local.db.entity.ColorDTO
 
 object TypeConvertor {
     @TypeConverter
@@ -23,7 +23,7 @@ object TypeConvertor {
     }
 
     @TypeConverter
-    fun toColorDTO(colorDTOString: String): ColorDTO{
+    fun toColorDTO(colorDTOString: String): ColorDTO {
         val result = colorDTOString.split("#")
         val primary = result.first()
         val secondary = result.last()

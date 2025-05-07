@@ -1,10 +1,8 @@
-package com.wiseowl.woli.data.local
+package com.wiseowl.woli.data.local.db
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.wiseowl.woli.data.local.entity.ImageDTO
+import com.wiseowl.woli.data.local.db.entity.ImageDTO
 
 @Database(entities = [ImageDTO::class], version = 1)
 abstract class WoliDatabase: RoomDatabase() {
