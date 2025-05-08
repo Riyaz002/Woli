@@ -1,10 +1,12 @@
 package com.wiseowl.woli.ui.navigation
 
+import android.util.Log
 import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class Screen {
     open val route: String = "$this"
+    val routeLowerCase: String = "$this".lowercase()
 
     @Serializable data object HOME: Screen()
     @Serializable data object DETAIL: Screen(){
@@ -23,15 +25,15 @@ sealed class Screen {
 
     companion object {
         fun fromRoute(route: String): Screen? {
-            val baseRoute = route.substringBefore("?")
+            val baseRoute = route.substringBefore("?").lowercase()
             return when (baseRoute) {
-                HOME.route -> HOME
-                DETAIL.route.substringBefore("?") -> DETAIL
-                CATEGORY.route.substringBefore("?") -> CATEGORY
-                REGISTRATION.route -> REGISTRATION
-                LOGIN.route -> LOGIN
-                CATEGORIES.route -> CATEGORIES
-                Profile.route -> Profile
+                HOME.routeLowerCase -> HOME
+                DETAIL.routeLowerCase.substringBefore("?") -> DETAIL
+                CATEGORY.routeLowerCase.substringBefore("?") -> CATEGORY
+                REGISTRATION.routeLowerCase -> REGISTRATION
+                LOGIN.routeLowerCase -> LOGIN
+                CATEGORIES.routeLowerCase -> CATEGORIES
+                Profile.routeLowerCase -> Profile
                 else -> null
             }
         }
