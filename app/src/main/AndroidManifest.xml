@@ -21,15 +21,16 @@
             android:theme="@style/Theme.Woli.Start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter android:label="@string/app_name">
+            <intent-filter
+                android:label="@string/app_name"
+                android:autoVerify="false">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <!-- Accepts URIs that begin with "http://www.example.com/gizmos” -->
+                <!-- Accepts URIs that begin with "https://www.woli.com/” -->
                 <data android:scheme="https"
                     android:host="www.woli.com"
                     android:pathPrefix="/" />
