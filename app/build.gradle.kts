@@ -127,4 +127,7 @@ dependencies {
 
     //constrain layout
     implementation(libs.androidx.constraintlayout.compose)
+
+    //Splash Screen
+    implementation(libs.androidx.core.splashscreen)
 }
