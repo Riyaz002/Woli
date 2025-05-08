@@ -41,7 +41,7 @@ class ProfileViewModelTest {
     fun deleteAccount_event_in_PageViewModel_deletes_account_from_repository() = runTest {
         val result1 = accountUseCase.doesAccountExists(fakeUser.email)
         assert(result1)
-        profileViewMode.onEvent(ProfileAction.DeleteAccount)
+        profileViewMode.onEvent(ProfileAction.DeleteAccountRequest)
         accountUseCase.deleteAccount()
         val result2 = accountUseCase.doesAccountExists(fakeUser.firstName)
         assertFalse(result2)
