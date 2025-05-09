@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.service.mediaprovider.model
+package com.wiseowl.woli.domain.repository.media.model
 
 data class Page(
     val nextPage: String,
