@@ -6,7 +6,7 @@ import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.data.local.db.WoliDatabase
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
-import com.wiseowl.woli.data.remote.FirebaseAPIService
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
 import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase

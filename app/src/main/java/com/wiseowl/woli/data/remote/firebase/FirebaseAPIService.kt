@@ -1,4 +1,4 @@
-package com.wiseowl.woli.data.remote
+package com.wiseowl.woli.data.remote.firebase
 
 import android.content.Context
 import coil3.Bitmap
@@ -57,7 +57,7 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
     }
 
     override suspend fun getImageBitmap(url: String): Bitmap? {
-        return withContext(Dispatcher.IO){
+        return withContext(Dispatcher.IO) {
             val loader = ImageLoader(context)
             val request = ImageRequest.Builder(context)
                 .data(url)
@@ -97,7 +97,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 email, password
             ).await()
 
-            if(result.user==null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
+            if(result.user==null) throw FirebaseAuthInvalidCredentialsException(
+                "",
+                "Invalid Credentials"
+            )
 
             val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
             if(user!=null) Result.Success(user)
@@ -187,7 +190,8 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         private suspend fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
             return CategoryDTO(
                 name = getValue(CategoryDTO::name.name).toString(),
-                cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get().await().data as Map<String, Any>).toImages()
+                cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get()
+                    .await().data as Map<String, Any>).toImages()
             )
         }
 

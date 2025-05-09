@@ -6,11 +6,11 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.firestore
 import com.wiseowl.woli.data.local.db.entity.ColorDTO.Companion.toColorDTO
 import com.wiseowl.woli.data.local.db.entity.ImageDTO
-import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.CATEGORY_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.DATA
-import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.IMAGES_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.PAGES_COLLECTION
-import com.wiseowl.woli.data.remote.FirebaseAPIService.Companion.toImages
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService.Companion.CATEGORY_COLLECTION
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService.Companion.DATA
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService.Companion.IMAGES_COLLECTION
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService.Companion.PAGES_COLLECTION
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService.Companion.toImages
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import kotlinx.coroutines.tasks.await
 import org.koin.java.KoinJavaComponent.inject
