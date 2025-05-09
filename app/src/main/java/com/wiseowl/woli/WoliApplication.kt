@@ -26,7 +26,7 @@ import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
-import com.wiseowl.woli.data.remote.PexelsAPIService
+import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf

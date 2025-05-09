@@ -1,8 +1,8 @@
-package com.wiseowl.woli.data.remote
+package com.wiseowl.woli.data.remote.media
 
 import com.wiseowl.woli.BuildConfig
-import com.wiseowl.woli.data.service.mediaprovider.model.PageDTO
-import com.wiseowl.woli.data.service.mediaprovider.model.PhotoDTO
+import com.wiseowl.woli.data.remote.media.model.PageDTO
+import com.wiseowl.woli.data.remote.media.model.PhotoDTO
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
