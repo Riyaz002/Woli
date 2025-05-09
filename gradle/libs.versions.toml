@@ -18,16 +18,19 @@ composeBom = "2024.12.01"
 mockk = "1.13.17"
 navigationCompose = "2.8.5"
 roomCompiler = "2.6.1"
-googleService = "4.3.14"
+googleService = "4.4.2"
 ksp = "2.0.21-1.0.27"
 crashlytics = "3.0.2"
 junitKtx = "1.2.1"
 uiTextGoogleFonts = "1.7.8"
 runner = "1.6.2"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
@@ -62,6 +65,8 @@ androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

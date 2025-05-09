@@ -20,7 +20,7 @@ class RegistrationUseCase(private val accountUseCase: AccountUseCase) {
         return accountUseCase.doesAccountExists(email)
     }
 
-    suspend fun createAccount(email: String, password: String, firstName: String, lastName: String): Result<Boolean>{
+    suspend fun createAccount(email: String, password: String, firstName: String, lastName: String): Result<User>{
         return accountUseCase.createAccount(email, password, firstName, lastName)
     }
 

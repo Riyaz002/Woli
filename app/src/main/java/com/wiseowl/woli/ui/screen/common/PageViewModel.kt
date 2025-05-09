@@ -1,11 +1,13 @@
 package com.wiseowl.woli.ui.screen.common
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.domain.event.Action
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.Timer
 import java.util.TimerTask
 
@@ -16,6 +18,13 @@ import java.util.TimerTask
 abstract class PageViewModel<T>(
     initialValue: Result<T> = Result.Loading()
 ): ViewModel() {
+
+    constructor(op: suspend () -> T): this(Result.Loading()){
+        viewModelScope.launch {
+            _state.update { Result.Success(op()) }
+        }
+    }
+
     //State hoisting for the page
     protected val _state = MutableStateFlow(initialValue)
     val state: StateFlow<Result<T>> = _state

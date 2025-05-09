@@ -19,6 +19,7 @@ import com.wiseowl.woli.data.local.db.entity.ColorDTO
 import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import com.wiseowl.woli.domain.service.RemoteAPIService
 import com.wiseowl.woli.domain.model.Error
+import com.wiseowl.woli.domain.model.Policy
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.tasks.await
@@ -73,17 +74,19 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
+    ): Result<User> {
+        if(isEmailRegistered(email)) return Result.Error(Error("Account already exists"))
+
         val result = Firebase.auth.createUserWithEmailAndPassword(
             email, password
         ).await()
 
         return if(result.user!=null){
             val user = User(firstName, lastName, result.user!!.uid, email, null)
-            firestore.collection(USERS_COLLECTION).document(email).set(user)
-            Result.Success(true)
+            firestore.collection(USERS_COLLECTION).document(email).set(user).await()
+            Result.Success(user)
         } else{
-            Result.Success(false)
+            Result.Error(Error("Wrong credentials"))
         }
     }
 
@@ -94,15 +97,11 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 email, password
             ).await()
 
-            if(result.user!=null) throw FirebaseAuthInvalidCredentialsException(
-                "",
-                "Invalid Credentials"
-            )
+            if(result.user==null) throw FirebaseAuthInvalidCredentialsException("","Invalid Credentials")
 
             val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
-            if(user!=null) {
-                Result.Success(user)
-            } else Result.Error(Error("Something went wrong"))
+            if(user!=null) Result.Success(user)
+            else Result.Error(Error("Something went wrong"))
         } catch (e: FirebaseAuthInvalidCredentialsException){
             Result.Error(Error("Invalid Credentials"))
         }
@@ -110,8 +109,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
 
     override suspend fun deleteUser() {
         if (!isLoggedIn()) throw IllegalStateException("User not logged in")
-        firestore.collection(USERS_COLLECTION).document().delete()
+        val email = Firebase.auth.currentUser?.email ?: throw IllegalStateException("User not logged in")
+        firestore.collection(USERS_COLLECTION).document(email).delete()
         Firebase.auth.currentUser?.delete()
+        Firebase.auth.signOut()
     }
 
     override suspend fun updateUser(user: User) {
@@ -135,6 +136,13 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return categories?.map { it.data!!.toCategoryDTO() }
     }
 
+    override suspend fun getPrivacyPolicyPage(): List<Policy>? {
+        val result = firestore.collection(PRIVACY_POLICY_COLLECTION).getDocumentOrNull(DATA)?.data
+        val policyData = result?.get(POLICIES) as List<Map<String, String>>?
+        val policies = policyData?.map { it.toPolicy() }
+        return policies
+    }
+
     override fun isLoggedIn(): Boolean = Firebase.auth.currentUser!=null
 
     companion object{
@@ -142,7 +150,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
         const val CATEGORIES_COLLECTION = "categories"
+        const val PRIVACY_POLICY_COLLECTION = "privacypolicy"
         const val USERS_COLLECTION = "users"
+        const val POLICIES = "policies"
         const val COUNT = "count"
         const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
@@ -178,6 +188,13 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
             return CategoryDTO(
                 name = getValue(CategoryDTO::name.name).toString(),
                 cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get().await().data as Map<String, Any>).toImages()
+            )
+        }
+
+        private fun Map<String, Any>.toPolicy(): Policy {
+            return Policy(
+                title = getValue(Policy::title.name).toString(),
+                description = getValue(Policy::description.name).toString()
             )
         }
 

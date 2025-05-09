@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
@@ -35,6 +36,7 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
 import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
+import com.wiseowl.woli.util.DeepLinkParser
 import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 
@@ -45,11 +47,14 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             var progressVisible by remember { mutableStateOf(false) }
             val snackBarHostState = remember { SnackbarHostState() }
+            val deepLinkParser = DeepLinkParser()
+            val screen = deepLinkParser.getPage(intent).getOrNull() ?: if(Firebase.auth.currentUser!=null) Screen.HOME else Screen.LOGIN
 
             ActionHandler.listen { action ->
                 when (action) {
@@ -71,11 +76,11 @@ class MainActivity : ComponentActivity() {
             }
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
-                    Box(Modifier.fillMaxHeight()) {
+                    Box(Modifier.fillMaxHeight().padding(padding)) {
                         Root(
                             modifier = Modifier.padding(bottom = 28.dp),
                             navController = navController,
-                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
+                            startScreen = screen.route
                         )
                         SnackbarHost(
                             snackBarHostState,

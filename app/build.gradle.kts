@@ -1,4 +1,6 @@
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Properties
 
 plugins {
@@ -14,6 +16,13 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
+fun getVersionCode() = 7
+
+fun getVersionName(): String{
+    val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
+    return versionName
+}
+
 android {
     namespace = "com.wiseowl.woli"
     compileSdk = 35
@@ -22,8 +31,8 @@ android {
         applicationId = "com.wiseowl.woli"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = getVersionCode()
+        versionName = getVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -35,11 +44,15 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
     compileOptions {
@@ -118,4 +131,7 @@ dependencies {
 
     //constrain layout
     implementation(libs.androidx.constraintlayout.compose)
+
+    //Splash Screen
+    implementation(libs.androidx.core.splashscreen)
 }
