@@ -3,6 +3,7 @@ package com.wiseowl.woli.data.remote.media
 import com.wiseowl.woli.BuildConfig
 import com.wiseowl.woli.data.remote.media.model.PageDTO
 import com.wiseowl.woli.data.remote.media.model.PhotoDTO
+import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -31,11 +32,12 @@ interface PexelsAPIService {
     ): Call<PageDTO>
 
     companion object{
-        fun getInstance(): PexelsAPIService {
+        fun getInstance(okHttpClient: OkHttpClient): PexelsAPIService{
             return Retrofit
                 .Builder()
                 .baseUrl(BuildConfig.PEXELS_BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
+                .client(okHttpClient)
                 .build()
                 .create(PexelsAPIService::class.java)
         }

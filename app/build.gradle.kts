@@ -140,4 +140,8 @@ dependencies {
     //Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
+
+    //Chucker
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
 }

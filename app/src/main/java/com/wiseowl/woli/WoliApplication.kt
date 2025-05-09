@@ -26,6 +26,7 @@ import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
+import com.wiseowl.woli.data.remote.HttpClient
 import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
@@ -33,6 +34,7 @@ import com.wiseowl.woli.domain.usecase.common.media.GetPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
+import okhttp3.OkHttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -44,14 +46,8 @@ class WoliApplication: Application() {
     private val appModule = module {
         //RemoteApi
         single{ FirebaseAPIService(this@WoliApplication) } bind(RemoteAPIService::class)
-        single{
-            Retrofit
-                .Builder()
-                .baseUrl(BuildConfig.PEXELS_BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .build()
-                .create(PexelsAPIService::class.java)
-        } bind(PexelsAPIService::class)
+        single{ HttpClient().get(this@WoliApplication) } bind(OkHttpClient::class)
+        single{ PexelsAPIService.getInstance(get()) } bind(PexelsAPIService::class)
 
         //Repository
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)

@@ -1,9 +1,12 @@
 package com.wiseowl.woli
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +45,7 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : ComponentActivity() {
 
     private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val activityRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,6 +100,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            activityRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }
