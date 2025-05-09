@@ -130,4 +130,8 @@ dependencies {
 
     //Splash Screen
     implementation(libs.androidx.core.splashscreen)
+
+    //Moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
 }
