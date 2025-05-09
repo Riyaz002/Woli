@@ -26,17 +26,28 @@ import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
+import com.wiseowl.woli.data.remote.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 
 class WoliApplication: Application() {
     private val appModule = module {
         //RemoteApi
         single{ FirebaseAPIService(this@WoliApplication) } bind(RemoteAPIService::class)
-        
+        single{
+            Retrofit
+                .Builder()
+                .baseUrl(BuildConfig.PEXELS_BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
+                .create(PexelsAPIService::class.java)
+        } bind(PexelsAPIService::class)
+
         //Repository
         singleOf(::PageRepository) bind(com.wiseowl.woli.domain.repository.PageRepository::class)
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)

@@ -40,6 +40,8 @@ android {
         }
         resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
         buildConfigField("String", "KEY_STORE_ALIAS", secrets["KEY_STORE_ALIAS"].toString())
+        buildConfigField("String", "PEXELS_BASE_URL", secrets["PEXELS_BASE_URL"].toString())
+        buildConfigField("String", "PEXELS_API_KEY", secrets["PEXELS_API_KEY"].toString())
     }
 
     buildTypes {
@@ -134,4 +136,8 @@ dependencies {
     //Moshi
     implementation(libs.moshi)
     ksp(libs.moshi.kotlin.codegen)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
 }
