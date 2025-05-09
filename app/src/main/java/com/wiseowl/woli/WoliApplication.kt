@@ -28,6 +28,11 @@ import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
+import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
+import com.wiseowl.woli.domain.usecase.common.media.GetPageUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
+import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -53,6 +58,7 @@ class WoliApplication: Application() {
         singleOf(::ImageRepository) bind(com.wiseowl.woli.domain.repository.ImageRepository::class)
         singleOf(::CategoryRepository) bind(com.wiseowl.woli.domain.repository.CategoryRepository::class)
         singleOf(::AccountRepository) bind(com.wiseowl.woli.domain.repository.AccountRepository::class)
+        singleOf(::MediaRepositoryImpl) bind(com.wiseowl.woli.domain.repository.media.MediaRepository::class)
 
         //Event
         singleOf(::EventListener) bind(com.wiseowl.woli.domain.pubsub.EventListener::class)
@@ -80,6 +86,10 @@ class WoliApplication: Application() {
         singleOf(::CategoriesUseCase)
         singleOf(::ProfileUseCase)
         singleOf(::GetPrivacyPolicyUseCase)
+        singleOf(::GetPageUseCase)
+        singleOf(::GetSearchUseCase)
+        singleOf(::GetPhotoUseCase)
+        singleOf(::MediaUseCase)
     }
 
     override fun onCreate() {
