@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.shared.model
 
-data class FieldValue(
+data class FieldData(
     val label: String,
     val value: String = "",
     var error: String? = null,
@@ -9,5 +9,5 @@ data class FieldValue(
     fun copy(
         value: String = this.value,
         error: String? = this.error
-    ) = FieldValue(label = label, value = value, error = error)
+    ) = FieldData(label = label, value = value, error = error)
 }

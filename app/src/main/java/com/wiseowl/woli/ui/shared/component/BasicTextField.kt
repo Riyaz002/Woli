@@ -17,7 +17,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wiseowl.woli.ui.shared.Constant
-import com.wiseowl.woli.ui.shared.model.FieldValue
+import com.wiseowl.woli.ui.shared.model.FieldData
 
 @Preview
 @Composable
@@ -25,7 +25,7 @@ fun BasicTextField(
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .padding(Constant.DEFAULT_PADDING.dp),
-    data: FieldValue = FieldValue(""),
+    data: FieldData = FieldData(""),
     onEvent: (String) -> Unit = {},
 ) {
     val isFocused = remember {
