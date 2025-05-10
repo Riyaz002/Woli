@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -15,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wiseowl.woli.domain.usecase.home.HomeUseCase
+import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
@@ -25,7 +26,7 @@ import org.koin.java.KoinJavaComponent.inject
 fun Home(
     modifier: Modifier = Modifier
 ) {
-    val useCase: HomeUseCase by inject(HomeUseCase::class.java)
+    val useCase: MediaUseCase by inject(MediaUseCase::class.java)
     val viewModel: HomeViewModel =  viewModel{ HomeViewModel(useCase) }
     val state = viewModel.state.collectAsState()
 
@@ -35,16 +36,16 @@ fun Home(
                 modifier = Modifier.fillMaxSize(),
                 columns = GridCells.Fixed(2)
             ) {
-                data.images?.let { images ->
-                    items(images.size){ index ->
+                data.images.let { images ->
+                    items(images, key = {it.id}) { image ->
                         ImageCard(
                             modifier = Modifier
                                 .padding(10.dp)
                                 .clip(RoundedCornerShape(20.dp)),
-                            image = images[index],
+                            image = image,
                             cornerRadius = 20.dp,
                             aspectRatio = 0.6f,
-                            onClick = { viewModel.onEvent(HomeEvent.OnClickImage(images[index].id)) }
+                            onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
                         )
                     }
                     items(
@@ -52,7 +53,7 @@ fun Home(
                         span = { GridItemSpan(2) }
                     ){
                         if(data.currentPage > 0){
-                            viewModel.onEvent(HomeEvent.LoadNextPage(data.currentPage.minus(1)))
+                            viewModel.onEvent(HomeEvent.LoadNextPage(data.currentPage))
                             LoaderFooter(
                                 modifier = Modifier
                                     .fillMaxWidth()

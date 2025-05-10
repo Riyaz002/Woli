@@ -11,14 +11,14 @@ data class PhotoDTO(
     val id: Int,
     val liked: Boolean,
     val photographer: String,
-    val photographer_id: Int,
+    val photographer_id: Long,
     val photographer_url: String,
     val src: ImageSourceDTO,
     val url: String,
     val width: Int
 ){
     fun toPhoto() = Photo(
-        altImage = alt,
+        alt = this@PhotoDTO.alt,
         avgColor = avg_color,
         height = height,
         id = id,
