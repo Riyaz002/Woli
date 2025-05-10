@@ -62,7 +62,7 @@ fun ImageCard(
                 .fillMaxWidth()
                 .aspectRatio(aspectRatio),
             model = ImageRequest.Builder(LocalContext.current)
-                .data(image.src.original)
+                .data(image.src.portrait)
                 .crossfade(true)
                 .build(),
             contentDescription = image.alt,
