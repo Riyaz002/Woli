@@ -91,7 +91,6 @@ fun BottomNavigation(
             .onSizeChanged { navigationBarHeight.value = it.height }
             .drawBehind {
                 drawIntoCanvas {
-
                     if (itemSize.value != 0 && ballAnimation?.value != null) {
                         drawCircle(
                             Color.Black, (size.minDimension / 2.0f) - 10, center = Offset(

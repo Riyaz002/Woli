@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
@@ -37,7 +39,9 @@ fun Home(
                 BasicTextField(
                     modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp).fillMaxWidth(),
                     data = data.search,
-                    onEvent = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
+                    onChange = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
+                    trailingIcon = Icons.Default.Search,
+                    onTrailingIconClick = { viewModel.onEvent(HomeEvent.OnClickSearch) }
                 )
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),

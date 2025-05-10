@@ -46,11 +46,11 @@ fun Login(
             Spacer(modifier = Modifier.height(40.dp))
             BasicTextField(
                 data = it.email,
-                onEvent = { viewModel.onEvent(LoginEvent.OnEmailChange(it)) },
+                onChange = { viewModel.onEvent(LoginEvent.OnEmailChange(it)) },
             )
             BasicTextField(
                 data = it.password,
-                onEvent = { viewModel.onEvent(LoginEvent.OnPasswordChange(it)) },
+                onChange = { viewModel.onEvent(LoginEvent.OnPasswordChange(it)) },
             )
             BasicButton(
                 data = it.cta,

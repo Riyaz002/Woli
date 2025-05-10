@@ -1,7 +1,6 @@
 package com.wiseowl.woli.ui.screen.home
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
@@ -9,6 +8,7 @@ import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.home.model.HomePageModel
+import com.wiseowl.woli.ui.shared.launchWithProgress
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
                 it.copy(search = it.search.copy(value = action.query))
             }
 
-            is HomeEvent.OnClickSearch -> search(action.query)
+            is HomeEvent.OnClickSearch -> search()
         }
     }
 
@@ -54,15 +54,15 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
         }
     }
 
-    private fun search(query: String) {
-        viewModelScope.launch {
+    private fun search() {
+        viewModelScope.launchWithProgress {
+            val query = (state.value as Result.Success).data.search.value
+            if(query.isEmpty()) return@launchWithProgress
             val page = homeUseCase.geSearchUseCase(query, 0)
             val currentState = _state.value
             if(currentState is Result.Success){
-                val photos = currentState.data.images.toMutableList()
-                photos.addAll(page.photos)
                 val homePageModel: HomePageModel = currentState.data.copy(
-                    images = photos,
+                    images = page.photos,
                     currentPage = page.page
                 )
                 _state.update { Result.Success(homePageModel) }

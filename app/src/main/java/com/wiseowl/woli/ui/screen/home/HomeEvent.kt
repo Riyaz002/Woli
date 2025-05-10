@@ -6,5 +6,5 @@ sealed class HomeEvent: Action {
     data class OnClickImage(val imageId: Int): HomeEvent()
     object LoadNextPage: HomeEvent()
     data class OnSearchChange(val query: String): HomeEvent()
-    data class OnClickSearch(val query: String): HomeEvent()
+    object OnClickSearch: HomeEvent()
 }

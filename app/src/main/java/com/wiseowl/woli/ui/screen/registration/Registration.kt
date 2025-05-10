@@ -42,19 +42,19 @@ fun Registration(
             Spacer(modifier = Modifier.height(40.dp))
             BasicTextField(
                 data = it.firstName,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnFirstNameChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationEvent.OnFirstNameChange(it)) },
             )
             BasicTextField(
                 data = it.lastName,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnLastNameChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationEvent.OnLastNameChange(it)) },
             )
             BasicTextField(
                 data = it.email,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnEmailChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationEvent.OnEmailChange(it)) },
             )
             BasicTextField(
                 data = it.password,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnPasswordChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationEvent.OnPasswordChange(it)) },
             )
             BasicButton(
                 data = it.cta,
