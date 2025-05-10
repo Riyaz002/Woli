@@ -26,7 +26,7 @@ import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.CategoryRepository
 import com.wiseowl.woli.data.event.EventListener
-import com.wiseowl.woli.data.remote.HttpClient
+import com.wiseowl.woli.data.remote.core.HttpClient
 import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
