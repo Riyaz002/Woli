@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -34,7 +30,6 @@ import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
-import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
 import com.wiseowl.woli.ui.shared.component.Shimmer
 import org.koin.java.KoinJavaComponent.inject
@@ -45,8 +40,8 @@ fun Detail(
     imageId: String
 ) {
     val scrollState = rememberScrollState()
-    val detailUseCase: DetailUseCase by inject(DetailUseCase::class.java)
-    val viewModel = viewModel{ DetailViewModel(imageId, detailUseCase) }
+    val useCase: DetailUseCase by inject(DetailUseCase::class.java)
+    val viewModel = viewModel{ DetailViewModel(imageId, useCase) }
     val state = viewModel.state.collectAsState()
     val detailState = if(state.value is Result.Success) state.value as Result.Success else null
     val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
@@ -62,7 +57,7 @@ fun Detail(
         ) {
             Column(
                 modifier = Modifier
-                    .background(complementaryColor)
+                    .background(accent)
                     .padding(bottom = 20.dp)
             ) {
                 data.image.let { image ->
@@ -96,16 +91,16 @@ fun Detail(
                     TextRoundButton(
                         modifier = Modifier.weight(1f),
                         text = "Preview",
-                        backgroundColor = Color(data.accentColor!!),
-                        textColor = complementaryColor,
+                        backgroundColor = complementaryColor,
+                        textColor = accent,
                         onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     TextRoundButton(
                         modifier = Modifier.weight(1f),
                         text = "Set",
-                        backgroundColor = Color(data.accentColor),
-                        textColor = complementaryColor,
+                        backgroundColor = complementaryColor,
+                        textColor = accent,
                         onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper) }
                     )
                 }
@@ -120,97 +115,8 @@ fun Detail(
                         textAlign = TextAlign.Center,
                         lineHeight = 42.sp,
                         fontWeight = FontWeight.Medium,
-                        color = Color(data.accentColor!!)
+                        color = complementaryColor
                     )
-                }
-            }
-
-            data.categories.let { categories ->
-                Column(
-                    modifier = Modifier
-                        .background(Color(data.accentColor!!))
-                        .padding(20.dp)
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Category",
-                        fontSize = 32.sp,
-                        textAlign = TextAlign.Start,
-                        lineHeight = 42.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color(data.complementaryColor!!)
-                    )
-                    LazyRow(modifier = Modifier.padding(top = 16.dp)) {
-                        items(categories) { category ->
-                            TextRoundButton(
-                                modifier = Modifier.padding(end = 10.dp),
-                                text = category,
-                                backgroundColor = Color(data.complementaryColor),
-                                textColor = Color(data.accentColor),
-                                onClick = {
-                                    viewModel.onEvent(
-                                        DetailEvent.OnClickCategory(
-                                            category
-                                        )
-                                    )
-                                }
-                            )
-                        }
-                    }
-                    data.similarImage.let { similarImage ->
-                        if (similarImage.shimmer) {
-                            Shimmer(
-                                modifier = Modifier
-                                    .width(100.dp)
-                                    .height(50.dp)
-                                    .padding(top = 20.dp)
-                                    .clip(RoundedCornerShape(20.dp))
-                            )
-                            Row {
-                                repeat(3) {
-                                    Shimmer(
-                                        modifier = Modifier
-                                            .padding(top = 16.dp)
-                                            .size(100.dp)
-                                            .clip(RoundedCornerShape(20.dp))
-                                    )
-                                    Spacer(modifier = Modifier.width(20.dp))
-                                }
-                            }
-                        } else {
-                            if (similarImage.images?.isNotEmpty() == true) {
-                                Text(
-                                    modifier = Modifier.padding(top = 20.dp),
-                                    text = "Similar",
-                                    fontSize = 32.sp,
-                                    textAlign = TextAlign.Start,
-                                    lineHeight = 42.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color(data.complementaryColor)
-                                )
-                                LazyRow {
-                                    similarImage.images.let { images ->
-                                        items(images) { image ->
-                                            ImageCard(
-                                                modifier = Modifier.size(100.dp),
-                                                image = image,
-                                                cornerRadius = 20.dp,
-                                                aspectRatio = 1f,
-                                                onClick = {
-                                                    viewModel.onEvent(
-                                                        DetailEvent.OnClickSimilarImage(
-                                                            image.id
-                                                        )
-                                                    )
-                                                }
-                                            )
-                                            Spacer(modifier = Modifier.size(10.dp))
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             }
 

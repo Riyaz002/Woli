@@ -34,6 +34,7 @@ import com.wiseowl.woli.domain.usecase.common.media.GetPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
+import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
 import okhttp3.OkHttpClient
 import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
@@ -84,6 +85,7 @@ class WoliApplication: Application() {
         singleOf(::GetPrivacyPolicyUseCase)
         singleOf(::GetPageUseCase)
         singleOf(::GetSearchUseCase)
+        singleOf(::GetComplementaryColorUseCase)
         singleOf(::GetPhotoUseCase)
         singleOf(::MediaUseCase)
     }
