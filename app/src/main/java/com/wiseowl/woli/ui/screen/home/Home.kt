@@ -1,6 +1,7 @@
 package com.wiseowl.woli.ui.screen.home
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,7 +12,6 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -20,6 +20,7 @@ import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
+import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable
@@ -32,32 +33,36 @@ fun Home(
 
     Page(data = state.value){ data ->
         Box(modifier = modifier) {
-            LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = GridCells.Fixed(2)
-            ) {
-                data.images.let { images ->
-                    items(images, key = {it.id}) { image ->
-                        ImageCard(
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .clip(RoundedCornerShape(20.dp)),
-                            image = image,
-                            cornerRadius = 20.dp,
-                            aspectRatio = 0.6f,
-                            onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
-                        )
-                    }
-                    items(
-                        1,
-                        span = { GridItemSpan(2) }
-                    ){
-                        if(data.currentPage > 0){
-                            viewModel.onEvent(HomeEvent.LoadNextPage(data.currentPage))
+            Column {
+                BasicTextField(
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp).fillMaxWidth(),
+                    data = data.search,
+                    onEvent = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
+                )
+                LazyVerticalGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = GridCells.Fixed(2)
+                ) {
+                    data.images.let { images ->
+                        items(images, key = {it.id}) { image ->
+                            ImageCard(
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .clip(RoundedCornerShape(20.dp)),
+                                image = image,
+                                cornerRadius = 20.dp,
+                                aspectRatio = 0.6f,
+                                onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
+                            )
+                        }
+                        items(
+                            1,
+                            span = { GridItemSpan(2) }
+                        ){
+                            viewModel.onEvent(HomeEvent.LoadNextPage)
                             LoaderFooter(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .align(Alignment.BottomCenter)
                             )
                         }
                     }

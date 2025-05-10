@@ -5,19 +5,19 @@ import android.util.Log
 const val TAG = "WOLI"
 
 object Logger {
-    fun Logger.e(message: String){
+    fun e(message: String){
         Log.e(TAG, message)
     }
 
-    fun Logger.d(message: String){
+    fun d(message: String){
         Log.d(TAG, message)
     }
 
-    fun Logger.v(message: String){
+    fun v(message: String){
         Log.v(TAG, message)
     }
 
-    fun Logger.w(message: String){
+    fun w(message: String){
         Log.w(TAG, message)
     }
 

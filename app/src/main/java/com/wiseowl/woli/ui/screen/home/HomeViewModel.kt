@@ -15,9 +15,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePageModel>() {
 
     init {
-        viewModelScope.launch(Dispatcher.IO) {
+        viewModelScope.launch {
             val page = homeUseCase.getPageUseCase(0)
-            val homePageModel = HomePageModel(page.photos, 0)
+            val homePageModel = HomePageModel(images = page.photos, currentPage = 0)
             _state.update { _ -> Result.Success(homePageModel) }
         }
     }
@@ -27,13 +27,36 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
             is HomeEvent.OnClickImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
-            is HomeEvent.LoadNextPage -> loadNextPage(action.page)
+            is HomeEvent.LoadNextPage -> loadNextPage()
+            is HomeEvent.OnSearchChange -> _state.ifSuccess{
+                it.copy(search = it.search.copy(value = action.query))
+            }
+
+            is HomeEvent.OnClickSearch -> search(action.query)
         }
     }
 
-    private fun loadNextPage(pageNo: Int) {
+    private fun loadNextPage() {
         viewModelScope.launch {
-            val page = homeUseCase.getPageUseCase(pageNo)
+            val pageNumber = (state.value as Result.Success).data.currentPage.plus(1)
+            val page = homeUseCase.getPageUseCase(pageNumber)
+            val currentState = _state.value
+            if(currentState is Result.Success){
+                val photos = currentState.data.images.toMutableList()
+                photos.addAll(page.photos)
+                val newPhotos = photos.distinctBy { it.id }
+                val homePageModel: HomePageModel = currentState.data.copy(
+                    images = newPhotos,
+                    currentPage = page.page
+                )
+                _state.update { Result.Success(homePageModel) }
+            }
+        }
+    }
+
+    private fun search(query: String) {
+        viewModelScope.launch {
+            val page = homeUseCase.geSearchUseCase(query, 0)
             val currentState = _state.value
             if(currentState is Result.Success){
                 val photos = currentState.data.images.toMutableList()

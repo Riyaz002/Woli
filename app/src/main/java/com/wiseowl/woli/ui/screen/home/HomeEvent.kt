@@ -4,5 +4,7 @@ import com.wiseowl.woli.domain.event.Action
 
 sealed class HomeEvent: Action {
     data class OnClickImage(val imageId: Int): HomeEvent()
-    data class LoadNextPage(val page: Int): HomeEvent()
+    object LoadNextPage: HomeEvent()
+    data class OnSearchChange(val query: String): HomeEvent()
+    data class OnClickSearch(val query: String): HomeEvent()
 }
