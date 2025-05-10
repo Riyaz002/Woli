@@ -40,18 +40,18 @@ abstract class PageViewModel<T>(
     private val timers: HashMap<String, Timer> = hashMapOf()
 
     /**
-     * Perform [validation] with some delay.
-     * If the function is called with the same [label] while the previous one hasn't been executed, the previous [validation] will be canceled.
-     * The [label] is unique identifier for the [validation].
+     * Perform [action] with some delay.
+     * The [label] is unique identifier for the [action].
+     * If the function is called with the same [label] while the previous one hasn't been executed, the previous [action] will be canceled.
      */
-    fun validate(label: String, validation: () -> Unit){
+    fun validate(label: String, action: () -> Unit){
         timers[label]?.cancel()
         val newTimer = Timer()
         timers[label] = newTimer
         newTimer.schedule(
             object : TimerTask() {
                 override fun run() {
-                    validation()
+                    action()
                 }
             }, 1000
         )
