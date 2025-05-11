@@ -22,6 +22,7 @@ import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
+import com.wiseowl.woli.ui.shared.Constant
 import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
 
@@ -37,7 +38,7 @@ fun Home(
         Box(modifier = modifier) {
             Column {
                 BasicTextField(
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = 20.dp).fillMaxWidth(),
+                    modifier = Modifier.padding(vertical = 10.dp, horizontal = Constant.DEFAULT_PADDING.dp).fillMaxWidth(),
                     data = data.search,
                     onChange = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
                     trailingIcon = Icons.Default.Search,
