@@ -38,7 +38,9 @@ fun Home(
         Box(modifier = modifier) {
             Column {
                 BasicTextField(
-                    modifier = Modifier.padding(vertical = 10.dp, horizontal = Constant.DEFAULT_PADDING.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(vertical = 10.dp, horizontal = Constant.DEFAULT_PADDING.dp)
+                        .fillMaxWidth(),
                     data = data.search,
                     onChange = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
                     trailingIcon = Icons.Default.Search,
@@ -48,28 +50,26 @@ fun Home(
                     modifier = Modifier.fillMaxSize(),
                     columns = GridCells.Fixed(2)
                 ) {
-                    data.images.let { images ->
-                        items(images, key = {it.id}) { image ->
-                            ImageCard(
-                                modifier = Modifier
-                                    .padding(10.dp)
-                                    .clip(RoundedCornerShape(20.dp)),
-                                image = image,
-                                cornerRadius = 20.dp,
-                                aspectRatio = 0.6f,
-                                onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
-                            )
-                        }
-                        items(
-                            1,
-                            span = { GridItemSpan(2) }
-                        ){
-                            viewModel.onEvent(HomeEvent.LoadNextPage)
-                            LoaderFooter(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            )
-                        }
+                    items(data.images, key = { it.id }) { image ->
+                        ImageCard(
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .clip(RoundedCornerShape(20.dp)),
+                            image = image,
+                            cornerRadius = 20.dp,
+                            aspectRatio = 0.6f,
+                            onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
+                        )
+                    }
+                    items(
+                        1,
+                        span = { GridItemSpan(2) }
+                    ){
+                        viewModel.onEvent(HomeEvent.LoadNextPage)
+                        LoaderFooter(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        )
                     }
                 }
             }
