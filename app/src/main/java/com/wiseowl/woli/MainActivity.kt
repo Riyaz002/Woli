@@ -77,9 +77,9 @@ class MainActivity : ComponentActivity() {
             }
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
-                    Box(Modifier.fillMaxHeight().padding(padding)) {
+                    Box(Modifier.fillMaxHeight()) {
                         Root(
-                            modifier = Modifier.padding(bottom = 28.dp),
+                            modifier = Modifier.padding(top = padding.calculateTopPadding()),
                             navController = navController,
                             startScreen = screen.route
                         )
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding()),
+                                .padding(bottom = padding.calculateBottomPadding()+16.dp),
                             navController
                         )
                     }
