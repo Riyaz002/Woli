@@ -1,6 +1,6 @@
 package com.wiseowl.woli.domain.repository.media.model
 
-data class ImageSource(
+data class Source(
     val landscape: String,
     val large: String,
     val large2x: String,

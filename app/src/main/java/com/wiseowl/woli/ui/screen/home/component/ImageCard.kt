@@ -17,7 +17,7 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.wiseowl.woli.domain.model.Image
-import com.wiseowl.woli.domain.repository.media.model.Photo
+import com.wiseowl.woli.domain.repository.media.model.Media
 
 @Composable
 fun ImageCard(
@@ -48,7 +48,7 @@ fun ImageCard(
 @Composable
 fun ImageCard(
     modifier: Modifier = Modifier,
-    image: Photo,
+    image: Media,
     cornerRadius: Dp = 20.dp,
     aspectRatio: Float? = null,
     onClick: (() -> Unit)? = null
@@ -62,7 +62,7 @@ fun ImageCard(
                 .fillMaxWidth()
                 .aspectRatio(aspectRatio),
             model = ImageRequest.Builder(LocalContext.current)
-                .data(image.src.portrait)
+                .data(image.src?.portrait)
                 .crossfade(true)
                 .build(),
             contentDescription = image.alt,

@@ -1,10 +1,10 @@
 package com.wiseowl.woli.data.remote.media.model
 
 import com.squareup.moshi.JsonClass
-import com.wiseowl.woli.domain.repository.media.model.ImageSource
+import com.wiseowl.woli.domain.repository.media.model.Source
 
 @JsonClass(generateAdapter = true)
-data class ImageSourceDTO(
+data class SourceDTO(
     val landscape: String,
     val large: String,
     val large2x: String,
@@ -14,7 +14,7 @@ data class ImageSourceDTO(
     val small: String,
     val tiny: String
 ){
-    fun toImageSource() = ImageSource(
+    fun toSource() = Source(
         landscape = landscape,
         large = large,
         large2x = large2x,

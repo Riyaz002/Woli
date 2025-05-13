@@ -16,7 +16,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
 
     init {
         viewModelScope.launch {
-            val page = homeUseCase.getPageUseCase(0)
+            val page = homeUseCase.getPhotoPageUseCase(0)
             val homePageModel = HomePageModel(images = page.photos, currentPage = 0)
             _state.update { _ -> Result.Success(homePageModel) }
         }
@@ -39,7 +39,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
     private fun loadNextPage() {
         viewModelScope.launch {
             val pageNumber = (state.value as Result.Success).data.currentPage.plus(1)
-            val page = homeUseCase.getPageUseCase(pageNumber)
+            val page = homeUseCase.getPhotoPageUseCase(pageNumber)
             val currentState = _state.value
             if(currentState is Result.Success){
                 val photos = currentState.data.images.toMutableList()

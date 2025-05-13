@@ -22,7 +22,7 @@ class DetailViewModel(
     init {
         viewModelScope.launch {
             val image = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
-            val accentColor = image.avgColor.toColorInt()
+            val accentColor = image.avgColor?.toColorInt() ?: android.graphics.Color.GRAY
             val complementaryColor = useCase.getComplementaryColorUseCase(accentColor)
             _state.update { s ->
                 Result.Success(
@@ -34,7 +34,7 @@ class DetailViewModel(
                     )
                 )
             }
-            val bitmap = viewModelScope.async {  useCase.getBitmapUseCase(image.src.large) }.await()
+            val bitmap = viewModelScope.async {  useCase.getBitmapUseCase(image.src!!.large) }.await()
             if(bitmap==null){
                 _state.update { Result.Error(Error("Oops, Error Loading Image!")) }
                 return@launch

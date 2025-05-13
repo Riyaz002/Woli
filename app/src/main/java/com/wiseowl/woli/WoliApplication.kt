@@ -30,7 +30,8 @@ import com.wiseowl.woli.data.remote.core.HttpClient
 import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
-import com.wiseowl.woli.domain.usecase.common.media.GetPageUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetCollectionPageUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetPhotoPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
@@ -40,8 +41,6 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 class WoliApplication: Application() {
     private val appModule = module {
@@ -83,10 +82,11 @@ class WoliApplication: Application() {
         singleOf(::CategoriesUseCase)
         singleOf(::ProfileUseCase)
         singleOf(::GetPrivacyPolicyUseCase)
-        singleOf(::GetPageUseCase)
+        singleOf(::GetPhotoPageUseCase)
         singleOf(::GetSearchUseCase)
         singleOf(::GetComplementaryColorUseCase)
         singleOf(::GetPhotoUseCase)
+        singleOf(::GetCollectionPageUseCase)
         singleOf(::MediaUseCase)
     }
 
