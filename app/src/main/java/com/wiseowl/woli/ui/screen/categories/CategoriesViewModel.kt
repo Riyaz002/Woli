@@ -4,8 +4,10 @@ import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.event.Action
 import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.domain.repository.media.model.Collection
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.categories.model.CollectionModel
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import kotlinx.coroutines.flow.update
@@ -16,15 +18,30 @@ class CategoriesViewModel(private val mediaUseCase: MediaUseCase): PageViewModel
         viewModelScope.launch(Dispatcher.IO) {
             val currentPage = 0
             val data = mediaUseCase.getCollectionPageUseCase(currentPage)
-            _state.update {
-                Result.Success(
-                    CollectionModel(
-                        categories = data.collections,
-                        currentPage,
-                        !data.nextPage.isNullOrEmpty()
-                    )
+            val state = Result.Success(
+                CollectionModel(
+                    categories = data.collections,
+                    currentPage,
+                    !data.nextPage.isNullOrEmpty()
+                )
+            )
+            _state.update { state }
+            val contentFullCollection = data.collections.map {
+                val medias = mediaUseCase.getCollectionUseCase(it.id)
+                Collection(
+                    id = it.id,
+                    title = it.title,
+                    images = medias,
+                    description = it.description,
+                    mediaCount = it.mediaCount,
+                    photosCount = it.photosCount,
+                    isPrivate = it.isPrivate,
+                    videosCount = it.videosCount
                 )
             }
+
+            _state.update{ state.copy(data = state.data.copy(categories = contentFullCollection)) }
+
             mediaUseCase.getCollectionPageUseCase
         }
     }
@@ -48,6 +65,9 @@ class CategoriesViewModel(private val mediaUseCase: MediaUseCase): PageViewModel
                         }
                     }
                 }
+            }
+            is CategoriesEvent.OnClickMedia -> {
+                ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.id.toString())))
             }
             else -> ActionHandler.perform(action)
         }

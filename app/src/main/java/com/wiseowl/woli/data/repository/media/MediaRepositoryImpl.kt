@@ -33,9 +33,9 @@ class MediaRepositoryImpl(private val apiService: PexelsAPIService): MediaReposi
         }
     }
 
-    override suspend fun getCollection(id: Int): List<Media> {
+    override suspend fun getCollection(id: String): List<Media> {
         return withContext(Dispatcher.IO) {
-            return@withContext apiService.getCollection(id).execute().body()!!.map { it.toMedia() }
+            return@withContext apiService.getCollection(id).execute().body()!!.media?.map { it.toMedia() }.orEmpty()
         }
     }
 }

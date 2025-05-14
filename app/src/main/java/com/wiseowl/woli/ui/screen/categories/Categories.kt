@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
-import com.wiseowl.woli.ui.screen.categories.component.Category
+import com.wiseowl.woli.ui.screen.categories.component.Collection
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
 import org.koin.java.KoinJavaComponent.inject
@@ -40,20 +40,20 @@ fun Categories(
             )
 
             LazyColumn (
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth(),
             ) {
-
-                items(it.categories.orEmpty(), key = {it.id}){
-                    Category(
+                items(it.categories.orEmpty(), key = { it.id }){
+                    Collection(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
                         title = it.title,
-                        images = it.images
+                        images = it.images,
+                        onClick = { viewModel.onEvent(CategoriesEvent.OnClickMedia(it) )}
                     )
                 }
 
-                item {
+                item{
                     if(it.hasNext){
                         viewModel.onEvent(CategoriesEvent.LoadPage(it.currentPage.plus(1)))
                         LoaderFooter(

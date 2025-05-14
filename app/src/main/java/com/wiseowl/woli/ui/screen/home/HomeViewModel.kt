@@ -17,7 +17,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
     init {
         viewModelScope.launch {
             val page = homeUseCase.getPhotoPageUseCase(0)
-            val homePageModel = HomePageModel(images = page.photos, currentPage = 0)
+            val homePageModel = HomePageModel(images = page.media, currentPage = 0)
             _state.update { _ -> Result.Success(homePageModel) }
         }
     }
@@ -43,7 +43,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
             val currentState = _state.value
             if(currentState is Result.Success){
                 val photos = currentState.data.images.toMutableList()
-                photos.addAll(page.photos)
+                photos.addAll(page.media)
                 val newPhotos = photos.distinctBy { it.id }
                 val homePageModel: HomePageModel = currentState.data.copy(
                     images = newPhotos,
@@ -62,7 +62,7 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePa
             val currentState = _state.value
             if(currentState is Result.Success){
                 val homePageModel: HomePageModel = currentState.data.copy(
-                    images = page.photos,
+                    images = page.media,
                     currentPage = page.page
                 )
                 _state.update { Result.Success(homePageModel) }

@@ -40,9 +40,9 @@ interface PexelsAPIService {
 
     @GET("collections/{id}")
     fun getCollection(
-        @Path("id") id: Int,
+        @Path("id") id: String,
         @Query("per_page") perPage: Int = 40,
-    ): Call<List<MediaDTO>>
+    ): Call<PhotoPageDTO>
 
     companion object{
         fun getInstance(okHttpClient: OkHttpClient): PexelsAPIService{

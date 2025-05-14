@@ -31,6 +31,7 @@ import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
 import com.wiseowl.woli.domain.usecase.common.media.GetCollectionPageUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetCollectionUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
@@ -87,6 +88,7 @@ class WoliApplication: Application() {
         singleOf(::GetComplementaryColorUseCase)
         singleOf(::GetPhotoUseCase)
         singleOf(::GetCollectionPageUseCase)
+        singleOf(::GetCollectionUseCase)
         singleOf(::MediaUseCase)
     }
 
