@@ -1,7 +1,6 @@
 package com.wiseowl.woli.ui.screen.categories.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -48,9 +47,9 @@ fun Collection(
                 items(5){
                     Shimmer(
                         modifier = Modifier
-                            .padding(10.dp)
                             .aspectRatio(1f)
-                            .fillMaxWidth(0.3f)
+                            .width(100.dp)
+                            .padding(end = 10.dp)
                             .clip(RoundedCornerShape(20.dp))
                     )
                 }

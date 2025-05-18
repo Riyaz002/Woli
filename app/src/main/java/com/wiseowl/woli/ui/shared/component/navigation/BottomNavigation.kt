@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -36,7 +35,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.wiseowl.woli.domain.event.Action
@@ -108,17 +106,17 @@ fun BottomNavigation(
             Column(
                 Modifier
                     .onSizeChanged { itemSize.value = it.width }
-                    .padding(5.dp)
-                    .clickable {
-                        ActionHandler.perform(Action.Navigate(navigationItem.screen))
-                        currentIndex.value = index + 1
-                    },
+                    .padding(5.dp),
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Column(
                     modifier = Modifier
-                        .width(80.dp)
+                        .width(50.dp)
                         .aspectRatio(1f)
                         .clip(RoundedCornerShape(100.dp))
+                        .clickable {
+                            ActionHandler.perform(Action.Navigate(navigationItem.screen))
+                            currentIndex.value = index + 1
+                        }
                         .padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -130,7 +128,6 @@ fun BottomNavigation(
                         contentDescription = navigationItem.title,
                         colorFilter = ColorFilter.tint(tintColor)
                     )
-                    Text(text = navigationItem.title, color = tintColor, fontSize = 11.sp)
                 }
             }
         }
