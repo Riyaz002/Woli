@@ -1,7 +1,6 @@
-package com.wiseowl.woli.ui.screen.categories
+package com.wiseowl.woli.ui.screen.collections
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,7 +14,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
-import com.wiseowl.woli.ui.screen.categories.component.Collection
+import com.wiseowl.woli.ui.screen.collections.component.Collection
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
 import org.koin.java.KoinJavaComponent.inject
@@ -25,7 +24,7 @@ fun Categories(
     modifier: Modifier = Modifier
 ) {
     val useCase: MediaUseCase by inject(MediaUseCase::class.java)
-    val viewModel = viewModel{ CategoriesViewModel(useCase) }
+    val viewModel = viewModel{ CollectionsViewModel(useCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
 
     Page(
@@ -34,7 +33,7 @@ fun Categories(
     ) {
         Column {
             Text(
-                text = "Categories",
+                text = "Collections",
                 fontSize = 54.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -49,13 +48,13 @@ fun Categories(
                             .padding(vertical = 10.dp),
                         title = it.title,
                         images = it.images,
-                        onClick = { viewModel.onEvent(CategoriesEvent.OnClickMedia(it) )}
+                        onClick = { viewModel.onEvent(CollectionsEvent.OnClickMedia(it) )}
                     )
                 }
 
                 item{
                     if(it.hasNext){
-                        viewModel.onEvent(CategoriesEvent.LoadPage(it.currentPage.plus(1)))
+                        viewModel.onEvent(CollectionsEvent.LoadPage(it.currentPage.plus(1)))
                         LoaderFooter(
                             modifier = Modifier.fillMaxWidth()
                         )

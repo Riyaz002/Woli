@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.categories.component
+package com.wiseowl.woli.ui.screen.collections.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

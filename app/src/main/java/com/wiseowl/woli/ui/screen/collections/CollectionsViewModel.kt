@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.categories
+package com.wiseowl.woli.ui.screen.collections
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
@@ -8,12 +8,12 @@ import com.wiseowl.woli.domain.repository.media.model.Collection
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.categories.model.CollectionModel
+import com.wiseowl.woli.ui.screen.collections.model.CollectionModel
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CategoriesViewModel(private val mediaUseCase: MediaUseCase): PageViewModel<CollectionModel>() {
+class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewModel<CollectionModel>() {
     init {
         viewModelScope.launch(Dispatcher.IO) {
             val currentPage = 0
@@ -48,7 +48,7 @@ class CategoriesViewModel(private val mediaUseCase: MediaUseCase): PageViewModel
 
     override fun onEvent(action: Action){
         when(action){
-            is CategoriesEvent.LoadPage -> {
+            is CollectionsEvent.LoadPage -> {
                 viewModelScope.launch(Dispatcher.IO) {
                     _state.update { state ->
                         (state as Result.Success<CollectionModel>).let {
@@ -66,7 +66,7 @@ class CategoriesViewModel(private val mediaUseCase: MediaUseCase): PageViewModel
                     }
                 }
             }
-            is CategoriesEvent.OnClickMedia -> {
+            is CollectionsEvent.OnClickMedia -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.id.toString())))
             }
             else -> ActionHandler.perform(action)

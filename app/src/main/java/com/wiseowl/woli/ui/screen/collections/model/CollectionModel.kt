@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.categories.model
+package com.wiseowl.woli.ui.screen.collections.model
 
 import com.wiseowl.woli.domain.repository.media.model.Collection
 

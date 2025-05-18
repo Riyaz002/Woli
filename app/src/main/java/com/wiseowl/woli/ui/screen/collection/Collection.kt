@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.category
+package com.wiseowl.woli.ui.screen.collection
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +31,7 @@ fun Category(
 
     val viewModel = viewModel {
         val categoryRepository: CategoryRepository by inject(CategoryRepository::class.java)
-        CategoryViewModel(category, categoryRepository)
+        CollectionViewModel(category, categoryRepository)
     }
 
     val state = viewModel.state.collectAsStateWithLifecycle()
