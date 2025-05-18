@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.registration
 
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 
 sealed class RegistrationEvent: Action {
     data object OnRegisterClick : RegistrationEvent()

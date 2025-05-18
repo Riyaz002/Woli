@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.event
+package com.wiseowl.woli.ui.event
 
 import android.content.Intent
 import com.wiseowl.woli.ui.navigation.Screen

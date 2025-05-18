@@ -2,7 +2,7 @@ package com.wiseowl.woli.ui.screen.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.flow.StateFlow

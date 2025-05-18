@@ -1,8 +1,8 @@
 package com.wiseowl.woli.ui.screen.home
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen

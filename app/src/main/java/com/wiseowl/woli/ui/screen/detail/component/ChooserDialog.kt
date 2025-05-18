@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperType
 import com.wiseowl.woli.ui.screen.detail.DetailEvent
 import kotlin.reflect.KFunction1

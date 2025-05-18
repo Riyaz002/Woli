@@ -1,11 +1,11 @@
 package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.Action.Navigate
-import com.wiseowl.woli.domain.event.Action.SnackBar
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.Action.Navigate
+import com.wiseowl.woli.ui.event.Action.SnackBar
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result

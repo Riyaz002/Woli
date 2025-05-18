@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.login
 
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 
 sealed class LoginEvent: Action {
     data object OnLoginClick : LoginEvent()

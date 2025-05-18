@@ -1,10 +1,10 @@
 package com.wiseowl.woli
 
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.ActionHandler
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.Rule
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 
 /**
  * [Rule] to avoid [NullPointerException] while testing any class that fires [Action] internally.

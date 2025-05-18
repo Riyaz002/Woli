@@ -2,8 +2,8 @@ package com.wiseowl.woli.ui.screen.collections
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.repository.media.model.Collection
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result

@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.event
+package com.wiseowl.woli.ui.event
 
 object ActionHandler {
     private var mSubscriber: ((Action) -> Unit)? = null

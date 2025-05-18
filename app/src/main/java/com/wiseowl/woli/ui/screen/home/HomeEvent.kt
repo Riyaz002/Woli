@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.home
 
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 
 sealed class HomeEvent: Action {
     data class OnClickImage(val imageId: Long): HomeEvent()

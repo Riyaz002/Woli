@@ -28,9 +28,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.UnhandledActionException
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.UnhandledActionException
 import com.wiseowl.woli.domain.pubsub.Event
 import com.wiseowl.woli.domain.pubsub.EventListener
 import com.wiseowl.woli.ui.navigation.Root

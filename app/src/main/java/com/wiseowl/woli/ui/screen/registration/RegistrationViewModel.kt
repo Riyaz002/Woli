@@ -1,9 +1,9 @@
 package com.wiseowl.woli.ui.screen.registration
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.Action.*
-import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.Action.*
+import com.wiseowl.woli.ui.event.perform
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase

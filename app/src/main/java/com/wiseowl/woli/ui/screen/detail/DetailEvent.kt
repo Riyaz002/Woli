@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.detail
 
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperType
 
 

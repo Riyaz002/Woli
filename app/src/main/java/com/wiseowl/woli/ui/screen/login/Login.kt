@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Page
