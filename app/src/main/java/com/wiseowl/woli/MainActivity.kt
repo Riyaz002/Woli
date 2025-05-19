@@ -31,12 +31,12 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.ui.event.UnhandledActionException
-import com.wiseowl.woli.domain.pubsub.Event
-import com.wiseowl.woli.domain.pubsub.EventListener
+import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.EventListener
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
-import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
+import com.wiseowl.woli.ui.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
 import com.wiseowl.woli.util.DeepLinkParser
 import kotlinx.coroutines.launch

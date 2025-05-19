@@ -23,7 +23,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wiseowl.woli.ui.shared.Constant
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.shared.component.modifier.glowingBorder
 import com.wiseowl.woli.ui.shared.model.FieldData
 

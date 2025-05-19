@@ -48,7 +48,7 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewMode
 
     override fun onEvent(action: Action){
         when(action){
-            is CollectionsEvent.LoadPage -> {
+            is CollectionsAction.LoadPage -> {
                 viewModelScope.launch(Dispatcher.IO) {
                     _state.update { state ->
                         (state as Result.Success<CollectionModel>).let {
@@ -66,7 +66,7 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewMode
                     }
                 }
             }
-            is CollectionsEvent.OnClickMedia -> {
+            is CollectionsAction.OnClickMedia -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.id.toString())))
             }
             else -> ActionHandler.perform(action)

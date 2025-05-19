@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.screen.profile.model
+package com.wiseowl.woli.ui.screen.profile
 
 import com.wiseowl.woli.ui.event.Action
 

@@ -48,13 +48,13 @@ fun Categories(
                             .padding(vertical = 10.dp),
                         title = it.title,
                         images = it.images,
-                        onClick = { viewModel.onEvent(CollectionsEvent.OnClickMedia(it) )}
+                        onClick = { viewModel.onEvent(CollectionsAction.OnClickMedia(it) )}
                     )
                 }
 
                 item{
                     if(it.hasNext){
-                        viewModel.onEvent(CollectionsEvent.LoadPage(it.currentPage.plus(1)))
+                        viewModel.onEvent(CollectionsAction.LoadPage(it.currentPage.plus(1)))
                         LoaderFooter(
                             modifier = Modifier.fillMaxWidth()
                         )

@@ -76,7 +76,7 @@ fun Detail(
                                 .clip(RoundedCornerShape(20.dp)),
                             image = image,
                             expanded = data.imagePreviewPopupVisible,
-                            onDismiss = { viewModel.onEvent(DetailEvent.OnDismissImagePreview) },
+                            onDismiss = { viewModel.onEvent(DetailAction.OnDismissImagePreview) },
                             onClick = viewModel::onEvent
                         )
                     }
@@ -93,7 +93,7 @@ fun Detail(
                         text = "Preview",
                         backgroundColor = complementaryColor,
                         textColor = accent,
-                        onClick = { viewModel.onEvent(DetailEvent.OnClickImage) }
+                        onClick = { viewModel.onEvent(DetailAction.OnClickImage) }
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     TextRoundButton(
@@ -101,7 +101,7 @@ fun Detail(
                         text = "Set",
                         backgroundColor = complementaryColor,
                         textColor = accent,
-                        onClick = { viewModel.onEvent(DetailEvent.OnClickSetWallpaper) }
+                        onClick = { viewModel.onEvent(DetailAction.OnClickSetWallpaper) }
                     )
                 }
 

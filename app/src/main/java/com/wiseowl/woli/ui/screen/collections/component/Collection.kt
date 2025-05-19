@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.wiseowl.woli.domain.repository.media.model.Media
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
-import com.wiseowl.woli.ui.shared.Constant
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.shared.component.Shimmer
 
 @Preview

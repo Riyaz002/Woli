@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import com.wiseowl.woli.ui.shared.Constant
+import com.wiseowl.woli.ui.configuration.Constant
 
 @Composable
 fun Modifier.glowingBorder(

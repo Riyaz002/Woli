@@ -46,18 +46,18 @@ fun Login(
             Spacer(modifier = Modifier.height(40.dp))
             BasicTextField(
                 data = it.email,
-                onChange = { viewModel.onEvent(LoginEvent.OnEmailChange(it)) },
+                onChange = { viewModel.onEvent(LoginAction.OnEmailChange(it)) },
             )
             BasicTextField(
                 data = it.password,
-                onChange = { viewModel.onEvent(LoginEvent.OnPasswordChange(it)) },
+                onChange = { viewModel.onEvent(LoginAction.OnPasswordChange(it)) },
             )
             BasicButton(
                 data = it.cta,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { viewModel.onEvent(LoginEvent.OnLoginClick) }
+                onClick = { viewModel.onEvent(LoginAction.OnLoginClick) }
             )
             TextButton(modifier = Modifier.padding(top = 10.dp).align(Alignment.CenterHorizontally), onClick = {viewModel.onEvent(Action.Navigate(Screen.REGISTRATION))}){
                 Text(text = "Don't have an account? Register", textDecoration = TextDecoration.Underline)

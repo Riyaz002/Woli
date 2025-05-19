@@ -1,4 +1,4 @@
-package com.wiseowl.woli.domain.pubsub
+package com.wiseowl.woli.domain.event
 
 sealed class Event {
     object Logout: Event()

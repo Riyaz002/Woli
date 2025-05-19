@@ -1,5 +1,6 @@
-package com.wiseowl.woli.ui.util
+package com.wiseowl.woli.ui.shared.component
 
+import android.graphics.BlurMaskFilter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
@@ -31,9 +32,9 @@ fun Modifier.shadow(
             color = shadowColor.copy(alpha = 0.5f)
             style = PaintingStyle.Fill
         }.asFrameworkPaint().apply {
-            maskFilter = android.graphics.BlurMaskFilter(
+            maskFilter = BlurMaskFilter(
                 blurRadius, // Blur radius
-                android.graphics.BlurMaskFilter.Blur.NORMAL
+                BlurMaskFilter.Blur.NORMAL
             )
         }
 
@@ -62,9 +63,9 @@ fun Modifier.neumorphism(
                     to = Offset(size.width, size.height),
                     colors = listOf(Color.White, Color.Black.copy(0.3f))
                 )
-                maskFilter = android.graphics.BlurMaskFilter(
+                maskFilter = BlurMaskFilter(
                     blurRadius.toPx(),  // Blur Radius
-                    android.graphics.BlurMaskFilter.Blur.NORMAL
+                    BlurMaskFilter.Blur.NORMAL
                 )
             }
             canvas.drawRoundRect(

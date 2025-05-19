@@ -22,7 +22,7 @@ import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.common.Page
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
-import com.wiseowl.woli.ui.shared.Constant
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
 
@@ -42,9 +42,9 @@ fun Home(
                         .padding(vertical = 10.dp, horizontal = Constant.DEFAULT_PADDING.dp)
                         .fillMaxWidth(),
                     data = data.search,
-                    onChange = { viewModel.onEvent(HomeEvent.OnSearchChange(it)) },
+                    onChange = { viewModel.onEvent(HomeAction.OnSearchChange(it)) },
                     trailingIcon = Icons.Default.Search,
-                    onTrailingIconClick = { viewModel.onEvent(HomeEvent.OnClickSearch) }
+                    onTrailingIconClick = { viewModel.onEvent(HomeAction.OnClickSearch) }
                 )
                 LazyVerticalGrid(
                     modifier = Modifier.fillMaxSize(),
@@ -58,14 +58,14 @@ fun Home(
                             image = image,
                             cornerRadius = 20.dp,
                             aspectRatio = 0.6f,
-                            onClick = { viewModel.onEvent(HomeEvent.OnClickImage(image.id)) }
+                            onClick = { viewModel.onEvent(HomeAction.OnClickImage(image.id)) }
                         )
                     }
                     items(
                         1,
                         span = { GridItemSpan(2) }
                     ){
-                        viewModel.onEvent(HomeEvent.LoadNextPage)
+                        viewModel.onEvent(HomeAction.LoadNextPage)
                         LoaderFooter(
                             modifier = Modifier
                                 .fillMaxWidth()

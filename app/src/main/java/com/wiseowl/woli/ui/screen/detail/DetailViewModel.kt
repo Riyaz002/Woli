@@ -48,7 +48,7 @@ class DetailViewModel(
 
     override fun onEvent(action: Action) {
         when (action) {
-            is DetailEvent.OnClickImage -> {
+            is DetailAction.OnClickImage -> {
                 _state.update { state ->
                     if (state is Result.Success) {
                         Result.Success(state.data.copy(imagePreviewPopupVisible = true))
@@ -56,7 +56,7 @@ class DetailViewModel(
                 }
             }
 
-            is DetailEvent.OnClickSetWallpaper -> {
+            is DetailAction.OnClickSetWallpaper -> {
                 _state.update { state ->
                     if (state is Result.Success) {
                         Result.Success(state.data.copy(setWallpaperPopupVisible = true))
@@ -65,14 +65,14 @@ class DetailViewModel(
             }
 
 
-            is DetailEvent.OnDismissImagePreview -> _state.update { state ->
+            is DetailAction.OnDismissImagePreview -> _state.update { state ->
                 if (state is Result.Success) {
                     Result.Success(state.data.copy(imagePreviewPopupVisible = false))
                 } else state
             }
 
-            is DetailEvent.OnClickSetAs -> _state.value.let { state ->
-                onEvent(DetailEvent.OnDismissSetWallpaperDialog)
+            is DetailAction.OnClickSetAs -> _state.value.let { state ->
+                onEvent(DetailAction.OnDismissSetWallpaperDialog)
                 if (state is Result.Success) {
                     viewModelScope.launch(Dispatcher.IO) {
                         ActionHandler.perform(Action.Progress(true))
@@ -85,17 +85,17 @@ class DetailViewModel(
                 }
             }
 
-            is DetailEvent.OnDismissSetWallpaperDialog -> _state.update { state ->
+            is DetailAction.OnDismissSetWallpaperDialog -> _state.update { state ->
                 if (state is Result.Success) {
                     Result.Success(state.data.copy(setWallpaperPopupVisible = false))
                 } else state
             }
 
-            is DetailEvent.OnClickSimilarImage -> {
+            is DetailAction.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
 
-            is DetailEvent.OnClickCategory -> {
+            is DetailAction.OnClickCategory -> {
                 ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to action.category)))
             }
         }

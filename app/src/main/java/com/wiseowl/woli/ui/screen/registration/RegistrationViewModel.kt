@@ -17,9 +17,9 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
 
     override fun onEvent(action: Action) {
         when(action){
-            is RegistrationEvent.OnFirstNameChange -> _state.ifSuccess { it.copy(firstName = it.firstName.copy(value = action.value)) }
-            is RegistrationEvent.OnLastNameChange -> _state.ifSuccess { it.copy(lastName = it.lastName.copy(value = action.value)) }
-            is RegistrationEvent.OnEmailChange -> {
+            is RegistrationAction.OnFirstNameChange -> _state.ifSuccess { it.copy(firstName = it.firstName.copy(value = action.value)) }
+            is RegistrationAction.OnLastNameChange -> _state.ifSuccess { it.copy(lastName = it.lastName.copy(value = action.value)) }
+            is RegistrationAction.OnEmailChange -> {
                 _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
                 validate("Email") {
                     val isValid = registrationUseCase.validateEmail(action.email)
@@ -27,7 +27,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                     _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
                 }
             }
-            is RegistrationEvent.OnPasswordChange -> {
+            is RegistrationAction.OnPasswordChange -> {
                 _state.ifSuccess {
                     validate("Password") {
                         val result = registrationUseCase.validatePassword(action.password)
@@ -43,7 +43,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                     it.copy(password = it.password.copy(value = action.password))
                 }
             }
-            is RegistrationEvent.OnRegisterClick -> {
+            is RegistrationAction.OnRegisterClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.firstName.valid && it.data.lastName.valid && it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launchWithProgress {

@@ -1,4 +1,4 @@
-package com.wiseowl.woli.ui.shared.component.navigation
+package com.wiseowl.woli.ui.navigation
 
 import androidx.compose.animation.core.EaseOutBounce
 import androidx.compose.animation.core.animateFloatAsState
@@ -40,7 +40,6 @@ import androidx.navigation.compose.rememberNavController
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
-import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.home.component.aspectRatio
 import org.koin.java.KoinJavaComponent.inject
 
