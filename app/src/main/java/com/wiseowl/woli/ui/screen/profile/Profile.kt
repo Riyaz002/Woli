@@ -28,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
+import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.profile.component.Button
 import com.wiseowl.woli.ui.shared.component.AlertDialog
@@ -55,7 +56,6 @@ fun Profile(modifier: Modifier = Modifier) {
         }
 
         Column {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -89,6 +89,13 @@ fun Profile(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth(),
                 text = "Logout"
             ) { viewModel.onEvent(Action.Logout) }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
+                text = "Privacy Policy"
+            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
 
             Button(
                 modifier = Modifier
