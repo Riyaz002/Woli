@@ -7,8 +7,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.wiseowl.woli.ui.screen.categories.Categories
-import com.wiseowl.woli.ui.screen.category.Category
+import com.wiseowl.woli.ui.screen.collections.Categories
+import com.wiseowl.woli.ui.screen.collection.Category
 import com.wiseowl.woli.ui.screen.detail.Detail
 import com.wiseowl.woli.ui.screen.home.Home
 import com.wiseowl.woli.ui.screen.login.Login

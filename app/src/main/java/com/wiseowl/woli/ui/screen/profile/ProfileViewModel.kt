@@ -1,13 +1,13 @@
 package com.wiseowl.woli.ui.screen.profile
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
-import com.wiseowl.woli.ui.screen.profile.model.ProfileAction
+import com.wiseowl.woli.ui.screen.profile.ProfileAction
 import com.wiseowl.woli.ui.screen.profile.model.ProfileModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

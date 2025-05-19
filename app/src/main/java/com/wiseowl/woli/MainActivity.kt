@@ -1,9 +1,12 @@
 package com.wiseowl.woli
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,15 +28,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.UnhandledActionException
-import com.wiseowl.woli.domain.pubsub.Event
-import com.wiseowl.woli.domain.pubsub.EventListener
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.UnhandledActionException
+import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.EventListener
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
-import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
+import com.wiseowl.woli.ui.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
 import com.wiseowl.woli.util.DeepLinkParser
 import kotlinx.coroutines.launch
@@ -42,6 +45,7 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : ComponentActivity() {
 
     private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val activityRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +77,9 @@ class MainActivity : ComponentActivity() {
             }
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
-                    Box(Modifier.fillMaxHeight().padding(padding)) {
+                    Box(Modifier.fillMaxHeight()) {
                         Root(
-                            modifier = Modifier.padding(bottom = 28.dp),
+                            modifier = Modifier.padding(top = padding.calculateTopPadding()),
                             navController = navController,
                             startScreen = screen.route
                         )
@@ -90,12 +94,15 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding()),
+                                .padding(bottom = padding.calculateBottomPadding()+16.dp),
                             navController
                         )
                     }
                 }
             }
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            activityRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }

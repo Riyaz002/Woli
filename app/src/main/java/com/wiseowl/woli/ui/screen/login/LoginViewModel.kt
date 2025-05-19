@@ -1,11 +1,11 @@
 package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.Action.Navigate
-import com.wiseowl.woli.domain.event.Action.SnackBar
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.Action.Navigate
+import com.wiseowl.woli.ui.event.Action.SnackBar
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result
@@ -18,7 +18,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
 
     override fun onEvent(action: Action) {
         when(action){
-            is LoginEvent.OnEmailChange -> {
+            is LoginAction.OnEmailChange -> {
                 _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
                 validate("Email") {
                     val isValid = loginUseCase.validateEmail(action.email)
@@ -26,7 +26,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                     _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
                 }
             }
-            is LoginEvent.OnPasswordChange -> {
+            is LoginAction.OnPasswordChange -> {
                 _state.ifSuccess {
                     validate("Password") {
                         val result = loginUseCase.validatePassword(action.password)
@@ -42,7 +42,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                     it.copy(password = it.password.copy(value = action.password))
                 }
             }
-            is LoginEvent.OnLoginClick -> {
+            is LoginAction.OnLoginClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launchWithProgress {

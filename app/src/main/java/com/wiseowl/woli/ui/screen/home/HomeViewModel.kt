@@ -1,46 +1,69 @@
 package com.wiseowl.woli.ui.screen.home
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.usecase.home.HomeUseCase
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.PageViewModel
 import com.wiseowl.woli.ui.screen.home.model.HomePageModel
+import com.wiseowl.woli.ui.shared.launchWithProgress
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val homeUseCase: HomeUseCase): PageViewModel<HomePageModel>() {
+class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePageModel>() {
 
     init {
-        viewModelScope.launch(Dispatcher.IO) {
-            val totalPages = homeUseCase.getPageUseCase.getTotalPageCount()
-            val page = homeUseCase.getPageUseCase.getPage(totalPages)
-            val homePageModel = HomePageModel(page.data, currentPage = totalPages)
+        viewModelScope.launch {
+            val page = homeUseCase.getPhotoPageUseCase(0)
+            val homePageModel = HomePageModel(images = page.media, currentPage = 0)
             _state.update { _ -> Result.Success(homePageModel) }
         }
     }
 
     override fun onEvent(action: Action){
         when(action){
-            is HomeEvent.OnClickImage -> {
+            is HomeAction.OnClickImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
-            is HomeEvent.LoadNextPage -> loadNextPage(action.page)
+            is HomeAction.LoadNextPage -> loadNextPage()
+            is HomeAction.OnSearchChange -> _state.ifSuccess{
+                it.copy(search = it.search.copy(value = action.query))
+            }
+
+            is HomeAction.OnClickSearch -> search()
         }
     }
 
-    private fun loadNextPage(pageNo: Int) {
+    private fun loadNextPage() {
         viewModelScope.launch {
-            val page = homeUseCase.getPageUseCase.getPage(pageNo)
+            val pageNumber = (state.value as Result.Success).data.currentPage.plus(1)
+            val page = homeUseCase.getPhotoPageUseCase(pageNumber)
             val currentState = _state.value
             if(currentState is Result.Success){
-                currentState.data
+                val photos = currentState.data.images.toMutableList()
+                photos.addAll(page.media)
+                val newPhotos = photos.distinctBy { it.id }
                 val homePageModel: HomePageModel = currentState.data.copy(
-                    images = currentState.data.images?.plus(page.data ?: listOf()),
-                    currentPage = pageNo
+                    images = newPhotos,
+                    currentPage = page.page
+                )
+                _state.update { Result.Success(homePageModel) }
+            }
+        }
+    }
+
+    private fun search() {
+        viewModelScope.launchWithProgress {
+            val query = (state.value as Result.Success).data.search.value
+            if(query.isEmpty()) return@launchWithProgress
+            val page = homeUseCase.geSearchUseCase(query, 0)
+            val currentState = _state.value
+            if(currentState is Result.Success){
+                val homePageModel: HomePageModel = currentState.data.copy(
+                    images = page.media,
+                    currentPage = page.page
                 )
                 _state.update { Result.Success(homePageModel) }
             }

@@ -5,7 +5,7 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.TestAccountRepository
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
-import com.wiseowl.woli.ui.screen.profile.model.ProfileAction
+import com.wiseowl.woli.ui.screen.profile.ProfileAction
 import junit.framework.TestCase.assertFalse
 import kotlinx.coroutines.test.runTest
 import org.junit.Before

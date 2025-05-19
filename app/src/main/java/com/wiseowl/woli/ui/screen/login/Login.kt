@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Page
@@ -46,18 +46,18 @@ fun Login(
             Spacer(modifier = Modifier.height(40.dp))
             BasicTextField(
                 data = it.email,
-                onEvent = { viewModel.onEvent(LoginEvent.OnEmailChange(it)) },
+                onChange = { viewModel.onEvent(LoginAction.OnEmailChange(it)) },
             )
             BasicTextField(
                 data = it.password,
-                onEvent = { viewModel.onEvent(LoginEvent.OnPasswordChange(it)) },
+                onChange = { viewModel.onEvent(LoginAction.OnPasswordChange(it)) },
             )
             BasicButton(
                 data = it.cta,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { viewModel.onEvent(LoginEvent.OnLoginClick) }
+                onClick = { viewModel.onEvent(LoginAction.OnLoginClick) }
             )
             TextButton(modifier = Modifier.padding(top = 10.dp).align(Alignment.CenterHorizontally), onClick = {viewModel.onEvent(Action.Navigate(Screen.REGISTRATION))}){
                 Text(text = "Don't have an account? Register", textDecoration = TextDecoration.Underline)
