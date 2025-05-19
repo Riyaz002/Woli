@@ -6,11 +6,11 @@ import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.repository.CategoryRepository
 import com.wiseowl.woli.domain.util.Result
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.collection.model.CollectionModel
 import kotlinx.coroutines.launch
 
-class CollectionViewModel(category: String, repository: CategoryRepository): PageViewModel<CollectionModel>() {
+class CollectionViewModel(category: String, repository: CategoryRepository): ScreenViewModel<CollectionModel>() {
 
     init {
         viewModelScope.launch(Dispatcher.IO) {

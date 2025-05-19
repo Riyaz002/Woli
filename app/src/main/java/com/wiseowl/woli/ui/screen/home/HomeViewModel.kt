@@ -6,13 +6,13 @@ import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.home.model.HomePageModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val homeUseCase: MediaUseCase): PageViewModel<HomePageModel>() {
+class HomeViewModel(private val homeUseCase: MediaUseCase): ScreenViewModel<HomePageModel>() {
 
     init {
         viewModelScope.launch {

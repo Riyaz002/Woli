@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.shared.component.BasicButton
 import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
@@ -29,7 +29,7 @@ fun Registration(
     val registrationUseCase by inject<RegistrationUseCase>(RegistrationUseCase::class.java)
     val viewModel = viewModel { RegistrationViewModel(registrationUseCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    Page(
+    Screen(
         modifier.fillMaxSize(),
         data = state.value
     ) {

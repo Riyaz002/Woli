@@ -10,11 +10,11 @@ import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 
-class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>(Result.Success(LoginModel())) {
+class LoginViewModel(private val loginUseCase: LoginUseCase): ScreenViewModel<LoginModel>(Result.Success(LoginModel())) {
 
     override fun onEvent(action: Action) {
         when(action){

@@ -9,11 +9,11 @@ import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.collections.model.CollectionModel
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewModel<CollectionModel>() {
+class CollectionsViewModel(private val mediaUseCase: MediaUseCase): ScreenViewModel<CollectionModel>() {
     init {
         viewModelScope.launch(Dispatcher.IO) {
             val currentPage = 0

@@ -9,11 +9,11 @@ import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 
-class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
+class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): ScreenViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
 
     override fun onEvent(action: Action) {
         when(action){

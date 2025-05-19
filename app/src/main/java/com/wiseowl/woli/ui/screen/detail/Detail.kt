@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
 import com.wiseowl.woli.ui.screen.detail.component.TextRoundButton
@@ -46,7 +46,7 @@ fun Detail(
     val detailState = if(state.value is Result.Success) state.value as Result.Success else null
     val complementaryColor = detailState?.data?.complementaryColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
     val accent = detailState?.data?.accentColor?.let { Color(it) } ?: MaterialTheme.colorScheme.background
-    Page(
+    Screen(
         data = state.value
     ) { data ->
         Column(
