@@ -101,7 +101,7 @@ fun Profile(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
-                text = "Delete My Account"
+                text = "Delete Account"
             ) { viewModel.onEvent(ProfileAction.DeleteAccountRequest) }
         }
     }
