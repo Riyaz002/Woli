@@ -16,7 +16,7 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
-fun getVersionCode() = 4
+fun getVersionCode() = 7
 
 fun getVersionName(): String{
     val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
@@ -40,6 +40,8 @@ android {
         }
         resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
         buildConfigField("String", "KEY_STORE_ALIAS", secrets["KEY_STORE_ALIAS"].toString())
+        buildConfigField("String", "PEXELS_BASE_URL", secrets["PEXELS_BASE_URL"].toString())
+        buildConfigField("String", "PEXELS_API_KEY", secrets["PEXELS_API_KEY"].toString())
     }
 
     buildTypes {
@@ -49,6 +51,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
     compileOptions {
@@ -123,4 +129,19 @@ dependencies {
 
     //constrain layout
     implementation(libs.androidx.constraintlayout.compose)
+
+    //Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    //Moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+
+    //Chucker
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
 }

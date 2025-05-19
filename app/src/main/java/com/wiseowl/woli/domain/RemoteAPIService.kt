@@ -3,6 +3,7 @@ package com.wiseowl.woli.domain
 import coil3.Bitmap
 import com.wiseowl.woli.data.local.db.entity.CategoryDTO
 import com.wiseowl.woli.data.local.db.entity.ImageDTO
+import com.wiseowl.woli.domain.model.Policy
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 
@@ -13,6 +14,7 @@ interface RemoteAPIService {
     suspend fun getImages(category: String): List<ImageDTO>?
     suspend fun getImageBitmap(url: String): Bitmap?
     suspend fun getCategoryPage(page: Int): List<CategoryDTO>?
+    suspend fun getPrivacyPolicyPage(): List<Policy>?
 
     //Account
     fun isLoggedIn(): Boolean

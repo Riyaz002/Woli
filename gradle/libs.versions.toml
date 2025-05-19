@@ -2,6 +2,8 @@
 agp = "8.5.2"
 coilCompose = "3.0.4"
 constraintlayoutCompose = "1.1.0"
+converterMoshi = "2.7.1"
+coreSplashscreen = "1.0.1"
 firebaseBom = "33.7.0"
 koinBom = "4.0.1"
 kotlin = "2.0.21"
@@ -11,11 +13,15 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinxCoroutinesTestVersion = "1.10.1"
 kotlinxSerializationJson = "1.8.0"
+library = "4.1.0"
+libraryNoOp = "4.1.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.9.3"
-composeBom = "2024.12.01"
+composeBom = "2025.05.00"
 mockk = "1.13.17"
+moshi = "1.15.2"
 navigationCompose = "2.8.5"
+retrofit = "2.11.0"
 roomCompiler = "2.6.1"
 googleService = "4.4.2"
 ksp = "2.0.21-1.0.27"
@@ -23,16 +29,20 @@ crashlytics = "3.0.2"
 junitKtx = "1.2.1"
 uiTextGoogleFonts = "1.7.8"
 runner = "1.6.2"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 [libraries]
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coilCompose" }
+converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
@@ -58,7 +68,14 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 androidx-ui-text-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
+chucker-no-op = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "libraryNoOp" }
+chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "library" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
+moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
