@@ -18,8 +18,8 @@ import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.categories.CategoriesUseCase
 import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase
+import com.wiseowl.woli.domain.usecase.common.media.GetCollectionsPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetCollectionPageUseCase
-import com.wiseowl.woli.domain.usecase.common.media.GetCollectionUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
@@ -85,7 +85,7 @@ fun AppModule(application: Context) = module {
     singleOf(::GetSearchUseCase)
     singleOf(::GetComplementaryColorUseCase)
     singleOf(::GetPhotoUseCase)
+    singleOf(::GetCollectionsPageUseCase)
     singleOf(::GetCollectionPageUseCase)
-    singleOf(::GetCollectionUseCase)
     singleOf(::MediaUseCase)
 }

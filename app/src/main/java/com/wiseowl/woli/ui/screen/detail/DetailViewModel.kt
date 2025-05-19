@@ -94,10 +94,6 @@ class DetailViewModel(
             is DetailAction.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
-
-            is DetailAction.OnClickCategory -> {
-                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to action.category)))
-            }
         }
     }
 }

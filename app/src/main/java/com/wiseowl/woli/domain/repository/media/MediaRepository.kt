@@ -9,5 +9,5 @@ interface MediaRepository {
     suspend fun getSearch(query: String, pageNo: Int): PhotoPage
     suspend fun getPhoto(photoId: Int): Media
     suspend fun getCollections(pageNo: Int): CollectionPage
-    suspend fun getCollection(id: String): List<Media>
+    suspend fun getCollection(id: String, pageNo: Int): List<Media>
 }

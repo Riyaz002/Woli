@@ -10,8 +10,8 @@ class MediaUseCase(
     val getPhotoPageUseCase: GetPhotoPageUseCase,
     val geSearchUseCase: GetSearchUseCase,
     val getPhotoUseCase: GetPhotoUseCase,
+    val getCollectionsPageUseCase: GetCollectionsPageUseCase,
     val getCollectionPageUseCase: GetCollectionPageUseCase,
-    val getCollectionUseCase: GetCollectionUseCase,
 )
 
 class GetPhotoPageUseCase(private val repository: MediaRepository){
@@ -26,10 +26,10 @@ class GetPhotoUseCase(private val repository: MediaRepository){
     suspend operator fun invoke(photoId: Int): Media = repository.getPhoto(photoId)
 }
 
-class GetCollectionPageUseCase(private val repository: MediaRepository){
+class GetCollectionsPageUseCase(private val repository: MediaRepository){
     suspend operator fun invoke(photoId: Int): CollectionPage = repository.getCollections(photoId)
 }
 
-class GetCollectionUseCase(private val repository: MediaRepository){
-    suspend operator fun invoke(id: String): List<Media> = repository.getCollection(id)
+class GetCollectionPageUseCase(private val repository: MediaRepository){
+    suspend operator fun invoke(id: String, pageNo: Int): List<Media> = repository.getCollection(id, pageNo)
 }

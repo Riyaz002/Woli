@@ -41,6 +41,7 @@ interface PexelsAPIService {
     @GET("collections/{id}")
     fun getCollection(
         @Path("id") id: String,
+        @Query("page") page: Int,
         @Query("per_page") perPage: Int = 40,
     ): Call<PhotoPageDTO>
 

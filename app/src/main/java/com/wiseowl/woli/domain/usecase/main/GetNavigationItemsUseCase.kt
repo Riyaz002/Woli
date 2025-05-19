@@ -16,7 +16,7 @@ class GetNavigationItemsUseCase {
 class NavBarData(
     val navItems: List<NavigationItem> = listOf(
         NavigationItem("Home", Icons.Default.Home, Screen.HOME),
-        NavigationItem("Categories", Icons.Default.Menu, Screen.CATEGORIES),
+        NavigationItem("Categories", Icons.Default.Menu, Screen.COLLECTIONS),
         NavigationItem("Profile", Icons.Default.Person, Screen.Profile)
     ),
     val selectedScreen: Screen?

@@ -46,9 +46,8 @@ fun Categories(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
-                        title = it.title,
-                        images = it.images,
-                        onClick = { viewModel.onEvent(CollectionsAction.OnClickMedia(it) )}
+                        collection = it,
+                        onAction = viewModel::onEvent
                     )
                 }
 
