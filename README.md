@@ -48,7 +48,7 @@ Woli follows the **MVI (Model–View–Intent/Action)** architecture to manage U
 │       ├── sharedpreference/   ← SharedPreference (Encrypted SharedPreference)
 │   ├── remote/                 ← remote apis httpclient config for authentication and media (Pexels and Firebase)
 │       ├── core/               ← Core class (Interceptors and HttpClient provider)
-│       ├── firebase/           ← Firebase firestore connevtivity classes
+│       ├── firebase/           ← Firebase firestore connectivity classes
 │       ├── media/              ← Pexels Api for media
 │   ├── repository/             ← repository class(Domain) implementation (AccountRepository, etc)
 │   └── model/                  ← Data and domain models
