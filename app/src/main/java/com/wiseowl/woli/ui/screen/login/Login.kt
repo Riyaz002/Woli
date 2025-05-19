@@ -21,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.shared.component.BasicButton
 import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
@@ -33,7 +33,7 @@ fun Login(
     val registrationUseCase: LoginUseCase by inject(LoginUseCase::class.java)
     val viewModel = viewModel { LoginViewModel(registrationUseCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    Page(
+    Screen(
         modifier.fillMaxSize(),
         data = state.value
     ) {

@@ -15,7 +15,7 @@ import java.util.TimerTask
  * Base class for all ViewModels in the app.
  * Complimenting MVI pattern by have a common method that handles [Action].
  */
-abstract class PageViewModel<T>(
+abstract class ScreenViewModel<T>(
     initialValue: Result<T> = Result.Loading()
 ): ViewModel() {
 

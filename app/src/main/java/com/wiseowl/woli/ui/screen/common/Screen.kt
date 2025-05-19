@@ -10,7 +10,7 @@ import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.shared.component.Error
 
 @Composable
-fun <T> Page(
+fun <T> Screen(
     modifier: Modifier = Modifier,
     data: Result<T>,
     content: @Composable BoxScope.(T) -> Unit,

@@ -6,8 +6,7 @@ import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
-import com.wiseowl.woli.ui.screen.profile.ProfileAction
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.profile.model.ProfileModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.wiseowl.woli.ui.util.Event
 
-class ProfileViewModel(private val profileUseCase: ProfileUseCase): PageViewModel<ProfileModel>() {
+class ProfileViewModel(private val profileUseCase: ProfileUseCase): ScreenViewModel<ProfileModel>() {
 
     private val _dialogEvent = MutableStateFlow(Event<Boolean>(false))
     val dialogEvent: StateFlow<Event<Boolean>> get() =  _dialogEvent

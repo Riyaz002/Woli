@@ -19,7 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
 import com.wiseowl.woli.ui.configuration.Constant
@@ -34,7 +34,7 @@ fun Home(
     val viewModel: HomeViewModel =  viewModel{ HomeViewModel(useCase) }
     val state = viewModel.state.collectAsState()
 
-    Page(data = state.value){ data ->
+    Screen(data = state.value){ data ->
         Box(modifier = modifier) {
             Column {
                 BasicTextField(

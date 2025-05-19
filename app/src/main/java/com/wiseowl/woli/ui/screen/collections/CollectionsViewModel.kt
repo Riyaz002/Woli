@@ -9,15 +9,15 @@ import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.collections.model.CollectionModel
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewModel<CollectionModel>() {
+class CollectionsViewModel(private val mediaUseCase: MediaUseCase): ScreenViewModel<CollectionModel>() {
     init {
         viewModelScope.launch(Dispatcher.IO) {
             val currentPage = 0
-            val data = mediaUseCase.getCollectionPageUseCase(currentPage)
+            val data = mediaUseCase.getCollectionsPageUseCase(currentPage)
             val state = Result.Success(
                 CollectionModel(
                     categories = data.collections,
@@ -27,7 +27,7 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewMode
             )
             _state.update { state }
             val contentFullCollection = data.collections.map {
-                val medias = mediaUseCase.getCollectionUseCase(it.id)
+                val medias = mediaUseCase.getCollectionPageUseCase(it.id, 0)
                 Collection(
                     id = it.id,
                     title = it.title,
@@ -42,18 +42,18 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): PageViewMode
 
             _state.update{ state.copy(data = state.data.copy(categories = contentFullCollection)) }
 
-            mediaUseCase.getCollectionPageUseCase
+            mediaUseCase.getCollectionsPageUseCase
         }
     }
 
     override fun onEvent(action: Action){
         when(action){
             is CollectionsAction.LoadPage -> {
-                viewModelScope.launch(Dispatcher.IO) {
+                viewModelScope.launch {
                     _state.update { state ->
                         (state as Result.Success<CollectionModel>).let {
                             val categories = it.data.categories as MutableList
-                            val pageData = mediaUseCase.getCollectionPageUseCase(action.pageNo).collections
+                            val pageData = mediaUseCase.getCollectionsPageUseCase(action.pageNo).collections
                             categories.addAll(pageData)
                             Result.Success(
                                 it.data.copy(

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.privacypolicy.component.Policy
 import org.koin.java.KoinJavaComponent.inject
 
@@ -21,7 +21,7 @@ fun PrivacyPolicy(modifier: Modifier = Modifier) {
     val getUserPoliciesUseCase by inject<GetPrivacyPolicyUseCase>(GetPrivacyPolicyUseCase::class.java)
     val viewModel = viewModel{ PrivacyPolicyViewModel(getUserPoliciesUseCase) }
 
-    Page(
+    Screen(
         modifier = modifier,
         data = viewModel.state.collectAsStateWithLifecycle().value
     ) { data ->

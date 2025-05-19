@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.collections.component.Collection
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
 import org.koin.java.KoinJavaComponent.inject
 
@@ -27,7 +27,7 @@ fun Categories(
     val viewModel = viewModel{ CollectionsViewModel(useCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
 
-    Page(
+    Screen(
         modifier = modifier,
         data = state.value
     ) {
@@ -46,9 +46,8 @@ fun Categories(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 10.dp),
-                        title = it.title,
-                        images = it.images,
-                        onClick = { viewModel.onEvent(CollectionsAction.OnClickMedia(it) )}
+                        collection = it,
+                        onAction = viewModel::onEvent
                     )
                 }
 

@@ -6,7 +6,7 @@ import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
@@ -18,7 +18,7 @@ import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 class DetailViewModel(
     imageId: String,
     private val useCase: DetailUseCase,
-) : PageViewModel<DetailModel>() {
+) : ScreenViewModel<DetailModel>() {
     init {
         viewModelScope.launch {
             val image = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
@@ -93,10 +93,6 @@ class DetailViewModel(
 
             is DetailAction.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
-            }
-
-            is DetailAction.OnClickCategory -> {
-                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to action.category)))
             }
         }
     }
