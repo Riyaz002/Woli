@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.shared.component.BasicButton
 import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
@@ -29,7 +29,7 @@ fun Registration(
     val registrationUseCase by inject<RegistrationUseCase>(RegistrationUseCase::class.java)
     val viewModel = viewModel { RegistrationViewModel(registrationUseCase) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    Page(
+    Screen(
         modifier.fillMaxSize(),
         data = state.value
     ) {
@@ -42,24 +42,24 @@ fun Registration(
             Spacer(modifier = Modifier.height(40.dp))
             BasicTextField(
                 data = it.firstName,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnFirstNameChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationAction.OnFirstNameChange(it)) },
             )
             BasicTextField(
                 data = it.lastName,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnLastNameChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationAction.OnLastNameChange(it)) },
             )
             BasicTextField(
                 data = it.email,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnEmailChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationAction.OnEmailChange(it)) },
             )
             BasicTextField(
                 data = it.password,
-                onEvent = { viewModel.onEvent(RegistrationEvent.OnPasswordChange(it)) },
+                onChange = { viewModel.onEvent(RegistrationAction.OnPasswordChange(it)) },
             )
             BasicButton(
                 data = it.cta,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { viewModel.onEvent(RegistrationEvent.OnRegisterClick) }
+                onClick = { viewModel.onEvent(RegistrationAction.OnRegisterClick) }
             )
         }
     }

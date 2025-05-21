@@ -26,12 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.wiseowl.woli.domain.event.Action
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.Page
+import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.profile.component.Button
-import com.wiseowl.woli.ui.screen.profile.model.ProfileAction
 import com.wiseowl.woli.ui.shared.component.AlertDialog
 import org.koin.java.KoinJavaComponent.inject
 
@@ -42,7 +41,7 @@ fun Profile(modifier: Modifier = Modifier) {
     val viewModel = viewModel{ ProfileViewModel(getUserProfileUseCase) }
     val alertDialog = viewModel.dialogEvent.collectAsStateWithLifecycle()
 
-    Page(modifier = modifier.padding(
+    Screen(modifier = modifier.padding(
         top = 30.dp
     ), data = viewModel.state.collectAsStateWithLifecycle().value) { data ->
 
