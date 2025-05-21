@@ -99,13 +99,6 @@ fun Profile(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
-                text = "Privacy Policy"
-            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
-
-            Button(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
                 text = "Delete Account"
             ) { viewModel.onEvent(ProfileAction.DeleteAccountRequest) }
         }
