@@ -56,7 +56,6 @@ fun Profile(modifier: Modifier = Modifier) {
         }
 
         Column {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -93,6 +92,13 @@ fun Profile(modifier: Modifier = Modifier) {
 
             Button(
                 modifier = Modifier.fillMaxWidth(),
+                text = "Privacy Policy"
+            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
+
+            Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp),
                 text = "Privacy Policy"
             ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
 

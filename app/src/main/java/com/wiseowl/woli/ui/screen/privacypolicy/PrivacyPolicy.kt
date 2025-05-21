@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.privacypolicy.component.Policy
 import org.koin.java.KoinJavaComponent.inject
@@ -25,7 +26,7 @@ fun PrivacyPolicy(modifier: Modifier = Modifier) {
         modifier = modifier,
         data = viewModel.state.collectAsStateWithLifecycle().value
     ) { data ->
-        Column(modifier = modifier.padding(top = 60.dp)) {
+        Column(modifier = modifier.padding(horizontal = Constant.DEFAULT_PADDING.dp)) {
             Text(data.title, fontSize = 24.sp, fontWeight = FontWeight.Bold)
             LazyColumn(modifier = Modifier.padding(top = 10.dp)) {
                 data.policies?.forEach {
