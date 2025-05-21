@@ -56,7 +56,6 @@ fun Profile(modifier: Modifier = Modifier) {
         }
 
         Column {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
