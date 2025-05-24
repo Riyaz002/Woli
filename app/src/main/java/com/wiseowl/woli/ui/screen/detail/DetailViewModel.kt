@@ -1,5 +1,6 @@
 package com.wiseowl.woli.ui.screen.detail
 
+import android.os.Environment
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.ui.event.Action
@@ -12,16 +13,19 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
 import com.wiseowl.woli.domain.model.Error
+import com.wiseowl.woli.domain.repository.media.model.Media
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 
 class DetailViewModel(
     imageId: String,
     private val useCase: DetailUseCase,
 ) : ScreenViewModel<DetailModel>() {
+    lateinit var image: Media
     init {
         viewModelScope.launch {
-            val image = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
+            image = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
             val accentColor = image.avgColor?.toColorInt() ?: android.graphics.Color.GRAY
             val complementaryColor = useCase.getComplementaryColorUseCase(accentColor)
             _state.update { s ->
@@ -93,6 +97,18 @@ class DetailViewModel(
 
             is DetailAction.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
+            }
+
+            is DetailAction.OnClickDownload -> {
+                image.src?.large?.toUri()?.let { fileUri ->
+                    val destinationUri = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toUri()
+                    useCase.saveFileUseCase(
+                        fileUri,
+                        destinationUri,
+                        "Downloading Image",
+                        "Image is being downloaded"
+                    )
+                }
             }
         }
     }

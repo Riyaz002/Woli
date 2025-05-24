@@ -7,21 +7,21 @@ import java.util.UUID
 
 class TestAccountRepository: AccountRepository {
     private val users = mutableListOf<User>()
-    override fun isLoggedIn(): Boolean = currentUser!=null
     private var currentUser: User? = null
+    override fun isLoggedIn(): Boolean = currentUser!=null
 
     override suspend fun createAccount(
         email: String,
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
+    ): Result<User> {
         if(users.any { it.email == email }){
             return Result.Error(Error("Email already registered"))
         }
         currentUser = User(firstName, lastName, UUID.randomUUID().toString(), email, null)
         users.add(currentUser!!)
-        return Result.Success(true)
+        return Result.Success(currentUser!!)
     }
 
     override suspend fun login(email: String, password: String): Result<User> {

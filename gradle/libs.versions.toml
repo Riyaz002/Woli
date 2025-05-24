@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.6.1"
 coilCompose = "3.0.4"
 constraintlayoutCompose = "1.1.0"
 converterMoshi = "2.7.1"
@@ -48,6 +48,8 @@ firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+insert-koin-koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4" }
+io-insert-koin-koin-test = { module = "io.insert-koin:koin-test" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
