@@ -1,9 +1,10 @@
-package com.wiseowl.woli.domain.usecase.registration
+package com.wiseowl.woli.usecase.registration
 
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.TestAccountRepository
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
+import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before

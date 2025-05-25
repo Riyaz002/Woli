@@ -16,7 +16,7 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
-fun getVersionCode() = 9
+fun getVersionCode() = 10
 
 fun getVersionName(): String{
     val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
@@ -126,6 +126,8 @@ dependencies {
     //Dependency Injection
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.android)
+    testImplementation(libs.io.insert.koin.koin.test)
+    testImplementation(libs.insert.koin.koin.test.junit4)
 
     //constrain layout
     implementation(libs.androidx.constraintlayout.compose)

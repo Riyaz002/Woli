@@ -7,8 +7,8 @@ import java.util.UUID
 
 class TestAccountRepository: AccountRepository {
     private val users = mutableListOf<User>()
-    override fun isLoggedIn(): Boolean = currentUser!=null
     private var currentUser: User? = null
+    override fun isLoggedIn(): Boolean = currentUser!=null
 
     override suspend fun createAccount(
         email: String,

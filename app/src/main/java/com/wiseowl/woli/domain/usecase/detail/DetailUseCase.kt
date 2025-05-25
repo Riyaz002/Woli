@@ -6,5 +6,6 @@ data class DetailUseCase(
     val mediaUseCase: MediaUseCase,
     val getBitmapUseCase: GetBitmapUseCase,
     val setWallpaperUseCase: SetWallpaperUseCase,
-    val getComplementaryColorUseCase: GetComplementaryColorUseCase
+    val getComplementaryColorUseCase: GetComplementaryColorUseCase,
+    val saveFileUseCase: SaveFileUseCase
 )

@@ -15,6 +15,8 @@ import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.PageRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
 import com.wiseowl.woli.domain.RemoteAPIService
+import com.wiseowl.woli.domain.service.DownloadManagerService
+import com.wiseowl.woli.domain.service.DownloadManagerServiceImpl
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.categories.CategoriesUseCase
 import com.wiseowl.woli.domain.usecase.categories.PageUseCase as CategoriesPageUseCase
@@ -29,6 +31,7 @@ import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
+import com.wiseowl.woli.domain.usecase.detail.SaveFileUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.home.HomeUseCase
 import com.wiseowl.woli.domain.usecase.home.PageUseCase
@@ -65,6 +68,9 @@ fun AppModule(application: Context) = module {
     single { StringEncryptor() }
     single { EncryptedSharedPreference(application, get()) }
 
+    //Services
+    single<DownloadManagerService> { DownloadManagerServiceImpl(application) }
+
     //Use Case
     singleOf(::GetImageUseCase)
     singleOf(::GetBitmapUseCase)
@@ -88,4 +94,5 @@ fun AppModule(application: Context) = module {
     singleOf(::GetCollectionsPageUseCase)
     singleOf(::GetCollectionPageUseCase)
     singleOf(::MediaUseCase)
+    singleOf(::SaveFileUseCase)
 }
