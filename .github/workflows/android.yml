@@ -1,0 +1,35 @@
+name: PR Check
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: set up JDK 11
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Create secret file
+      run: echo GOOGLE_API_KEY=""\\nKEY_STORE_ALIAS=""\\nPEXELS_BASE_URL=""\\nPEXELS_API_KEY="" >> secrets.properties
+    
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Build with Gradle
+      run: ./gradlew build
+    - name: Build debug APK
+      run: ./gradlew assembleDebug
+    - name: Run Unit Tests
+      run: ./gradlew testDebugUnitTest
+    - name: Run Lint
+      run: ./gradlew lintDebug
