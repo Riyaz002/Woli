@@ -87,6 +87,7 @@ jobs:
     - if: matrix.build-mode == 'manual'
       shell: bash
       run: |
+        echo GOOGLE_API_KEY=""\\nKEY_STORE_ALIAS=""\\nPEXELS_BASE_URL=""\\nPEXELS_API_KEY="" >> secrets.properties
         chmod +x ./gradlew
         ./gradlew assembleDebug
 
