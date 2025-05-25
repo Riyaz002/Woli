@@ -91,11 +91,6 @@ fun Profile(modifier: Modifier = Modifier) {
             ) { viewModel.onEvent(Action.Logout) }
 
             Button(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Privacy Policy"
-            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
-
-            Button(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp),
