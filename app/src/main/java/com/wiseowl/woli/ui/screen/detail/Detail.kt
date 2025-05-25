@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.detail.component.ChooserDialog
 import com.wiseowl.woli.ui.screen.detail.component.ExpandableImageCard
@@ -64,7 +65,7 @@ fun Detail(
                     if (image == null) {
                         Shimmer(
                             modifier = Modifier
-                                .padding(top = 100.dp, start = 20.dp, end = 20.dp)
+                                .padding(top = 100.dp, start = Constant.DEFAULT_PADDING.dp, end = Constant.DEFAULT_PADDING.dp)
                                 .fillMaxWidth()
                                 .aspectRatio(1f)
                                 .clip(RoundedCornerShape(20.dp))
@@ -72,7 +73,7 @@ fun Detail(
                     } else {
                         ExpandableImageCard(
                             modifier = Modifier
-                                .padding(top = 100.dp, start = 20.dp, end = 20.dp)
+                                .padding(top = 100.dp, start = Constant.DEFAULT_PADDING.dp, end = Constant.DEFAULT_PADDING.dp)
                                 .clip(RoundedCornerShape(20.dp)),
                             image = image,
                             expanded = data.imagePreviewPopupVisible,
@@ -104,6 +105,14 @@ fun Detail(
                         onClick = { viewModel.onEvent(DetailAction.OnClickSetWallpaper) }
                     )
                 }
+
+                TextRoundButton(
+                    modifier = Modifier.fillMaxWidth().padding(Constant.DEFAULT_PADDING.dp),
+                    text = "Download",
+                    backgroundColor = complementaryColor,
+                    textColor = accent,
+                    onClick = { viewModel.onEvent(DetailAction.OnClickDownload) }
+                )
 
                 data.description?.let { it1 ->
                     Text(
