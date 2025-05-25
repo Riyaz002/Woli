@@ -15,13 +15,13 @@ class TestAccountRepository: AccountRepository {
         password: String,
         firstName: String,
         lastName: String,
-    ): Result<Boolean> {
+    ): Result<User> {
         if(users.any { it.email == email }){
             return Result.Error(Error("Email already registered"))
         }
         currentUser = User(firstName, lastName, UUID.randomUUID().toString(), email, null)
         users.add(currentUser!!)
-        return Result.Success(true)
+        return Result.Success(currentUser!!)
     }
 
     override suspend fun login(email: String, password: String): Result<User> {
