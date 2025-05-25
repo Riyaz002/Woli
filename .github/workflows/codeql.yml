@@ -87,7 +87,7 @@ jobs:
     - if: matrix.build-mode == 'manual'
       shell: bash
       run: |
-        chmod +x ./gradlew \
+        chmod +x ./gradlew
         ./gradlew assembleDebug
 
     - name: Assemble build
