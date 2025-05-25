@@ -17,6 +17,9 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Create secret file
+    - run: echo GOOGLE_API_KEY=""\\nKEY_STORE_ALIAS=""\\nPEXELS_BASE_URL=""\\nPEXELS_API_KEY="" >> secrets.properties
+    
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
