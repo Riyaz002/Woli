@@ -14,7 +14,7 @@ data class Media(
     val photographerUrl: String?,
     val src: Source?,
     val tags: List<Any?>?,
-    val type: String?,
+    val type: MediaType?,
     val url: String,
     val width: Int
 )

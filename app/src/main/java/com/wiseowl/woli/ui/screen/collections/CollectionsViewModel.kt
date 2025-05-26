@@ -5,6 +5,7 @@ import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.repository.media.model.Collection
+import com.wiseowl.woli.domain.repository.media.model.MediaType
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
@@ -26,18 +27,21 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): ScreenViewMo
                 )
             )
             _state.update { state }
-            val contentFullCollection = data.collections.map {
+            val contentFullCollection = data.collections.mapNotNull {
                 val medias = mediaUseCase.getCollectionPageUseCase(it.id, 0)
-                Collection(
-                    id = it.id,
-                    title = it.title,
-                    images = medias,
-                    description = it.description,
-                    mediaCount = it.mediaCount,
-                    photosCount = it.photosCount,
-                    isPrivate = it.isPrivate,
-                    videosCount = it.videosCount
-                )
+                    .filter { it.type == MediaType.Photo }
+                if (medias.isNotEmpty()) {
+                    Collection(
+                        id = it.id,
+                        title = it.title,
+                        medias = medias,
+                        description = it.description,
+                        mediaCount = it.mediaCount,
+                        photosCount = it.photosCount,
+                        isPrivate = it.isPrivate,
+                        videosCount = it.videosCount
+                    )
+                } else null
             }
 
             _state.update{ state.copy(data = state.data.copy(categories = contentFullCollection)) }

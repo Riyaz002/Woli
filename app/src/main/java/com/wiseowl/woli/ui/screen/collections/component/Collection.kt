@@ -67,7 +67,7 @@ fun Collection(
         }
 
         LazyRow(Modifier.padding(top = 10.dp)) {
-            if(collection.images.isEmpty()){
+            if(collection.medias.isEmpty()){
                 items(5){
                     Shimmer(
                         modifier = Modifier
@@ -78,7 +78,7 @@ fun Collection(
                     )
                 }
             } else{
-                items(collection.images, key = { it.id }) {
+                items(collection.medias, key = { it.id }) {
                     ImageCard(
                         modifier = Modifier
                             .aspectRatio(1f)

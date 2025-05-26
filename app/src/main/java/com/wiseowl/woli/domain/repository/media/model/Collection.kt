@@ -11,5 +11,5 @@ data class Collection(
     val isPrivate: Boolean,
     val title: String,
     val videosCount: Int,
-    val images: List<Media>
+    val medias: List<Media>
 )
