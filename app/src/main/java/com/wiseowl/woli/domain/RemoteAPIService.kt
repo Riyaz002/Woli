@@ -1,8 +1,6 @@
 package com.wiseowl.woli.domain
 
 import coil3.Bitmap
-import com.wiseowl.woli.data.local.db.entity.CategoryDTO
-import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import com.wiseowl.woli.domain.model.Policy
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result

@@ -58,16 +58,16 @@ fun Collection(
                     .padding(top = 10.dp),
                 columns = GridCells.Fixed(2)
             ) {
-                items(data.media.orEmpty()){ image ->
+                items(data.media.orEmpty()){ media ->
                     ImageCard(
                         modifier = Modifier.padding(10.dp),
-                        image = image,
+                        image = media,
                         aspectRatio = 0.6f,
                         onClick = {
                             viewModel.onEvent(
                                 Action.Navigate(
                                     Screen.DETAIL,
-                                    mapOf(Screen.DETAIL.ARG_IMAGE_ID to image.id.toString())
+                                    mapOf(Screen.DETAIL.ARG_IMAGE_ID to media.id.toString())
                                 )
                             )
                         }

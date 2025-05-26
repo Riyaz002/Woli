@@ -10,5 +10,4 @@ data class DetailModel(
     val complementaryColor: Int? = null,
     val imagePreviewPopupVisible: Boolean = false,
     val setWallpaperPopupVisible: Boolean = false,
-    val similarImage: SimilarImageModel = SimilarImageModel()
 )

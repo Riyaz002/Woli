@@ -3,7 +3,6 @@ package com.wiseowl.woli.di
 import android.content.Context
 import androidx.room.Room
 import com.wiseowl.woli.data.event.EventListener
-import com.wiseowl.woli.data.local.db.WoliDatabase
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
 import com.wiseowl.woli.data.remote.core.HttpClient
@@ -53,9 +52,6 @@ fun appModule(application: Context) = module {
 
     //Event
     singleOf(::EventListener) bind(com.wiseowl.woli.domain.event.EventListener::class)
-
-    //Database
-    single { Room.databaseBuilder(application, WoliDatabase::class.java, WoliDatabase.NAME).build() }
 
     //Encryption
     single { StringEncryptor() }
