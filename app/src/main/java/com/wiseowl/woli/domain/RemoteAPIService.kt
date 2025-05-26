@@ -8,12 +8,7 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
 
 interface RemoteAPIService {
-    suspend fun getPage(page: Int): List<ImageDTO>?
-    suspend fun getTotalPageCount(): Int
-    suspend fun getImage(id: Int): ImageDTO?
-    suspend fun getImages(category: String): List<ImageDTO>?
     suspend fun getImageBitmap(url: String): Bitmap?
-    suspend fun getCategoryPage(page: Int): List<CategoryDTO>?
     suspend fun getPrivacyPolicyPage(): List<Policy>?
 
     //Account
