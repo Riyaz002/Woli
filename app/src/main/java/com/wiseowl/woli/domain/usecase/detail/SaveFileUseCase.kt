@@ -8,7 +8,7 @@ import com.wiseowl.woli.domain.service.DownloadManagerService
 /**
  * Saves file using [DownloadManager].
  *
- * @param downloadManagerService The application context.
+ * @param downloadManagerService an implementation of [DownloadManagerService].
  *
  * @author Riyaz Uddin
  * @since version 11
