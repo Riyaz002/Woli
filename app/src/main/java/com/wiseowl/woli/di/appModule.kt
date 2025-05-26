@@ -25,9 +25,6 @@ import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
 import com.wiseowl.woli.domain.usecase.detail.SaveFileUseCase
-import com.wiseowl.woli.domain.usecase.detail.GetImageUseCase
-import com.wiseowl.woli.domain.usecase.detail.GetImagesForCategoryUseCase
-import com.wiseowl.woli.domain.usecase.detail.SaveFileUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
