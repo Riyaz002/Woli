@@ -7,15 +7,7 @@ import com.wiseowl.woli.domain.model.Image
 import com.wiseowl.woli.domain.repository.ImageRepository
 
 class ImageRepository(private val apiService: RemoteAPIService): ImageRepository {
-    override suspend fun getImage(id: Int): Image? {
-        return apiService.getImage(id)?.toImage()
-    }
-
     override suspend fun getImageBitmap(url: String): Bitmap? {
         return apiService.getImageBitmap(url)
-    }
-
-    override suspend fun getImages(category: String): List<Image>? {
-        return apiService.getImages(category)?.map { it.toImage() }
     }
 }

@@ -29,46 +29,6 @@ import kotlinx.coroutines.withContext
 class FirebaseAPIService(private val context: Context): RemoteAPIService {
     private val firestore = Firebase.firestore
 
-    override suspend fun getPage(page: Int): List<ImageDTO>? {
-        val result = firestore.collection(PAGES_COLLECTION).getDocumentOrNull(page.toString())?.data
-        val imagesData = result?.get(DATA) as List<DocumentReference>?
-        val images = imagesData?.map { it.get() }?.map { it.await() }
-        return images?.map { it.data!!.toImages() }
-    }
-
-    override suspend fun getTotalPageCount(): Int {
-        val collection = firestore.collection(PAGES_COLLECTION)
-        val document = collection.document(COUNT).get().await()
-        val totalPageCount = document.data?.getValue(TOTAL_PAGE) as Long
-        return totalPageCount.toInt()
-    }
-
-    override suspend fun getImage(id: Int): ImageDTO? {
-        val result = firestore.collection(IMAGES_COLLECTION).getDocumentOrNull(id.toString())?.data
-        val image = (result as Map<String, Any>?)?.toImages()
-        return image
-    }
-
-    override suspend fun getImages(category: String): List<ImageDTO>? {
-        val result = firestore.collection(CATEGORY_COLLECTION).getDocumentOrNull(category)?.data
-        val imagesData = result?.get(DATA) as List<DocumentReference>?
-        val images = imagesData?.map { it.get() }?.map { it.await() }
-        return images?.map { it.data!!.toImages() }
-    }
-
-    override suspend fun getImageBitmap(url: String): Bitmap? {
-        return withContext(Dispatcher.IO) {
-            val loader = ImageLoader(context)
-            val request = ImageRequest.Builder(context)
-                .data(url)
-                .allowHardware(false) // Disable hardware bitmaps.
-                .build()
-
-            val result = (loader.execute(request))
-            result.image?.toBitmap()
-        }
-    }
-
     override suspend fun createUser(
         email: String,
         password: String,
@@ -132,13 +92,6 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 
-    override suspend fun getCategoryPage(page: Int): List<CategoryDTO>? {
-        val result = firestore.collection(CATEGORIES_COLLECTION).getDocumentOrNull(page.toString())?.data
-        val categoriesData = result?.get(DATA) as List<DocumentReference>?
-        val categories = categoriesData?.map { it.get() }?.map { it.await() }
-        return categories?.map { it.data!!.toCategoryDTO() }
-    }
-
     override suspend fun getPrivacyPolicyPage(): List<Policy>? {
         val result = firestore.collection(PRIVACY_POLICY_COLLECTION).getDocumentOrNull(DATA)?.data
         val policyData = result?.get(POLICIES) as List<Map<String, String>>?
@@ -148,16 +101,26 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
 
     override fun isLoggedIn(): Boolean = Firebase.auth.currentUser!=null
 
+    override suspend fun getImageBitmap(url: String): Bitmap? {
+        return withContext(Dispatcher.IO) {
+            val loader = ImageLoader(context)
+            val request = ImageRequest.Builder(context)
+                .data(url)
+                .allowHardware(false) // Disable hardware bitmaps.
+                .build()
+
+            val result = (loader.execute(request))
+            result.image?.toBitmap()
+        }
+    }
+
     companion object{
         const val IMAGES_COLLECTION = "images"
         const val PAGES_COLLECTION = "pages"
         const val CATEGORY_COLLECTION = "category"
-        const val CATEGORIES_COLLECTION = "categories"
         const val PRIVACY_POLICY_COLLECTION = "privacypolicy"
         const val USERS_COLLECTION = "users"
         const val POLICIES = "policies"
-        const val COUNT = "count"
-        const val TOTAL_PAGE = "totalPages"
         const val DATA = "data"
 
         fun Map<String, Any>.toImages(): ImageDTO {
