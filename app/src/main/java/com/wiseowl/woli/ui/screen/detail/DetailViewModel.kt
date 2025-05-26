@@ -22,30 +22,22 @@ class DetailViewModel(
     imageId: String,
     private val useCase: DetailUseCase,
 ) : ScreenViewModel<DetailModel>() {
-    lateinit var image: Media
+    lateinit var media: Media
     init {
         viewModelScope.launch {
-            image = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
-            val accentColor = image.avgColor?.toColorInt() ?: android.graphics.Color.GRAY
+            media = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
+            val accentColor = media.avgColor?.toColorInt() ?: android.graphics.Color.GRAY
             val complementaryColor = useCase.getComplementaryColorUseCase(accentColor)
             _state.update { s ->
                 Result.Success(
                     DetailModel(
-                        description = image.alt,
+                        media = media,
+                        description = media.alt,
                         categories = listOf(),
                         accentColor = accentColor,
                         complementaryColor = complementaryColor
                     )
                 )
-            }
-            val bitmap = viewModelScope.async {  useCase.getBitmapUseCase(image.src!!.large) }.await()
-            if(bitmap==null){
-                _state.update { Result.Error(Error("Oops, Error Loading Image!")) }
-                return@launch
-            }
-            _state.update { s ->
-                if(s is Result.Success) s.copy(s.data.copy(image = bitmap))
-                else Result.Success(DetailModel(image = bitmap))
             }
         }
     }
@@ -80,8 +72,9 @@ class DetailViewModel(
                 if (state is Result.Success) {
                     viewModelScope.launch(Dispatcher.IO) {
                         ActionHandler.perform(Action.Progress(true))
+                        val image = useCase.getBitmapUseCase(state.data.media?.src?.portrait) ?: return@launch
                         useCase.setWallpaperUseCase(
-                            state.data.image!!,
+                            image,
                             action.setWallpaperType
                         )
                         ActionHandler.perform(Action.Progress(false))
@@ -100,7 +93,7 @@ class DetailViewModel(
             }
 
             is DetailAction.OnClickDownload -> {
-                image.src?.large?.toUri()?.let { fileUri ->
+                media.src?.large?.toUri()?.let { fileUri ->
                     val destinationUri = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toUri()
                     useCase.saveFileUseCase(
                         fileUri,
