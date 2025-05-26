@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
+import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.repository.media.model.Media
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 
