@@ -2,6 +2,7 @@ package com.wiseowl.woli.data.remote.media.model
 
 import com.squareup.moshi.JsonClass
 import com.wiseowl.woli.domain.repository.media.model.Media
+import com.wiseowl.woli.domain.repository.media.model.MediaType
 
 @JsonClass(generateAdapter = true)
 data class MediaDTO(
@@ -41,6 +42,6 @@ data class MediaDTO(
         fullRes = full_res,
         image = image,
         tags = tags,
-        type = type
+        type = type?.let { MediaType.valueOf(it) }
     )
 }
