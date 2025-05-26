@@ -21,6 +21,6 @@ data class CollectionPageItemDTO(
         photosCount = photos_count,
         isPrivate = `private`,
         videosCount = videos_count,
-        images = listOf()
+        medias = listOf()
     )
 }
