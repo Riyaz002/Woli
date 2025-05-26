@@ -9,14 +9,10 @@ import coil3.toBitmap
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.data.local.db.entity.CategoryDTO
-import com.wiseowl.woli.data.local.db.entity.ColorDTO
-import com.wiseowl.woli.data.local.db.entity.ImageDTO
 import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.model.Error
 import com.wiseowl.woli.domain.model.Policy
@@ -115,30 +111,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
     }
 
     companion object{
-        const val IMAGES_COLLECTION = "images"
-        const val PAGES_COLLECTION = "pages"
-        const val CATEGORY_COLLECTION = "category"
         const val PRIVACY_POLICY_COLLECTION = "privacypolicy"
         const val USERS_COLLECTION = "users"
         const val POLICIES = "policies"
         const val DATA = "data"
-
-        fun Map<String, Any>.toImages(): ImageDTO {
-            return ImageDTO(
-                id = getValue(ImageDTO::id.name).toString().toInt(),
-                url = getValue(ImageDTO::url.name).toString(),
-                description = getValue(ImageDTO::description.name).toString(),
-                categories = getValue(ImageDTO::categories.name) as List<String>,
-                color = (getValue(ImageDTO::color.name) as Map<String, Int>?)?.toColorDTO(),
-            )
-        }
-
-        private fun Map<String, Any>.toColorDTO(): ColorDTO {
-            return ColorDTO(
-                primary = getValue(ColorDTO::primary.name).toString().toInt(),
-                secondary = getValue(ColorDTO::secondary.name).toString().toInt()
-            )
-        }
 
         private fun Map<String, Any>.toUser(): User {
             return User(
@@ -147,14 +123,6 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 uid = getValue(User::uid.name).toString(),
                 email = getValue(User::email.name).toString(),
                 favourites = null
-            )
-        }
-
-        private suspend fun Map<String, Any>.toCategoryDTO(): CategoryDTO {
-            return CategoryDTO(
-                name = getValue(CategoryDTO::name.name).toString(),
-                cover = ((getValue(CategoryDTO::cover.name) as DocumentReference).get()
-                    .await().data as Map<String, Any>).toImages()
             )
         }
 
