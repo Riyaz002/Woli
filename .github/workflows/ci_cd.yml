@@ -27,8 +27,14 @@ jobs:
         restore-keys: |
           gradle-${{ runner.os }}-
 
-    - name: Create secret file
-      run: echo GOOGLE_API_KEY=""\\nKEY_STORE_ALIAS=""\\nPEXELS_BASE_URL=""\\nPEXELS_API_KEY="" >> secrets.properties
+    - name: create secret file
+      run : |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}\\n" >> secrets.properties
+          echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}\\n" >> secrets.properties
+          echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}\\n" >> secrets.properties
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}\\n" >> secrets.properties
+          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}\\n" >> secrets.properties
+          echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}\\n" >> secrets.properties
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
@@ -41,7 +47,33 @@ jobs:
       - name: Run tests
         run: ./gradlew assembleDebug
 
-#TODO complete deployment job
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: test
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps: 
+      - name: Create jks file
+        run : echo {{ secrets.KEYSTORE_JKS_FILE_CONTENT }} | base64 -d >> app/woli_keystore.jks
+      - name: create secret file
+        run : |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}\\n" >> secrets.properties
+          echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}\\n" >> secrets.properties
+          echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}\\n" >> secrets.properties
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}\\n" >> secrets.properties
+          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}\\n" >> secrets.properties
+          echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}\\n" >> secrets.properties
+
+      - name: Build Release AAB
+        run: ./gradlew app:bundleRelease
+
+      - name: Add service account json
+        run: |
+          echo "${{ secrets.SERVICE_ACCOUNT_JSON }}" >> secrets_account.text
+          echo "SERVICE_ACCOUNT_JSON_TEXT=${{ cat < secrets_account.json }}\\n" >> $GITHUB_ENV      
+
+      - name: Deploy to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON_TEXT }}
+          packageName: com.wiseowl.woli
+          releaseFiles: app/build/outputs/bundle/release/*.aab
+          track: internal
