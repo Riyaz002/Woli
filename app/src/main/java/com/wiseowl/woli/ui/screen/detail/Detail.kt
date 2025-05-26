@@ -61,7 +61,7 @@ fun Detail(
                     .background(accent)
                     .padding(bottom = 20.dp)
             ) {
-                data.image.let { image ->
+                data.media .let { image ->
                     if (image == null) {
                         Shimmer(
                             modifier = Modifier
@@ -75,7 +75,7 @@ fun Detail(
                             modifier = Modifier
                                 .padding(top = 100.dp, start = Constant.DEFAULT_PADDING.dp, end = Constant.DEFAULT_PADDING.dp)
                                 .clip(RoundedCornerShape(20.dp)),
-                            image = image,
+                            media = image,
                             expanded = data.imagePreviewPopupVisible,
                             onDismiss = { viewModel.onEvent(DetailAction.OnDismissImagePreview) },
                             onClick = viewModel::onEvent
