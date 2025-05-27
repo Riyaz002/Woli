@@ -29,12 +29,12 @@ jobs:
 
     - name: create secret file
       run : |
-          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}\\n" >> secrets.properties
-          echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}\\n" >> secrets.properties
-          echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}\\n" >> secrets.properties
-          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}\\n" >> secrets.properties
-          echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}\\n" >> secrets.properties
-          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
+          echo "GOOGLE_API_KEY=$("${{ secrets.GOOGLE_API_KEY }}")" >> secrets.properties
+          echo "KEY_STORE_ALIAS=$("${{ secrets.KEY_STORE_ALIAS }}")" >> secrets.properties
+          echo "KEY_STORE_PASSWORD=$("${{ secrets.KEY_STORE_PASSWORD }}")" >> secrets.properties
+          echo "PEXELS_API_KEY=$("${{ secrets.PEXELS_API_KEY }}")" >> secrets.properties
+          echo "SIGNING_KEY_ALIAS=$("${{ secrets.SIGNING_KEY_ALIAS }}")" >> secrets.properties
+          echo "PEXELS_BASE_URL=$("${{ secrets.PEXELS_BASE_URL }}")" >> secrets.properties
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle
