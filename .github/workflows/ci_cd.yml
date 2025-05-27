@@ -67,7 +67,7 @@ jobs:
 
       - name: Add service account json
         run: |
-          echo "SERVICE_ACCOUNT_JSON_TEXT=${{ secrets.SERVICE_ACCOUNT_JSON | base64 -d }}" >> $GITHUB_ENV      
+          echo "SERVICE_ACCOUNT_JSON_TEXT=$( echo ${{ secrets.SERVICE_ACCOUNT_JSON }} | base64 -d )" >> $GITHUB_ENV      
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
