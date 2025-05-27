@@ -60,19 +60,20 @@ jobs:
           echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}\\n" >> secrets.properties
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}\\n" >> secrets.properties
           echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}\\n" >> secrets.properties
-          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}\\n" >> secrets.properties
+          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
 
       - name: Build Release AAB
         run: ./gradlew app:bundleRelease
 
       - name: Add service account json
         run: |
+          echo "SERVICE_ACCOUNT_JSON_TEXT=${{ secrets.SERVICE_ACCOUNT_JSON | base64 -d }}" >> $GITHUB_ENV      
           echo "SERVICE_ACCOUNT_JSON_TEXT=$( echo ${{ secrets.SERVICE_ACCOUNT_JSON }} | base64 -d )" >> $GITHUB_ENV      
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ env.SERVICE_ACCOUNT_JSON_TEXT }}
+          serviceAccountJsonPlainText: ${{ SERVICE_ACCOUNT_JSON_TEXT }}
           packageName: com.wiseowl.woli
           releaseFiles: app/build/outputs/bundle/release/*.aab
           track: internal
