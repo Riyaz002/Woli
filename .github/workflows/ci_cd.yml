@@ -109,9 +109,12 @@ jobs:
       
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
+      - name: Print Version
+        run: echo $VERSION_CODE
         
       - name: Build Release AAB
-        run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
+        run: ./gradlew app:bundleRelease -PVERSION_CODE=14
 
       - name: Sign App Bundle
         run:  jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass ${{ secrets.KEY_STORE_PASSWORD }} -keystore app/woli_keystore.jks app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_STORE_ALIAS }}
