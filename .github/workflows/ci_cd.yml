@@ -9,10 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Add version code to Enviroment
-      run: echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
-    - name: Print Version
-      run: echo ${{ github.run_number }}
     - uses: actions/checkout@v4
     - name: set up JDK 17
       uses: actions/setup-java@v4
@@ -116,8 +112,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         
+      - name: Add version code to Enviroment
+        run: |
+          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 24 ))
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+        
       - name: Build Release AAB
-        run: ./gradlew app:bundleRelease -PVERSION_CODE=14
+        run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
 
       - name: Sign App Bundle
         run:  jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass ${{ secrets.KEY_STORE_PASSWORD }} -keystore app/woli_keystore.jks app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_STORE_ALIAS }}
