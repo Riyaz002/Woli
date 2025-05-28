@@ -114,7 +114,7 @@ jobs:
         
       - name: Add version code to Enviroment
         run: |
-          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 24 ))
+          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
         
       - name: Build Release AAB
@@ -130,10 +130,10 @@ jobs:
           echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
           base64 -d service_account_encoded.txt > service_account.json
 
-      # - name: Deploy to Play Store
-      #   uses: r0adkll/upload-google-play@v1
-      #   with:
-      #     serviceAccountJson: service_account.json
-      #     packageName: com.wiseowl.woli
-      #     releaseFiles: app/build/outputs/bundle/release/*.aab
-      #     track: internal
+      - name: Deploy to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.wiseowl.woli
+          releaseFiles: app/build/outputs/bundle/release/*.aab
+          track: internal
