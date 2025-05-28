@@ -12,7 +12,7 @@ jobs:
     - name: Add version code to Enviroment
       run: echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
     - name: Print Version
-      run: echo ${{ env.VERSION_CODE }}
+      run: echo ${{ github.run_number }}
     - uses: actions/checkout@v4
     - name: set up JDK 17
       uses: actions/setup-java@v4
