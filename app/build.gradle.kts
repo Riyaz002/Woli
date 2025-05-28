@@ -28,7 +28,7 @@ android {
     compileSdk = 35
 
     signingConfigs {
-        create("release"){
+        maybeCreate("release").apply{
             keyAlias = secrets["KEY_STORE_ALIAS"].toString()
             keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
             storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
