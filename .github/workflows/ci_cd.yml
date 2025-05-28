@@ -113,12 +113,15 @@ jobs:
       - name: Build Release AAB
         run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
 
+      - name: Sign App Bundle
+        run:  jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass ${{ secrets.KEY_STORE_PASSWORD }} -keystore app/woli_keystore.jks app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_STORE_ALIAS }}
+
       - name: Add service account json
         run: |
           touch service_account_encoded.txt
           touch service_account.json
           echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
-          base64 -d service_account_encoded.txt > service_account.json     
+          base64 -d service_account_encoded.txt > service_account.json
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
