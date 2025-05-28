@@ -54,6 +54,30 @@ jobs:
     steps: 
       - name: Create jks file
         run : echo {{ secrets.KEYSTORE_JKS_FILE_CONTENT }} | base64 -d >> app/woli_keystore.jks
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: create secret file
+        run : |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> secrets.properties
+          echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}" >> secrets.properties
+          echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}" >> secrets.properties
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
+          echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
+          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
+          
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
         
       - name: Build Release AAB
         run: ./gradlew app:bundleRelease
