@@ -103,12 +103,15 @@ jobs:
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
           echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
           echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
-          
+
+      - name: Add version code to Enviroment
+        run: echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
+      
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         
       - name: Build Release AAB
-        run: ./gradlew app:bundleRelease
+        run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
 
       - name: Add service account json
         run: |
