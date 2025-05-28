@@ -62,7 +62,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.findByName("release")
+            if(signingConfigs.findByName("release")!=null){
+                signingConfig = signingConfigs.findByName("release")
+            } else print("Unable to locate signingConfig")
         }
 
         debug {
