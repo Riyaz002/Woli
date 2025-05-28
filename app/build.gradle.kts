@@ -16,7 +16,7 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
-fun getVersionCode() = project.property("VERSION_CODE")?.toString()?.toInt() ?: 11
+fun getVersionCode() = if (project.hasProperty("VERSION_CODE")) project.property("VERSION_CODE").toString().toInt() else 11
 
 fun getVersionName(): String{
     val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
@@ -26,6 +26,15 @@ fun getVersionName(): String{
 android {
     namespace = "com.wiseowl.woli"
     compileSdk = 35
+
+    signingConfigs {
+        create("release"){
+            keyAlias = secrets["KEY_STORE_ALIAS"].toString()
+            keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
+            storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
+            storePassword = secrets["KEY_STORE_PASSWORD"].toString()
+        }
+    }
 
     defaultConfig {
         applicationId = "com.wiseowl.woli"
@@ -75,15 +84,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    signingConfigs {
-        create("release"){
-            keyAlias = secrets["KEY_STORE_ALIAS"].toString()
-            keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
-            storeFile = File(secrets["KEY_STORE_FILE"].toString())
-            storePassword = secrets["KEY_STORE_PASSWORD"].toString()
         }
     }
 }
