@@ -112,6 +112,8 @@ jobs:
 
       - name: Add service account json
         run: |
+          touch service_account_encoded.txt
+          touch service_account.json
           echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
           base64 -d service_account_en.txt > service_account.json
           echo "SERVICE_ACCOUNT_JSON_TEXT=$(echo service_account.json)" >> $GITHUB_ENV      
