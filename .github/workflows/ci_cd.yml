@@ -111,7 +111,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Print Version
-        run: echo $VERSION_CODE
+        run: echo ${{ env.VERSION_CODE }}
         
       - name: Build Release AAB
         run: ./gradlew app:bundleRelease -PVERSION_CODE=14
@@ -126,10 +126,10 @@ jobs:
           echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
           base64 -d service_account_encoded.txt > service_account.json
 
-      - name: Deploy to Play Store
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: com.wiseowl.woli
-          releaseFiles: app/build/outputs/bundle/release/*.aab
-          track: internal
+      # - name: Deploy to Play Store
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJson: service_account.json
+      #     packageName: com.wiseowl.woli
+      #     releaseFiles: app/build/outputs/bundle/release/*.aab
+      #     track: internal
