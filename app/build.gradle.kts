@@ -16,7 +16,7 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
-fun getVersionCode() = 10
+fun getVersionCode() = project.property("VERSION_CODE")?.toString()?.toInt() ?: 11
 
 fun getVersionName(): String{
     val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
