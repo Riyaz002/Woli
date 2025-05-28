@@ -83,7 +83,7 @@ jobs:
           distribution: 'temurin'
           cache: gradle
       - name: Create jks file
-        run : echo {{ secrets.KEYSTORE_JKS_FILE_CONTENT }} | base64 -d >> app/woli_keystore.jks
+        run : echo {{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
 
       - name: Cache Gradle
         uses: actions/cache@v4
@@ -112,7 +112,9 @@ jobs:
 
       - name: Add service account json
         run: |
-          echo "SERVICE_ACCOUNT_JSON_TEXT=$( echo ${{ secrets.SERVICE_ACCOUNT_JSON }} | base64 -d )" >> $GITHUB_ENV      
+          echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
+          base64 -d service_account_en.txt > service_account.json
+          echo "SERVICE_ACCOUNT_JSON_TEXT=$(echo service_account.json)" >> $GITHUB_ENV      
 
       - name: Deploy to Play Store
         uses: r0adkll/upload-google-play@v1
