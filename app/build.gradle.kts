@@ -28,7 +28,7 @@ android {
     compileSdk = 35
 
     signingConfigs {
-        create("release"){
+        maybeCreate("release").apply{
             keyAlias = secrets["KEY_STORE_ALIAS"].toString()
             keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
             storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
@@ -84,15 +84,6 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    signingConfigs {
-        create("release"){
-            keyAlias = secrets["KEY_STORE_ALIAS"].toString()
-            keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
-            storeFile = File(secrets["KEY_STORE_FILE"].toString())
-            storePassword = secrets["KEY_STORE_PASSWORD"].toString()
         }
     }
 }
