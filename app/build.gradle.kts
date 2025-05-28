@@ -28,11 +28,13 @@ android {
     compileSdk = 35
 
     signingConfigs {
-        maybeCreate("release").apply{
-            keyAlias = secrets["KEY_STORE_ALIAS"].toString()
-            keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
-            storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
-            storePassword = secrets["KEY_STORE_PASSWORD"].toString()
+        if(project.file(secrets["KEY_STORE_FILE"].toString()).exists()) {
+            maybeCreate("release").apply {
+                keyAlias = secrets["KEY_STORE_ALIAS"].toString()
+                keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
+                storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
+                storePassword = secrets["KEY_STORE_PASSWORD"].toString()
+            }
         }
     }
 
