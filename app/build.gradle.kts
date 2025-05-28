@@ -38,10 +38,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
-        buildConfigField("String", "KEY_STORE_ALIAS", secrets["KEY_STORE_ALIAS"].toString())
-        buildConfigField("String", "PEXELS_BASE_URL", secrets["PEXELS_BASE_URL"].toString())
-        buildConfigField("String", "PEXELS_API_KEY", secrets["PEXELS_API_KEY"].toString())
+        resValue("string", "GOOGLE_API_KEY", "\"${secrets["GOOGLE_API_KEY"]}\"")
+        buildConfigField("String", "KEY_STORE_ALIAS", "\"${secrets["KEY_STORE_ALIAS"]}\"")
+        buildConfigField("String", "PEXELS_BASE_URL", "\"${secrets["PEXELS_BASE_URL"]}\"")
+        buildConfigField("String", "PEXELS_API_KEY", "\"${secrets["PEXELS_API_KEY"]}\"")
     }
 
     buildTypes {
@@ -51,6 +51,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.findByName("release")
         }
 
         debug {
@@ -74,6 +75,15 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    signingConfigs {
+        create("release"){
+            keyAlias = secrets["KEY_STORE_ALIAS"].toString()
+            keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
+            storeFile = File(secrets["KEY_STORE_FILE"].toString())
+            storePassword = secrets["KEY_STORE_PASSWORD"].toString()
         }
     }
 }
