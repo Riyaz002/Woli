@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.wiseowl.woli.ui.shared.Constant
+import com.wiseowl.woli.ui.configuration.Constant
 import com.wiseowl.woli.ui.shared.model.Button
 
 @Preview

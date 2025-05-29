@@ -1,22 +1,24 @@
 package com.wiseowl.woli.ui.screen.login
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.Action.Navigate
+import com.wiseowl.woli.ui.event.Action.SnackBar
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.perform
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 
-class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<LoginModel>(Result.Success(LoginModel())) {
+class LoginViewModel(private val loginUseCase: LoginUseCase): ScreenViewModel<LoginModel>(Result.Success(LoginModel())) {
 
     override fun onEvent(action: Action) {
         when(action){
-            is LoginEvent.OnEmailChange -> {
+            is LoginAction.OnEmailChange -> {
                 _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
                 validate("Email") {
                     val isValid = loginUseCase.validateEmail(action.email)
@@ -24,7 +26,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                     _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
                 }
             }
-            is LoginEvent.OnPasswordChange -> {
+            is LoginAction.OnPasswordChange -> {
                 _state.ifSuccess {
                     validate("Password") {
                         val result = loginUseCase.validatePassword(action.password)
@@ -40,19 +42,20 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): PageViewModel<Logi
                     it.copy(password = it.password.copy(value = action.password))
                 }
             }
-            is LoginEvent.OnLoginClick -> {
+            is LoginAction.OnLoginClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launchWithProgress {
                             val result = loginUseCase.isEmailRegistered(it.data.email.value)
                             if(result){
                                 val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
-                                if((loginResult as Result.Success).data){
-                                    onEvent(Action.Navigate(Screen.HOME))
-                                } else Action.SnackBar("Password is incorrect").perform()
-                            } else Action.SnackBar("This email is not registered").perform()
+                                when(loginResult){
+                                    is Result.Success -> Navigate(Screen.HOME).perform()
+                                    else -> SnackBar("Password or Email is incorrect").perform()
+                                }
+                            } else SnackBar("This email is not registered").perform()
                         }
-                    } else Action.SnackBar("All fields must be valid").perform()
+                    } else SnackBar("All fields must be valid").perform()
                 }
             }
             else -> ActionHandler.perform(action)

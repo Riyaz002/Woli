@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -19,9 +18,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import coil3.Bitmap
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.ui.screen.detail.DetailEvent
+import com.wiseowl.woli.domain.repository.media.model.Media
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.screen.detail.DetailAction
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
 import kotlin.reflect.KFunction1
 
@@ -29,7 +28,7 @@ import kotlin.reflect.KFunction1
 @Composable
 fun ExpandableImageCard(
     modifier: Modifier,
-    image: Bitmap,
+    media: Media,
     expanded: Boolean = false,
     onDismiss: (() -> Unit),
     onClick: KFunction1<Action, Unit>
@@ -56,10 +55,10 @@ fun ExpandableImageCard(
                                 animatedVisibilityScope = this@AnimatedContent,
                                 resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
                             ),
-                        image = image,
+                        image = media,
                         cornerRadius = 20.dp,
                         aspectRatio = 1f,
-                        onClick = { onClick(DetailEvent.OnClickImage) }
+                        onClick = { onClick(DetailAction.OnClickImage) }
                     )
                 }
             } else {
@@ -89,7 +88,7 @@ fun ExpandableImageCard(
                                 animatedVisibilityScope = this@AnimatedContent,
                                 resizeMode = SharedTransitionScope.ResizeMode.ScaleToBounds()
                             ),
-                        image = image,
+                        image = media,
                     )
                 }
             }

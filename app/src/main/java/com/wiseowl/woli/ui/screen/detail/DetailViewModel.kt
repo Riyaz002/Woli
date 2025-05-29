@@ -1,67 +1,49 @@
 package com.wiseowl.woli.ui.screen.detail
 
-import kotlin.collections.flatten
+import android.os.Environment
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.model.Error
-import com.wiseowl.woli.domain.model.Image
-import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.detail.model.DetailModel
-import com.wiseowl.woli.ui.screen.detail.model.SimilarImageModel
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import androidx.core.graphics.toColorInt
+import androidx.core.net.toUri
+import com.wiseowl.woli.domain.repository.media.model.Media
+import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 
-class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase) : PageViewModel<DetailModel>() {
+class DetailViewModel(
+    imageId: String,
+    private val useCase: DetailUseCase,
+) : ScreenViewModel<DetailModel>() {
+    lateinit var media: Media
     init {
         viewModelScope.launch {
-            val image = viewModelScope.async(Dispatcher.IO) { detailUseCase.getImageUseCase(imageId.toInt()) }.await()
+            media = viewModelScope.async(Dispatcher.IO) { useCase.mediaUseCase.getPhotoUseCase(imageId.toInt()) }.await()
+            val accentColor = media.avgColor?.toColorInt() ?: android.graphics.Color.GRAY
+            val complementaryColor = useCase.getComplementaryColorUseCase(accentColor)
             _state.update { s ->
-                if(s is Result.Success) s.copy(
-                    s.data.copy(
-                        description = image?.description,
-                        categories = image?.categories ?: listOf(),
-                        accentColor = image?.color?.primary,
-                        complementaryColor = image?.color?.secondary
-                    )
-                ) else Result.Success(
+                Result.Success(
                     DetailModel(
-                        description = image?.description,
-                        categories = image?.categories ?: listOf(),
-                        accentColor = image?.color?.primary,
-                        complementaryColor = image?.color?.secondary
+                        media = media,
+                        description = media.alt,
+                        categories = listOf(),
+                        accentColor = accentColor,
+                        complementaryColor = complementaryColor
                     )
                 )
-            }
-            val bitmap = viewModelScope.async {  detailUseCase.getBitmapUseCase(image?.url!!) }.await()
-            if(bitmap==null){
-                _state.update { Result.Error(Error("Oops, Error Loading Image!")) }
-                return@launch
-            }
-            _state.update { s ->
-                if(s is Result.Success) s.copy(s.data.copy(image = bitmap))
-                else Result.Success(DetailModel(image = bitmap))
-            }
-            val similarImagesDeferred = image?.categories?.map { category ->
-                async { detailUseCase.getImagesForCategoryUseCase(category) }
-            } ?: emptyList()
-            val similarImages = (similarImagesDeferred.awaitAll() as List<List<Image>>).flatten().filter { it.id!=image?.id }
-            _state.update { s ->
-                if(s is Result.Success) s.copy(s.data.copy(similarImage =SimilarImageModel(images = similarImages, false)))
-                else Result.Success(DetailModel(image = bitmap))
             }
         }
     }
 
     override fun onEvent(action: Action) {
         when (action) {
-            is DetailEvent.OnClickImage -> {
+            is DetailAction.OnClickImage -> {
                 _state.update { state ->
                     if (state is Result.Success) {
                         Result.Success(state.data.copy(imagePreviewPopupVisible = true))
@@ -69,7 +51,7 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                 }
             }
 
-            is DetailEvent.OnClickSetWallpaper -> {
+            is DetailAction.OnClickSetWallpaper -> {
                 _state.update { state ->
                     if (state is Result.Success) {
                         Result.Success(state.data.copy(setWallpaperPopupVisible = true))
@@ -78,19 +60,20 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
             }
 
 
-            is DetailEvent.OnDismissImagePreview -> _state.update { state ->
+            is DetailAction.OnDismissImagePreview -> _state.update { state ->
                 if (state is Result.Success) {
                     Result.Success(state.data.copy(imagePreviewPopupVisible = false))
                 } else state
             }
 
-            is DetailEvent.OnClickSetAs -> _state.value.let { state ->
-                onEvent(DetailEvent.OnDismissSetWallpaperDialog)
+            is DetailAction.OnClickSetAs -> _state.value.let { state ->
+                onEvent(DetailAction.OnDismissSetWallpaperDialog)
                 if (state is Result.Success) {
                     viewModelScope.launch(Dispatcher.IO) {
                         ActionHandler.perform(Action.Progress(true))
-                        detailUseCase.setWallpaperUseCase(
-                            state.data.image!!,
+                        val image = useCase.getBitmapUseCase(state.data.media?.src?.portrait) ?: return@launch
+                        useCase.setWallpaperUseCase(
+                            image,
                             action.setWallpaperType
                         )
                         ActionHandler.perform(Action.Progress(false))
@@ -98,18 +81,26 @@ class DetailViewModel(imageId: String, private val detailUseCase: DetailUseCase)
                 }
             }
 
-            is DetailEvent.OnDismissSetWallpaperDialog -> _state.update { state ->
+            is DetailAction.OnDismissSetWallpaperDialog -> _state.update { state ->
                 if (state is Result.Success) {
                     Result.Success(state.data.copy(setWallpaperPopupVisible = false))
                 } else state
             }
 
-            is DetailEvent.OnClickSimilarImage -> {
+            is DetailAction.OnClickSimilarImage -> {
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.imageId.toString())))
             }
 
-            is DetailEvent.OnClickCategory -> {
-                ActionHandler.perform(Action.Navigate(Screen.CATEGORY, mapOf(Screen.CATEGORY.ARG_CATEGORY to action.category)))
+            is DetailAction.OnClickDownload -> {
+                media.src?.large?.toUri()?.let { fileUri ->
+                    val destinationUri = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toUri()
+                    useCase.saveFileUseCase(
+                        fileUri,
+                        destinationUri,
+                        "Downloading Image",
+                        "Image is being downloaded"
+                    )
+                }
             }
         }
     }

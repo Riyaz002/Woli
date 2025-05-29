@@ -1,7 +1,7 @@
 package com.wiseowl.woli.ui.shared
 
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job

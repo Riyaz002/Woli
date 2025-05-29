@@ -1,23 +1,25 @@
 package com.wiseowl.woli.ui.screen.registration
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.perform
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.Action.*
+import com.wiseowl.woli.ui.event.perform
+import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.usecase.common.PasswordResult
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.screen.common.PageViewModel
+import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.registration.model.RegistrationModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
 
-class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): PageViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
+class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase): ScreenViewModel<RegistrationModel>(Result.Success(RegistrationModel())) {
 
     override fun onEvent(action: Action) {
         when(action){
-            is RegistrationEvent.OnFirstNameChange -> _state.ifSuccess { it.copy(firstName = it.firstName.copy(value = action.value)) }
-            is RegistrationEvent.OnLastNameChange -> _state.ifSuccess { it.copy(lastName = it.lastName.copy(value = action.value)) }
-            is RegistrationEvent.OnEmailChange -> {
+            is RegistrationAction.OnFirstNameChange -> _state.ifSuccess { it.copy(firstName = it.firstName.copy(value = action.value)) }
+            is RegistrationAction.OnLastNameChange -> _state.ifSuccess { it.copy(lastName = it.lastName.copy(value = action.value)) }
+            is RegistrationAction.OnEmailChange -> {
                 _state.ifSuccess { it.copy(email = it.email.copy(value = action.email)) }
                 validate("Email") {
                     val isValid = registrationUseCase.validateEmail(action.email)
@@ -25,7 +27,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                     _state.ifSuccess { current -> current.copy(email = current.email.copy(error = error)) }
                 }
             }
-            is RegistrationEvent.OnPasswordChange -> {
+            is RegistrationAction.OnPasswordChange -> {
                 _state.ifSuccess {
                     validate("Password") {
                         val result = registrationUseCase.validatePassword(action.password)
@@ -41,17 +43,20 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                     it.copy(password = it.password.copy(value = action.password))
                 }
             }
-            is RegistrationEvent.OnRegisterClick -> {
+            is RegistrationAction.OnRegisterClick -> {
                 (state.value as Result.Success).let {
                     if(it.data.firstName.valid && it.data.lastName.valid && it.data.email.valid && it.data.password.valid) {
                         viewModelScope.launchWithProgress {
                             val result = registrationUseCase.createAccount(
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
-                            if((result as Result.Success).data) Action.Navigate(Screen.HOME).perform()
-                            else Action.SnackBar("Oops! something went wrong.").perform()
+                            when(result){
+                                is Result.Success<User> -> Navigate(Screen.HOME).perform()
+                                is Result.Error<*> -> SnackBar(result.error.reason).perform()
+                                else -> Unit
+                            }
                         }
-                    } else Action.SnackBar("All fields must be valid").perform()
+                    } else SnackBar("All fields must be valid").perform()
                 }
             }
         }
