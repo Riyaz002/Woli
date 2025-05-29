@@ -148,10 +148,10 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
-          name: "Release ${RELEASE_NAME}"
+          name: "Release ${{ env.RELEASE_NAME }}"
           artifacts: "app/build/outputs/apk/release/release.apk"
           bodyFile: "release_body.md"
-          tag: "${TAG}"
+          tag: "${{ env.TAG }}"
           prerelease: false 
             
   # deploy:
