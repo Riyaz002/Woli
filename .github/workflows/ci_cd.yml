@@ -141,7 +141,7 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Create Release
-      - uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1
         with:
           name: Release ${{ env.RELEASE_NAME }}
           artifacts: "app/build/outputs/bundle/debug/*.apk"
