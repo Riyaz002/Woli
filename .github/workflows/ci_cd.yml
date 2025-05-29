@@ -98,6 +98,12 @@ jobs:
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
           echo "RELEASE_NAME=$DATE-${VERSION_CODE}" >> $GITHUB_ENV
           echo "$VERSION_CODE"
+
+      - name: print ENV
+        run: 
+          echo "$VERSION_CODE"
+          echo "$RELEASE_NAME"
+          echo "$TAG"
       # - name: Generate Dynamic Release Notes
       #   run: |
       #     LAST_TAG=$(git describe --tags --abbrev=0 || echo "")
