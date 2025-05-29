@@ -89,14 +89,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Get current date in yyyy/MM/dd format
+      - name: Add Enviroment Variables
         run: |
           DATE=$(date +'%Y/%m/%d')
-          VERSION_CODE=$(git rev-list --count HEAD)
+          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
           echo "DATE=$DATE" >> $GITHUB_ENV
-          echo "TAG=${DATE}" >> $GITHUB_ENV
-          echo "VERSION_CODE=${VERSION_CODE}" >> $GITHUB_ENV
-          echo "RELEASE_NAME=${DATE}-${VERSION_CODE}" >> $GITHUB_ENV
+          echo "TAG=$DATE" >> $GITHUB_ENV
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$DATE-$VERSION_CODE" >> $GITHUB_ENV
           echo ${{ env.VERSION_CODE }}
     
       - name: Generate Dynamic Release Notes
