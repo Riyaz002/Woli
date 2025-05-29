@@ -27,17 +27,6 @@ android {
     namespace = "com.wiseowl.woli"
     compileSdk = 35
 
-    signingConfigs {
-        if(project.file(secrets["KEY_STORE_FILE"].toString()).exists()) {
-            maybeCreate("release").apply {
-                keyAlias = secrets["KEY_STORE_ALIAS"].toString()
-                keyPassword = secrets["KEY_STORE_PASSWORD"].toString()
-                storeFile = project.file(secrets["KEY_STORE_FILE"].toString())
-                storePassword = secrets["KEY_STORE_PASSWORD"].toString()
-            }
-        }
-    }
-
     defaultConfig {
         applicationId = "com.wiseowl.woli"
         minSdk = 24
@@ -62,13 +51,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            if(signingConfigs.findByName("release")!=null){
-                signingConfig = signingConfigs.findByName("release")
-            } else print("Unable to locate signingConfig")
+            signingConfig = signingConfigs.findByName("release")
         }
 
         debug {
             applicationIdSuffix = ".debug"
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
