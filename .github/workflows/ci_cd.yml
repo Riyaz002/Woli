@@ -54,6 +54,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
           
       - name: create secret file
         run : |
@@ -70,20 +80,40 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
-  deploy:
+  release:
+    name: Create Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: test
-    steps: 
-      - uses: actions/checkout@v4
-      
-      - name: set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-      - name: Create jks file
-        run : echo ${{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Get current date in yyyy/MM/dd format
+        run: |
+          DATE=$(date +'%Y/%m/%d')
+          echo "DATE=$DATE" >> $GITHUB_ENV
+          echo "TAG=${DATE}" >> $GITHUB_ENV
+          echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
+          echo "RELEASE_NAME=${DATE}-${VERSION_CODE}" >> $GITHUB_ENV
+          echo ${{ env.VERSION_CODE }}
+    
+      - name: Generate Dynamic Release Notes
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 || echo "")
+          echo "## Release Notes" > release_body.md
+          echo "" >> release_body.md
+
+          if [ -z "$LAST_TAG" ]; then
+            echo "First release. Listing all commits:" >> release_body.md
+          git log --pretty=format:"- %s (%h)" >> release_body.md
+          else
+            echo "Changes since $LAST_TAG:" >> release_body.md
+            git log "$LAST_TAG"..HEAD --pretty=format:"- %s (%h)" >> release_body.md
+          fi
+          echo "" >> release_body.md
+          echo "- 🗓 Date: $(date +'%Y/%m/%d')" >> release_body.md
+          echo "- 🔢 Version: ${{ env.VERSION_CODE }}" >> release_body.md
 
       - name: Cache Gradle
         uses: actions/cache@v4
@@ -103,37 +133,86 @@ jobs:
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
           echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
           echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
-
-      - name: Add version code to Enviroment
-        run: echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
-      - name: Print Version
-        run: echo ${{ env.VERSION_CODE }}
-      
+          
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
         
-      - name: Add version code to Enviroment
-        run: |
-          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
-          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-        
-      - name: Build Release AAB
-        run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
+      - name: Generate Upload artifact
+        run: ./gradlew assembleDebug
 
-      - name: Sign App Bundle
-        run:  jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass ${{ secrets.KEY_STORE_PASSWORD }} -keystore app/woli_keystore.jks app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_STORE_ALIAS }}
-
-      - name: Add service account json
-        run: |
-          touch service_account_encoded.txt
-          touch service_account.json
-          echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
-          base64 -d service_account_encoded.txt > service_account.json
-
-      - name: Deploy to Play Store
-        uses: r0adkll/upload-google-play@v1
+      - name: Create Release
+      - uses: ncipollo/release-action@v1
         with:
-          serviceAccountJson: service_account.json
-          packageName: com.wiseowl.woli
-          releaseFiles: app/build/outputs/bundle/release/*.aab
-          track: internal
+          name: Release ${{ env.RELEASE_NAME }}
+          artifacts: "app/build/outputs/bundle/debug/*.apk"
+          bodyFile: "release_body.md"
+          tag: ${{ env.TAG }}
+          prerelease: false 
+            
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: release
+  #   steps: 
+  #     - uses: actions/checkout@v4
+      
+  #     - name: set up JDK 17
+  #       uses: actions/setup-java@v4
+  #       with:
+  #         java-version: '17'
+  #         distribution: 'temurin'
+  #         cache: gradle
+  #     - name: Create jks file
+  #       run : echo ${{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
+
+  #     - name: Cache Gradle
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: |
+  #           ~/.gradle/caches
+  #           ~/.gradle/wrapper
+  #         key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+  #         restore-keys: |
+  #           gradle-${{ runner.os }}-
+
+  #     - name: create secret file
+  #       run : |
+  #         echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> secrets.properties
+  #         echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}" >> secrets.properties
+  #         echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}" >> secrets.properties
+  #         echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
+  #         echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
+  #         echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
+
+  #     - name: Add version code to Enviroment
+  #       run: echo "VERSION_CODE=$(git rev-list --count HEAD)" >> $GITHUB_ENV
+  #     - name: Print Version
+  #       run: echo ${{ env.VERSION_CODE }}
+      
+  #     - name: Grant execute permission for gradlew
+  #       run: chmod +x gradlew
+        
+  #     - name: Add version code to Enviroment
+  #       run: |
+  #         VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
+  #         echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+        
+  #     - name: Build Release AAB
+  #       run: ./gradlew app:bundleRelease -PVERSION_CODE=$VERSION_CODE
+
+  #     - name: Sign App Bundle
+  #       run:  jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass ${{ secrets.KEY_STORE_PASSWORD }} -keystore app/woli_keystore.jks app/build/outputs/bundle/release/app-release.aab ${{ secrets.KEY_STORE_ALIAS }}
+
+  #     - name: Add service account json
+  #       run: |
+  #         touch service_account_encoded.txt
+  #         touch service_account.json
+  #         echo ${{ secrets.SERVICE_ACCOUNT_JSON }} >> service_account_encoded.txt
+  #         base64 -d service_account_encoded.txt > service_account.json
+
+  #     - name: Deploy to Play Store
+  #       uses: r0adkll/upload-google-play@v1
+  #       with:
+  #         serviceAccountJson: service_account.json
+  #         packageName: com.wiseowl.woli
+  #         releaseFiles: app/build/outputs/bundle/release/*.aab
+  #         track: internal
