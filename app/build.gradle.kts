@@ -16,7 +16,7 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
-fun getVersionCode() = 10
+fun getVersionCode() = if (project.hasProperty("VERSION_CODE")) project.property("VERSION_CODE").toString().toInt() else 11
 
 fun getVersionName(): String{
     val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
@@ -38,10 +38,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
-        buildConfigField("String", "KEY_STORE_ALIAS", secrets["KEY_STORE_ALIAS"].toString())
-        buildConfigField("String", "PEXELS_BASE_URL", secrets["PEXELS_BASE_URL"].toString())
-        buildConfigField("String", "PEXELS_API_KEY", secrets["PEXELS_API_KEY"].toString())
+        resValue("string", "GOOGLE_API_KEY", "\"${secrets["GOOGLE_API_KEY"]}\"")
+        buildConfigField("String", "KEY_STORE_ALIAS", "\"${secrets["KEY_STORE_ALIAS"]}\"")
+        buildConfigField("String", "PEXELS_BASE_URL", "\"${secrets["PEXELS_BASE_URL"]}\"")
+        buildConfigField("String", "PEXELS_API_KEY", "\"${secrets["PEXELS_API_KEY"]}\"")
     }
 
     buildTypes {
@@ -51,10 +51,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.findByName("release")
         }
 
         debug {
             applicationIdSuffix = ".debug"
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
