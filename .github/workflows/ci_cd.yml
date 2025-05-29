@@ -133,6 +133,9 @@ jobs:
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
           echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
           echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
+      
+      - name: Create jks file
+        run : echo ${{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
           
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
