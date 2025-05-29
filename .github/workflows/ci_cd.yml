@@ -92,7 +92,7 @@ jobs:
       - name: Add Enviroment Variables
         run: |
           DATE=$(date +'%Y/%m/%d')
-          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 34 ))
+          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 37 ))
           echo "DATE=$DATE" >> $GITHUB_ENV
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
           echo "TAG=$DATE-${VERSION_CODE}" >> $GITHUB_ENV
@@ -151,7 +151,7 @@ jobs:
           artifacts: "app/build/outputs/apk/debug/release.apk"
           bodyFile: "release_body.md"
           tag: "${{ env.TAG }}"
-          prerelease: false 
+          prerelease: false
 
   deploy:
     runs-on: ubuntu-latest
@@ -190,7 +190,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Add version code to Enviroment
+      - name: Add version code to Environment
         run: |
           VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 37 ))
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
