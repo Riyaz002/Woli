@@ -94,66 +94,66 @@ jobs:
           DATE=$(date +'%Y/%m/%d')
           VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
           echo "DATE=$DATE" >> $GITHUB_ENV
-          echo "TAG=$DATE" >> $GITHUB_ENV
+          echo "TAG=${DATE}" >> $GITHUB_ENV
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
-          echo "RELEASE_NAME=$DATE-$VERSION_CODE" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$DATE-${VERSION_CODE}" >> $GITHUB_ENV
           echo ${{ env.VERSION_CODE }}
     
-      - name: Generate Dynamic Release Notes
-        run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 || echo "")
-          echo "## Release Notes" > release_body.md
-          echo "" >> release_body.md
-          if [ -z "$LAST_TAG" ]; then
-            echo "First release" >> release_body.md
-            git log --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
-          else
-            echo "Changes since $LAST_TAG:" >> release_body.md
-            git log "$LAST_TAG"..HEAD --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
-          fi
-          echo "" >> release_body.md
-          echo "- 🗓 Date: $(date +'%Y/%m/%d')" >> release_body.md
-          echo "- 🔢 Version: ${{ env.VERSION_CODE }}" >> release_body.md
+      # - name: Generate Dynamic Release Notes
+      #   run: |
+      #     LAST_TAG=$(git describe --tags --abbrev=0 || echo "")
+      #     echo "## Release Notes" > release_body.md
+      #     echo "" >> release_body.md
+      #     if [ -z "$LAST_TAG" ]; then
+      #       echo "First release" >> release_body.md
+      #       git log --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
+      #     else
+      #       echo "Changes since $LAST_TAG:" >> release_body.md
+      #       git log "$LAST_TAG"..HEAD --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
+      #     fi
+      #     echo "" >> release_body.md
+      #     echo "- 🗓 Date: $(date +'%Y/%m/%d')" >> release_body.md
+      #     echo "- 🔢 Version: ${{ env.VERSION_CODE }}" >> release_body.md
 
-      - name: Cache Gradle
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            gradle-${{ runner.os }}-
+      # - name: Cache Gradle
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: |
+      #       ~/.gradle/caches
+      #       ~/.gradle/wrapper
+      #     key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #     restore-keys: |
+      #       gradle-${{ runner.os }}-
 
-      - name: create secret file
-        run : |
-          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> secrets.properties
-          echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}" >> secrets.properties
-          echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}" >> secrets.properties
-          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
-          echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
-          echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
+      # - name: create secret file
+      #   run : |
+      #     echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> secrets.properties
+      #     echo "KEY_STORE_ALIAS=${{ secrets.KEY_STORE_ALIAS }}" >> secrets.properties
+      #     echo "KEY_STORE_PASSWORD=${{ secrets.KEY_STORE_PASSWORD }}" >> secrets.properties
+      #     echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> secrets.properties
+      #     echo "SIGNING_KEY_ALIAS=${{ secrets.SIGNING_KEY_ALIAS }}" >> secrets.properties
+      #     echo "PEXELS_BASE_URL=${{ secrets.PEXELS_BASE_URL }}" >> secrets.properties
       
-      - name: Create jks file
-        run : echo ${{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
+      # - name: Create jks file
+      #   run : echo ${{ secrets.KEYSTORE_JKS_FILE_CONTENT }} >> encoded.txt && base64 -d encoded.txt > app/woli_keystore.jks
           
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      # - name: Grant execute permission for gradlew
+      #   run: chmod +x gradlew
         
-      - name: Generate Upload artifact
-        run: |
-          ./gradlew assembleRelease
-          cp app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/release.apk
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass woli_keystore_password -keystore app/woli_keystore.jks app/build/outputs/apk/release/release.apk admin_key
+      # - name: Generate Upload artifact
+      #   run: |
+      #     ./gradlew assembleRelease
+      #     cp app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/release.apk
+      #     jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass woli_keystore_password -keystore app/woli_keystore.jks app/build/outputs/apk/release/release.apk admin_key
 
-      - name: Create Release
-        uses: ncipollo/release-action@v1
-        with:
-          name: Release ${{ env.RELEASE_NAME }}
-          artifacts: "app/build/outputs/apk/release/release.apk"
-          bodyFile: "release_body.md"
-          tag: ${{ env.TAG }}
-          prerelease: false 
+      # - name: Create Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     name: Release ${{ env.RELEASE_NAME }}
+      #     artifacts: "app/build/outputs/apk/release/release.apk"
+      #     bodyFile: "release_body.md"
+      #     tag: ${{ env.TAG }}
+      #     prerelease: false 
             
   # deploy:
   #   runs-on: ubuntu-latest
