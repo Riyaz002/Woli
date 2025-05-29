@@ -141,9 +141,8 @@ jobs:
         
       - name: Generate Upload artifact
         run: |
-          ./gradlew assembleRelease
-          cp app/build/outputs/apk/release/*.apk app/build/outputs/apk/release/release.apk
-          jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -storepass woli_keystore_password -keystore app/woli_keystore.jks app/build/outputs/apk/release/release.apk admin_key
+          ./gradlew assembleDebug
+          cp app/build/outputs/apk/debug/*.apk app/build/outputs/apk/debug/release.apk
 
       - name: Create Release
         uses: ncipollo/release-action@v1
