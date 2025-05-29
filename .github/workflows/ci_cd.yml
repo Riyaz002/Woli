@@ -92,10 +92,10 @@ jobs:
       - name: Add Enviroment Variables
         run: |
           DATE=$(date +'%Y/%m/%d')
-          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 23 ))
+          VERSION_CODE=$(( $GITHUB_RUN_NUMBER - 34 ))
           echo "DATE=$DATE" >> $GITHUB_ENV
-          echo "TAG=${DATE}" >> $GITHUB_ENV
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_ENV
+          echo "TAG=$DATE-${VERSION_CODE}" >> $GITHUB_ENV
           echo "RELEASE_NAME=$DATE-${VERSION_CODE}" >> $GITHUB_ENV
           echo "$VERSION_CODE"
       - name: Generate Dynamic Release Notes
@@ -151,7 +151,7 @@ jobs:
           name: "Release $RELEASE_NAME"
           artifacts: "app/build/outputs/apk/release/release.apk"
           bodyFile: "release_body.md"
-          tag: ${{ env.TAG }}
+          tag: "$TAG"
           prerelease: false 
             
   # deploy:
