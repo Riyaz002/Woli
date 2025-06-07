@@ -31,6 +31,8 @@ import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.usecase.registration.RegistrationUseCase
+import com.wiseowl.woli.ui.notification.NotificationHandler
+import com.wiseowl.woli.ui.notification.handler.WoliNotificationHandler
 import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -56,6 +58,9 @@ fun appModule(application: Context) = module {
 
     //Services
     single<DownloadManagerService> { DownloadManagerServiceImpl(application) }
+
+    //Notification
+    single { WoliNotificationHandler(application) } bind(NotificationHandler::class)
 
     //Use Case
     singleOf(::GetBitmapUseCase)

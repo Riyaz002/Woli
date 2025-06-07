@@ -3,6 +3,7 @@
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="17">
       <module name="AndroidStudioProjects.Woli.app" target="21" />
+      <module name="riyaz.AndroidStudioProjects.Woli.app" target="21" />
       <module name="Woli.app" target="21" />
     </bytecodeTargetLevel>
   </component>
