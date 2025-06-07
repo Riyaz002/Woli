@@ -44,12 +44,12 @@ Woli follows the **MVI (Model–View–Intent/Action)** architecture to manage U
 <pre> woli/
 ├── data/
 │   ├── local/                  ← Database & SharedPreference (Room, SharedPreference)
-│       ├── db/                 ← Database (Room)
-│       ├── sharedpreference/   ← SharedPreference (Encrypted SharedPreference)
+│   │    ├── db/                ← Database (Room)
+│   │    ├── sharedpreference/  ← SharedPreference (Encrypted SharedPreference)
 │   ├── remote/                 ← remote apis httpclient config for authentication and media (Pexels and Firebase)
-│       ├── core/               ← Core class (Interceptors and HttpClient provider)
-│       ├── firebase/           ← Firebase firestore connectivity classes
-│       ├── media/              ← Pexels Api for media
+│   │    ├── core/              ← Core class (Interceptors and HttpClient provider)
+│   │    ├── firebase/          ← Firebase firestore connectivity classes
+│   │    ├── media/             ← Pexels Api for media
 │   ├── repository/             ← repository class(Domain) implementation (AccountRepository, etc)
 │   └── model/                  ← Data and domain models
 ├── domain/
@@ -61,7 +61,8 @@ Woli follows the **MVI (Model–View–Intent/Action)** architecture to manage U
 ├── ui/
 │   ├── event/                  ← UI level action/event handler (ActionHandler, Action)
 │   ├── screens/                ← UI screens (Compose-based, MVI state, intent)
-│   └── navigation/             ← Navigation related components (Root & BottomNavigation composable, Screens)
+│   ├── notification/           ← Notification services and helper classes  (FirebaseNotificationService, NotificationHandler)
+│   ├── navigation/             ← Navigation related components (Root & BottomNavigation composable, Screens)
 │   └── shared/                 ← Shared/Reusable UI level components & data model (Button, Dialog, Progressbar, etc)
 ├── di/                         ← Koin modules and dependency providers
 ├── utils/                      ← Utility functions and helpers
