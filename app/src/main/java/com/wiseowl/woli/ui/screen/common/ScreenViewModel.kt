@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.ui.event.Action
 import kotlinx.coroutines.flow.MutableStateFlow
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.Reducer
+import com.wiseowl.woli.ui.event.ReducerBuilder
+import com.wiseowl.woli.ui.event.reducerOf
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,7 +33,13 @@ abstract class ScreenViewModel<T>(
     protected val _state = MutableStateFlow(initialValue)
     val state: StateFlow<Result<T>> = _state
 
-    abstract fun onEvent(action: Action)
+    abstract val actionReducer: ReducerBuilder.() -> Unit
+    private val reducer: Reducer = reducerOf { actionReducer() }
+
+    fun onEvent(action: Action){
+        val isHandled = reducer.handle(action)
+        if(!isHandled) ActionHandler.perform(action)
+    }
 
     fun MutableStateFlow<Result<T>>.ifSuccess(block: (T) -> T) {
         if (this.value is Result.Success) {

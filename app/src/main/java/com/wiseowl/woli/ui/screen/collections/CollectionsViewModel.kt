@@ -2,12 +2,13 @@ package com.wiseowl.woli.ui.screen.collections
 
 import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
-import com.wiseowl.woli.ui.event.Action
-import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.repository.media.model.Collection
 import com.wiseowl.woli.domain.repository.media.model.MediaType
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.ReducerBuilder
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.collections.model.CollectionModel
 import com.wiseowl.woli.ui.screen.common.ScreenViewModel
@@ -50,9 +51,9 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): ScreenViewMo
         }
     }
 
-    override fun onEvent(action: Action){
-        when(action){
-            is CollectionsAction.LoadPage -> {
+    override val actionReducer: ReducerBuilder.() -> Unit
+        get() = {
+            on<CollectionsAction.LoadPage> { action ->
                 viewModelScope.launch {
                     _state.update { state ->
                         (state as Result.Success<CollectionModel>).let {
@@ -70,10 +71,8 @@ class CollectionsViewModel(private val mediaUseCase: MediaUseCase): ScreenViewMo
                     }
                 }
             }
-            is CollectionsAction.OnClickMedia -> {
+            on<CollectionsAction.OnClickMedia> { action ->
                 ActionHandler.perform(Action.Navigate(Screen.DETAIL, mapOf(Screen.DETAIL.ARG_IMAGE_ID to action.id.toString())))
             }
-            else -> ActionHandler.perform(action)
         }
-    }
 }
