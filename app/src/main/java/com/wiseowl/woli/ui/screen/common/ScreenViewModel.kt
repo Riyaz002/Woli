@@ -46,30 +46,5 @@ abstract class ScreenViewModel<T>(
             update { Result.Success(block((this.value as Result.Success<T>).data))  }
         }
     }
-
-    private val timers: HashMap<String, Timer> = hashMapOf()
-
-    /**
-     * Perform [action] with some delay.
-     * The [label] is unique identifier for the [action].
-     * If the function is called with the same [label] while the previous one hasn't been executed, the previous [action] will be canceled.
-     */
-    fun validate(label: String, action: () -> Unit){
-        timers[label]?.cancel()
-        val newTimer = Timer()
-        timers[label] = newTimer
-        newTimer.schedule(
-            object : TimerTask() {
-                override fun run() {
-                    action()
-                }
-            }, 1000
-        )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        timers.clear()
-    }
 }
 

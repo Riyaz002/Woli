@@ -12,6 +12,8 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.login.model.LoginModel
 import com.wiseowl.woli.ui.shared.launchWithProgress
+import java.util.Timer
+import java.util.TimerTask
 
 class LoginViewModel(private val loginUseCase: LoginUseCase): ScreenViewModel<LoginModel>(Result.Success(LoginModel())) {
 
@@ -65,4 +67,30 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): ScreenViewModel<Lo
                 }
             }
         }
+
+    private val timers: HashMap<String, Timer> = hashMapOf()
+
+    /**
+     * Perform [action] with some delay.
+     * The [label] is unique identifier for the [action].
+     * If the function is called with the same [label] while the previous one hasn't been executed, the previous [action] will be canceled.
+     */
+    fun validate(label: String, action: () -> Unit){
+        timers[label]?.cancel()
+        val newTimer = Timer()
+        timers[label] = newTimer
+        newTimer.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    action()
+                }
+            }, 1000
+        )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        timers.forEach { it.value.cancel() }
+        timers.clear()
+    }
 }
