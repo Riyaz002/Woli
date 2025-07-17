@@ -8,18 +8,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.wiseowl.woli.ui.configuration.Constant
+import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.shared.model.Button
 
 @Preview
 @Composable
 fun BasicButton(
     modifier: Modifier = Modifier,
-    data: Button = Button("Click Me"),
-    onClick: () -> Unit = {}
+    data: Button = Button("Click Me", Action.None),
+    actionHandler: (Action) -> Unit = {},
 ) {
     androidx.compose.material3.Button(
         modifier = modifier,
-        onClick = onClick,
+        onClick = { actionHandler(data.action) },
         shape = RoundedCornerShape(Constant.DEFAULT_CORNER_RADIUS.dp)
     ) {
         Text(modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp), text = data.text)
