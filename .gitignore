@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+/app/woli_keystore.jks
+/app/release
 /captures
 .externalNativeBuild
 .cxx

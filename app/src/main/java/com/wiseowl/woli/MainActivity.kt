@@ -1,20 +1,17 @@
 package com.wiseowl.woli
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.background
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
@@ -25,41 +22,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
-import com.wiseowl.woli.domain.event.UnhandledActionException
-import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
+import com.wiseowl.woli.ui.event.UnhandledActionException
+import com.wiseowl.woli.domain.event.Event
+import com.wiseowl.woli.domain.event.EventListener
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
-import com.wiseowl.woli.ui.shared.component.navigation.BottomNavigation
+import com.wiseowl.woli.ui.navigation.BottomNavigation
 import com.wiseowl.woli.ui.theme.AppTheme
+import com.wiseowl.woli.util.DeepLinkParser
 import kotlinx.coroutines.launch
-import org.koin.android.ext.android.inject
+import org.koin.java.KoinJavaComponent.inject
 
 class MainActivity : ComponentActivity() {
-    val getNavigationItemsUseCase by inject<GetNavigationItemsUseCase>()
+
+    private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val activityRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
-            var progressVisible by remember {
-                mutableStateOf(false)
-            }
-            var navigationBarVisible by remember { mutableStateOf(false) }
-            val navigationBarHeight = 78.dp
-            val navigationBarOffset = animateDpAsState(targetValue = if (navigationBarVisible) 0.dp else navigationBarHeight)
-            val navigationBarAlpha = animateFloatAsState(targetValue = if (navigationBarVisible) 1f else 0f)
-            val snackBarHostState = remember {
-                SnackbarHostState()
-            }
+            var progressVisible by remember { mutableStateOf(false) }
+            val snackBarHostState = remember { SnackbarHostState() }
+            val deepLinkParser = DeepLinkParser()
+            val screen = deepLinkParser.getPage(intent).getOrNull() ?: if(Firebase.auth.currentUser!=null) Screen.HOME else Screen.LOGIN
 
             ActionHandler.listen { action ->
                 when (action) {
@@ -70,17 +67,21 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState.currentSnackbarData?.dismiss()
                         snackBarHostState.showSnackbar(action.text)
                     }
-                    is Action.NavigationBarVisible -> navigationBarVisible = action.visible
+                    is Action.Logout -> {
+                        Firebase.auth.signOut()
+                        eventListener.pushEvent(Event.Logout)
+                        navController.navigate(Screen.LOGIN.route)
+                    }
                     else -> throw UnhandledActionException(action)
                 }
             }
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
-                    Box(Modifier) {
+                    Box(Modifier.fillMaxHeight()) {
                         Root(
-                            modifier = Modifier.padding(bottom = 28.dp),
+                            modifier = Modifier.padding(top = padding.calculateTopPadding()),
                             navController = navController,
-                            startScreen = if(Firebase.auth.currentUser!=null) Screen.HOME.route else Screen.LOGIN.route
+                            startScreen = screen.route
                         )
                         SnackbarHost(
                             snackBarHostState,
@@ -93,14 +94,15 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding())
-                                .offset(y = navigationBarOffset.value)
-                                .alpha(navigationBarAlpha.value),
-                            navigationItems = getNavigationItemsUseCase()
+                                .padding(bottom = padding.calculateBottomPadding()+16.dp),
+                            navController
                         )
                     }
                 }
             }
+        }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            activityRequestLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }

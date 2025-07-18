@@ -6,8 +6,8 @@ import android.content.Intent
 import android.view.WindowManager
 import coil3.Bitmap
 import com.wiseowl.woli.R
-import com.wiseowl.woli.domain.event.Action
-import com.wiseowl.woli.domain.event.ActionHandler
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.util.bitmapToUri
 import com.wiseowl.woli.domain.usecase.util.getCenterCroppedBitmap
 import com.wiseowl.woli.domain.usecase.util.getScreenProperties

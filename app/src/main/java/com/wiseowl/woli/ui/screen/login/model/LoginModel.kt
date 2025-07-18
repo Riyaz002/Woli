@@ -1,10 +1,10 @@
 package com.wiseowl.woli.ui.screen.login.model
 
 import com.wiseowl.woli.ui.shared.model.Button
-import com.wiseowl.woli.ui.shared.model.FieldValue
+import com.wiseowl.woli.ui.shared.model.FieldData
 
 data class LoginModel(
-    val email: FieldValue = FieldValue(label = "Email"),
-    val password: FieldValue = FieldValue(label = "Password"),
+    val email: FieldData = FieldData(label = "Email"),
+    val password: FieldData = FieldData(label = "Password"),
     val cta: Button = Button("Login")
 )
