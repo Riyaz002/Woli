@@ -56,11 +56,15 @@ class MainActivity : ComponentActivity() {
             var progressVisible by remember { mutableStateOf(false) }
             val snackBarHostState = remember { SnackbarHostState() }
             val deepLinkParser = DeepLinkParser()
-            val screen = deepLinkParser.getPage(intent).getOrNull() ?: if(Firebase.auth.currentUser!=null) Screen.HOME else Screen.LOGIN
+            val screen = deepLinkParser.getPage(intent).getOrNull() ?: Screen.HOME
 
             ActionHandler.listen { action ->
                 when (action) {
                     is Action.Navigate -> navController.navigate(action.toRoute())
+                    is Action.Pop -> {
+                        // TODO("fix this! not working.")
+                        navController.popBackStack(action.screen, action.inclusive)
+                    }
                     is Action.Progress -> progressVisible = action.show
                     is Action.StartActivity -> startActivity(action.intent)
                     is Action.SnackBar -> lifecycleScope.launch {

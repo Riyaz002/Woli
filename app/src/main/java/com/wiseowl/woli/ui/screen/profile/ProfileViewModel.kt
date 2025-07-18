@@ -22,7 +22,8 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): ScreenViewMo
     init {
         viewModelScope.launch {
             _state.update {
-                Result.Success(ProfileModel(profileUseCase.getUserInfo()))
+                val isLoggedIn = profileUseCase.isLoggedIn()
+                Result.Success(ProfileModel(isLoggedIn, if(!isLoggedIn) null else profileUseCase.getUserInfo()))
             }
         }
     }
@@ -45,6 +46,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase): ScreenViewMo
                     _dialogEvent.update { Event(false) }
                 }
             }
+            ProfileAction.OnClickLogin -> onEvent(Action.Navigate(Screen.LOGIN))
             else -> ActionHandler.perform(action)
         }
     }

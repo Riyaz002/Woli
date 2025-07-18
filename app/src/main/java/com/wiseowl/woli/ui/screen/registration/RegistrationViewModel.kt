@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.registration
 
-import androidx.lifecycle.viewModelScope
+import  androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.Action.*
 import com.wiseowl.woli.ui.event.perform
@@ -51,7 +51,7 @@ class RegistrationViewModel(private val registrationUseCase: RegistrationUseCase
                                 it.data.email.value, it.data.password.value, it.data.firstName.value, it.data.lastName.value
                             )
                             when(result){
-                                is Result.Success<User> -> Navigate(Screen.HOME).perform()
+                                is Result.Success<User> -> onEvent(Pop(Screen.REGISTRATION, true))
                                 is Result.Error<*> -> SnackBar(result.error.reason).perform()
                                 else -> Unit
                             }

@@ -6,4 +6,5 @@ sealed class ProfileAction: Action {
     object DeleteAccountRequest: ProfileAction()
     object ConfirmDeleteAccount: ProfileAction()
     object DismissDeleteDialog: ProfileAction()
+    object OnClickLogin: ProfileAction()
 }

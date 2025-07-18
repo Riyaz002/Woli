@@ -32,6 +32,7 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.profile.component.Button
 import com.wiseowl.woli.ui.shared.component.AlertDialog
+import com.wiseowl.woli.ui.shared.component.BasicButton
 import org.koin.java.KoinJavaComponent.inject
 
 @Preview
@@ -85,10 +86,11 @@ fun Profile(modifier: Modifier = Modifier) {
                 )
             }
 
-            Button(
+            BasicButton (
                 modifier = Modifier.fillMaxWidth(),
-                text = "Logout"
-            ) { viewModel.onEvent(Action.Logout) }
+                data = data.authenticationButton,
+                actionHandler = viewModel::onEvent
+            )
 
             Button(
                 modifier = Modifier
