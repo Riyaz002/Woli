@@ -62,8 +62,7 @@ class MainActivity : ComponentActivity() {
                 when (action) {
                     is Action.Navigate -> navController.navigate(action.toRoute())
                     is Action.Pop -> {
-                        // TODO("fix this! not working.")
-                        navController.popBackStack(action.screen, action.inclusive)
+                        navController.popBackStack(action.screen.route, action.inclusive)
                     }
                     is Action.Progress -> progressVisible = action.show
                     is Action.StartActivity -> startActivity(action.intent)
@@ -74,7 +73,10 @@ class MainActivity : ComponentActivity() {
                     is Action.Logout -> {
                         Firebase.auth.signOut()
                         eventListener.pushEvent(Event.Logout)
-                        navController.navigate(Screen.LOGIN.route)
+                        navController.currentDestination?.route?.let {currentRoute ->
+                            navController.popBackStack()
+                            navController.navigate(currentRoute)
+                        }
                     }
                     else -> throw UnhandledActionException(action)
                 }
