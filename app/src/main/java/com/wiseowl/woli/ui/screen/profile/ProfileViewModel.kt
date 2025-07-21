@@ -14,19 +14,15 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import com.wiseowl.woli.ui.util.Event
 
-class ProfileViewModel(private val profileUseCase: ProfileUseCase): ScreenViewModel<ProfileModel>() {
-
-    private val _dialogEvent = MutableStateFlow(Event<Boolean>(false))
-    val dialogEvent: StateFlow<Event<Boolean>> get() =  _dialogEvent
-
-    init {
-        viewModelScope.launch {
-            _state.update {
-                val isLoggedIn = profileUseCase.isLoggedIn()
-                Result.Success(ProfileModel(isLoggedIn, if(!isLoggedIn) null else profileUseCase.getUserInfo()))
-            }
-        }
+class ProfileViewModel(private val profileUseCase: ProfileUseCase): ScreenViewModel<ProfileModel>(
+    op = {
+        val isLoggedIn = profileUseCase.isLoggedIn()
+        ProfileModel(isLoggedIn, if(!isLoggedIn) null else profileUseCase.getUserInfo())
     }
+) {
+
+    private val _dialogEvent = MutableStateFlow(Event(false))
+    val dialogEvent: StateFlow<Event<Boolean>> get() =  _dialogEvent
 
     override fun onEvent(action: Action) {
         when(action){

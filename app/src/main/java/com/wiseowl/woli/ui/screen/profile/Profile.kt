@@ -87,24 +87,31 @@ fun Profile(modifier: Modifier = Modifier) {
             }
 
             BasicButton (
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
                 data = data.authenticationButton,
                 actionHandler = viewModel::onEvent
             )
 
-            Button(
+            BasicButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
-                text = "Privacy Policy"
-            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = data.privacyPolicyButton,
+                actionHandler = viewModel::onEvent
+            )
 
-            Button(
+            BasicButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
-                text = "Delete Account"
-            ) { viewModel.onEvent(ProfileAction.DeleteAccountRequest) }
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = data.deleteAccountButton,
+                actionHandler = viewModel::onEvent
+            )
         }
     }
 }
