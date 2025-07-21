@@ -33,6 +33,7 @@ import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.ui.event.UnhandledActionException
 import com.wiseowl.woli.domain.event.Event
 import com.wiseowl.woli.domain.event.EventListener
+import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
@@ -45,6 +46,7 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : ComponentActivity() {
 
     private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val accountRepository by inject<AccountRepository>(AccountRepository::class.java)
     private val activityRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,11 +73,13 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState.showSnackbar(action.text)
                     }
                     is Action.Logout -> {
-                        Firebase.auth.signOut()
-                        eventListener.pushEvent(Event.Logout)
-                        navController.currentDestination?.route?.let {currentRoute ->
-                            navController.popBackStack()
-                            navController.navigate(currentRoute)
+                        lifecycleScope.launch {
+                            accountRepository.signOut()
+                            eventListener.pushEvent(Event.Logout)
+                            navController.currentDestination?.route?.let {currentRoute ->
+                                navController.popBackStack()
+                                navController.navigate(currentRoute)
+                            }
                         }
                     }
                     else -> throw UnhandledActionException(action)

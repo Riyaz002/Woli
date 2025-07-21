@@ -5,10 +5,12 @@ import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
 import com.wiseowl.woli.data.remote.core.HttpClient
+import com.wiseowl.woli.data.remote.firebase.FirebaseAPIService
 import com.wiseowl.woli.data.remote.media.PexelsAPIService
 import com.wiseowl.woli.data.repository.AccountRepository
 import com.wiseowl.woli.data.repository.ImageRepository
 import com.wiseowl.woli.data.repository.media.MediaRepositoryImpl
+import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.service.DownloadManagerService
 import com.wiseowl.woli.domain.service.DownloadManagerServiceImpl
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
@@ -33,8 +35,10 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
 
+
 fun appModule(application: Context) = module {
     //RemoteApi
+    single{ FirebaseAPIService(application) } bind(RemoteAPIService::class)
     single{ HttpClient().get(application) } bind(OkHttpClient::class)
     single{ PexelsAPIService.getInstance(get()) } bind(PexelsAPIService::class)
 

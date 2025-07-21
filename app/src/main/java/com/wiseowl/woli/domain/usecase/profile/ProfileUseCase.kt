@@ -6,11 +6,12 @@ import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 class ProfileUseCase(
     private val accountUseCase: AccountUseCase
 ) {
+
+    fun getAccountState() = accountUseCase.getAccountState()
+
     suspend fun getUserInfo(): User{
         return accountUseCase.getUserInfo()!!
     }
-
-    suspend fun isLoggedIn() = accountUseCase.isLoggedIn()
 
     suspend fun deleteAccount(){
         accountUseCase.deleteAccount()
