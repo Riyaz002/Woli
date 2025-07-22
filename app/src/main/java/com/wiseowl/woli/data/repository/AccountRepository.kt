@@ -8,7 +8,6 @@ import com.wiseowl.woli.domain.model.AccountState
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.util.Result
-import com.wiseowl.woli.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -85,6 +84,7 @@ class AccountRepository(
     }
 
     override suspend fun getUserInfo(): User? {
+        if(!remoteApiService.isLoggedIn()) return null
         var user = getSavedUser()
         if (user != null) return user
         user = remoteApiService.getUserInfo()
