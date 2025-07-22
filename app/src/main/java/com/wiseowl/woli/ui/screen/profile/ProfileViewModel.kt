@@ -1,26 +1,26 @@
 package com.wiseowl.woli.ui.screen.profile
 
 import androidx.lifecycle.viewModelScope
-import com.wiseowl.woli.ui.event.Action
-import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.event.Action
+import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.profile.model.ProfileModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import com.wiseowl.woli.ui.util.Event
 import com.wiseowl.woli.util.Logger
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ScreenViewModel<ProfileModel>(
     Result.Success(
         ProfileModel(
-            isLoggedIn = false,
-            currentUser = null
+            isLoggedIn = profileUseCase.getAccountState().value.isLoggedIn,
+            currentUser = profileUseCase.getAccountState().value.currentUser
         )
     )
 ) {
@@ -31,8 +31,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ScreenViewM
             profileUseCase.getAccountState().stateIn(
                 viewModelScope
             ).collect {
-                Logger.e(it.toString())
-                _state.ifSuccess { state ->
+                _state.ifSuccess {
                     ProfileModel(isLoggedIn = it.isLoggedIn, currentUser = it.currentUser)
                 }
             }

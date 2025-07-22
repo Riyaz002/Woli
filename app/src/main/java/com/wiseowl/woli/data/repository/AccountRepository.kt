@@ -8,10 +8,13 @@ import com.wiseowl.woli.domain.model.AccountState
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.util.Logger
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 class AccountRepository(
@@ -19,7 +22,7 @@ class AccountRepository(
     private val sharedPreference: EncryptedSharedPreference
 ) : AccountRepository {
 
-    private val scope = CoroutineScope(Dispatcher.IO)
+    val scope = CoroutineScope(Dispatcher.IO)
 
     private val accountState = MutableStateFlow(
         AccountState(
@@ -27,6 +30,18 @@ class AccountRepository(
             currentUser = getSavedUser()
         )
     )
+
+    init {
+        scope.launch {
+            val currentUser = scope.async { getUserInfo() }.await()
+            accountState.update {
+                AccountState(
+                    isLoggedIn = currentUser != null,
+                    currentUser = currentUser
+                )
+            }
+        }
+    }
 
     override fun getAccountState(): StateFlow<AccountState> = accountState
 
