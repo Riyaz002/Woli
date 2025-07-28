@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.util.Result
+import com.wiseowl.woli.ui.event.ReducerBuilder
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.event.ReducerBuilder
 import com.wiseowl.woli.ui.screen.common.ScreenViewModel
@@ -39,7 +40,6 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ScreenViewM
 
     private val _dialogEvent = MutableStateFlow(Event(false))
     val dialogEvent: StateFlow<Event<Boolean>> get() = _dialogEvent
-
 
     override val actionReducer: ReducerBuilder.() -> Unit
         get() = {
