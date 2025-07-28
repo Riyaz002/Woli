@@ -3,6 +3,19 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-2088852320">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Google Android SDK built for x86" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-1491739460">
           <value>
             <AndroidTestResultsTableState>
@@ -24,6 +37,20 @@
                   <entry key="Duration" value="90" />
                   <entry key="Google Pixel 6a" value="120" />
                   <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-566661143">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="Google Android SDK built for x86" value="120" />
+                  <entry key="Tests" value="360" />
+                  <entry key="Xiaomi 2201117TI" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>

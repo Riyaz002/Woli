@@ -1,4 +1,6 @@
 import java.io.FileInputStream
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Properties
 
 plugins {
@@ -14,6 +16,13 @@ plugins {
 val secrets = Properties()
 secrets.load(FileInputStream("secrets.properties"))
 
+fun getVersionCode() = if (project.hasProperty("VERSION_CODE")) project.property("VERSION_CODE").toString().toInt() else 11
+
+fun getVersionName(): String{
+    val versionName = SimpleDateFormat("yyyy/MM/dd").format(Date())
+    return versionName
+}
+
 android {
     namespace = "com.wiseowl.woli"
     compileSdk = 35
@@ -22,19 +31,32 @@ android {
         applicationId = "com.wiseowl.woli"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = getVersionCode()
+        versionName = getVersionName()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
-        resValue("string", "GOOGLE_API_KEY", secrets["GOOGLE_API_KEY"].toString())
+        resValue("string", "GOOGLE_API_KEY", "\"${secrets["GOOGLE_API_KEY"]}\"")
+        buildConfigField("String", "KEY_STORE_ALIAS", "\"${secrets["KEY_STORE_ALIAS"]}\"")
+        buildConfigField("String", "PEXELS_BASE_URL", "\"${secrets["PEXELS_BASE_URL"]}\"")
+        buildConfigField("String", "PEXELS_API_KEY", "\"${secrets["PEXELS_API_KEY"]}\"")
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            signingConfig = signingConfigs.findByName("release")
+        }
+
+        debug {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -50,6 +72,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -72,8 +95,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    //Test
     implementation(libs.androidx.junit.ktx)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.runner)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,6 +107,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     //Firebase
     implementation(platform(libs.firebase.bom))
@@ -104,7 +132,24 @@ dependencies {
     //Dependency Injection
     implementation(project.dependencies.platform(libs.koin.bom))
     implementation(libs.koin.android)
+    testImplementation(libs.io.insert.koin.koin.test)
+    testImplementation(libs.insert.koin.koin.test.junit4)
 
     //constrain layout
     implementation(libs.androidx.constraintlayout.compose)
+
+    //Splash Screen
+    implementation(libs.androidx.core.splashscreen)
+
+    //Moshi
+    implementation(libs.moshi)
+    ksp(libs.moshi.kotlin.codegen)
+
+    //Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+
+    //Chucker
+    debugImplementation(libs.chucker)
+    releaseImplementation(libs.chucker.no.op)
 }

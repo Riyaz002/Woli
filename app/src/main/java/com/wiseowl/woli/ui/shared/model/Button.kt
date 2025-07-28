@@ -1,6 +1,9 @@
 package com.wiseowl.woli.ui.shared.model
 
+import com.wiseowl.woli.ui.event.Action
+
 data class Button(
     val text: String,
-    val enabled: Boolean = true
+    val action: Action,
+    val enabled: Boolean = true,
 )
