@@ -57,9 +57,9 @@ fun Registration(
                 onChange = { viewModel.onEvent(RegistrationAction.OnPasswordChange(it)) },
             )
             BasicButton(
-                data = it.cta,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { viewModel.onEvent(RegistrationAction.OnRegisterClick) }
+                data = it.cta,
+                actionHandler = viewModel::onEvent
             )
         }
     }

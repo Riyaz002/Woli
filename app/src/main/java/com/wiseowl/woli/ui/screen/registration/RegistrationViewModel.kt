@@ -1,6 +1,6 @@
 package com.wiseowl.woli.ui.screen.registration
 
-import androidx.lifecycle.viewModelScope
+import  androidx.lifecycle.viewModelScope
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.Action.*
 import com.wiseowl.woli.ui.event.perform
