@@ -6,7 +6,6 @@ import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.event.ReducerBuilder
 import com.wiseowl.woli.ui.navigation.Screen
-import com.wiseowl.woli.ui.event.ReducerBuilder
 import com.wiseowl.woli.ui.screen.common.ScreenViewModel
 import com.wiseowl.woli.ui.screen.profile.model.ProfileModel
 import com.wiseowl.woli.ui.util.Event
