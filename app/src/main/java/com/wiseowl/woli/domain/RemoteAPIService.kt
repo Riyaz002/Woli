@@ -17,4 +17,5 @@ interface RemoteAPIService {
     suspend fun updateUser(user: User)
     suspend fun isEmailRegistered(email: String): Boolean
     suspend fun getUserInfo(): User?
+    suspend fun signOut()
 }

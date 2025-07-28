@@ -50,7 +50,7 @@ class LoginViewModel(private val loginUseCase: LoginUseCase): ScreenViewModel<Lo
                             if(result){
                                 val loginResult = loginUseCase.login(it.data.email.value, it.data.password.value)
                                 when(loginResult){
-                                    is Result.Success -> Navigate(Screen.HOME).perform()
+                                    is Result.Success -> onEvent(Action.Pop(Screen.LOGIN, true))
                                     else -> SnackBar("Password or Email is incorrect").perform()
                                 }
                             } else SnackBar("This email is not registered").perform()
