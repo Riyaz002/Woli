@@ -57,7 +57,7 @@ fun Login(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                onClick = { viewModel.onEvent(LoginAction.OnLoginClick) }
+                actionHandler = { viewModel.onEvent(LoginAction.OnLoginClick) }
             )
             TextButton(modifier = Modifier.padding(top = 10.dp).align(Alignment.CenterHorizontally), onClick = {viewModel.onEvent(Action.Navigate(Screen.REGISTRATION))}){
                 Text(text = "Don't have an account? Register", textDecoration = TextDecoration.Underline)

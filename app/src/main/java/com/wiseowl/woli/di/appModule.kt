@@ -1,7 +1,6 @@
 package com.wiseowl.woli.di
 
 import android.content.Context
-import androidx.room.Room
 import com.wiseowl.woli.data.event.EventListener
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.StringEncryptor
@@ -37,6 +36,7 @@ import okhttp3.OkHttpClient
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
+
 
 fun appModule(application: Context) = module {
     //RemoteApi

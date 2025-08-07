@@ -33,6 +33,7 @@ import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.ui.event.UnhandledActionException
 import com.wiseowl.woli.domain.event.Event
 import com.wiseowl.woli.domain.event.EventListener
+import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.ui.navigation.Root
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.shared.component.CircularProgressBar
@@ -45,6 +46,7 @@ import org.koin.java.KoinJavaComponent.inject
 class MainActivity : ComponentActivity() {
 
     private val eventListener by inject<EventListener>(EventListener::class.java)
+    private val accountRepository by inject<AccountRepository>(AccountRepository::class.java)
     private val activityRequestLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){}
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,11 +58,14 @@ class MainActivity : ComponentActivity() {
             var progressVisible by remember { mutableStateOf(false) }
             val snackBarHostState = remember { SnackbarHostState() }
             val deepLinkParser = DeepLinkParser()
-            val screen = deepLinkParser.getPage(intent).getOrNull() ?: if(Firebase.auth.currentUser!=null) Screen.HOME else Screen.LOGIN
+            val screen = deepLinkParser.getPage(intent).getOrNull() ?: Screen.HOME
 
             ActionHandler.listen { action ->
                 when (action) {
                     is Action.Navigate -> navController.navigate(action.toRoute())
+                    is Action.Pop -> {
+                        navController.popBackStack(action.screen.route, action.inclusive)
+                    }
                     is Action.Progress -> progressVisible = action.show
                     is Action.StartActivity -> startActivity(action.intent)
                     is Action.SnackBar -> lifecycleScope.launch {
@@ -68,9 +73,14 @@ class MainActivity : ComponentActivity() {
                         snackBarHostState.showSnackbar(action.text)
                     }
                     is Action.Logout -> {
-                        Firebase.auth.signOut()
-                        eventListener.pushEvent(Event.Logout)
-                        navController.navigate(Screen.LOGIN.route)
+                        lifecycleScope.launch {
+                            accountRepository.signOut()
+                            eventListener.pushEvent(Event.Logout)
+                            navController.currentDestination?.route?.let {currentRoute ->
+                                navController.popBackStack()
+                                navController.navigate(currentRoute)
+                            }
+                        }
                     }
                     else -> throw UnhandledActionException(action)
                 }

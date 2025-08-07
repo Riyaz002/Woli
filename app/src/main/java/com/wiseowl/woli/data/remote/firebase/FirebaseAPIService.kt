@@ -88,6 +88,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 
+    override suspend fun signOut() = Firebase.auth.signOut()
+
+
     override suspend fun getPrivacyPolicyPage(): List<Policy>? {
         val result = firestore.collection(PRIVACY_POLICY_COLLECTION).getDocumentOrNull(DATA)?.data
         val policyData = result?.get(POLICIES) as List<Map<String, String>>?

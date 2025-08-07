@@ -32,6 +32,7 @@ import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.profile.component.Button
 import com.wiseowl.woli.ui.shared.component.AlertDialog
+import com.wiseowl.woli.ui.shared.component.BasicButton
 import org.koin.java.KoinJavaComponent.inject
 
 @Preview
@@ -85,24 +86,32 @@ fun Profile(modifier: Modifier = Modifier) {
                 )
             }
 
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                text = "Logout"
-            ) { viewModel.onEvent(Action.Logout) }
-
-            Button(
+            BasicButton (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
-                text = "Privacy Policy"
-            ) { viewModel.onEvent(Action.Navigate(Screen.PrivacyPolicy)) }
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = data.authenticationButton,
+                actionHandler = viewModel::onEvent
+            )
 
-            Button(
+            BasicButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
-                text = "Delete Account"
-            ) { viewModel.onEvent(ProfileAction.DeleteAccountRequest) }
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = data.privacyPolicyButton,
+                actionHandler = viewModel::onEvent
+            )
+
+            BasicButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = data.deleteAccountButton,
+                actionHandler = viewModel::onEvent
+            )
         }
     }
 }
