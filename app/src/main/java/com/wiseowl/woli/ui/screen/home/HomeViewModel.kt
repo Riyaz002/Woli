@@ -40,6 +40,14 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): ScreenViewModel<Home
                 }
             }
             on<HomeAction.OnClickSearch>{ search() }
+            on<HomeAction.OnClickAddToFavourite>{ action ->
+                viewModelScope.launch {
+                    homeUseCase.addMediaToFavourites(action.mediaId)
+                }
+                _state.ifSuccess{
+                    it.copy(favourites = it.favourites+action.mediaId)
+                }
+            }
         }
 
     private fun loadNextPage() {

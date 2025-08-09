@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.wiseowl.woli.ui.screen.collections.Categories
 import com.wiseowl.woli.ui.screen.collection.Collection
 import com.wiseowl.woli.ui.screen.detail.Detail
+import com.wiseowl.woli.ui.screen.favourites.Favourites
 import com.wiseowl.woli.ui.screen.home.Home
 import com.wiseowl.woli.ui.screen.login.Login
 import com.wiseowl.woli.ui.screen.privacypolicy.PrivacyPolicy
@@ -43,6 +44,7 @@ fun Root(
         }
         composable(route = Screen.REGISTRATION.route) { Registration(modifier) }
         composable(route = Screen.LOGIN.route) { Login(modifier) }
+        composable(route = Screen.FAVOURITES.route) { Favourites(modifier) }
         composable(route = Screen.COLLECTIONS.route) { Categories(modifier) }
         composable(route = Screen.Profile.route) { Profile(modifier) }
         composable(route = Screen.PrivacyPolicy.route) { PrivacyPolicy(modifier) }

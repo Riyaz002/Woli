@@ -92,6 +92,20 @@ fun Profile(modifier: Modifier = Modifier) {
                     .padding(top = 20.dp)
                     .padding(horizontal = 20.dp),
                 data = data.authenticationButton,
+                actionHandler = {
+                    viewModel.onEvent(data.authenticationButton.action)
+                }
+            )
+
+            BasicButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                data = com.wiseowl.woli.ui.shared.model.Button(
+                    text = "Favourites",
+                    action = Action.Navigate(Screen.FAVOURITES)
+                ),
                 actionHandler = viewModel::onEvent
             )
 

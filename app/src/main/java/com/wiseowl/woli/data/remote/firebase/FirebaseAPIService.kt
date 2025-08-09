@@ -83,13 +83,25 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
     }
 
     override suspend fun getUserInfo(): User? {
-        if(!isLoggedIn()) throw IllegalStateException("User not logged in")
+        ensureLoggedIn()
         val email = Firebase.auth.currentUser?.email!!
         return firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
     }
 
-    override suspend fun signOut() = Firebase.auth.signOut()
+    fun ensureLoggedIn(){
+        if(!isLoggedIn()) throw IllegalStateException("User not logged in")
+    }
 
+    override suspend fun addToFavourites(mediaId: Long){
+        ensureLoggedIn()
+        val email = Firebase.auth.currentUser?.email!!
+        val user = getUserInfo()
+        if(user?.favourites?.contains(mediaId)==false){
+            firestore.collection(USERS_COLLECTION).document(email).set(user.copy(favourites = user.favourites+mediaId))
+        }
+    }
+
+    override suspend fun signOut() = Firebase.auth.signOut()
 
     override suspend fun getPrivacyPolicyPage(): List<Policy>? {
         val result = firestore.collection(PRIVACY_POLICY_COLLECTION).getDocumentOrNull(DATA)?.data
@@ -123,9 +135,9 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
             return User(
                 firstName = getValue(User::firstName.name).toString(),
                 lastName = getValue(User::lastName.name).toString(),
+                favourites = getValue(User::favourites.name) as List<Long>,
                 uid = getValue(User::uid.name).toString(),
                 email = getValue(User::email.name).toString(),
-                favourites = null
             )
         }
 

@@ -4,6 +4,8 @@ import com.wiseowl.woli.domain.repository.media.MediaRepository
 import com.wiseowl.woli.domain.repository.media.model.CollectionPage
 import com.wiseowl.woli.domain.repository.media.model.PhotoPage
 import com.wiseowl.woli.domain.repository.media.model.Media
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
+import com.wiseowl.woli.ui.screen.home.HomeAction
 
 
 class MediaUseCase(
@@ -12,6 +14,7 @@ class MediaUseCase(
     val getPhotoUseCase: GetPhotoUseCase,
     val getCollectionsPageUseCase: GetCollectionsPageUseCase,
     val getCollectionPageUseCase: GetCollectionPageUseCase,
+    val addMediaToFavourites: AddMediaToFavouritesUseCase,
 )
 
 class GetPhotoPageUseCase(private val repository: MediaRepository){
@@ -32,4 +35,10 @@ class GetCollectionsPageUseCase(private val repository: MediaRepository){
 
 class GetCollectionPageUseCase(private val repository: MediaRepository){
     suspend operator fun invoke(id: String, pageNo: Int): List<Media> = repository.getCollection(id, pageNo)
+}
+
+class AddMediaToFavouritesUseCase(private val accountUseCase: AccountUseCase){
+    suspend operator fun invoke(mediaId: Long){
+        accountUseCase.addToFavouritesUseCase(mediaId)
+    }
 }

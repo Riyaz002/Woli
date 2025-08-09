@@ -7,4 +7,5 @@ sealed class HomeAction: Action {
     object LoadNextPage: HomeAction()
     data class OnSearchChange(val query: String): HomeAction()
     object OnClickSearch: HomeAction()
+    data class OnClickAddToFavourite(val mediaId: Long): HomeAction()
 }

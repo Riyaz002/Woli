@@ -8,5 +8,5 @@ data class User(
     val lastName: String,
     val uid: String,
     val email: String,
-    val favourites: List<String>?
+    val favourites: List<Long>?
 )

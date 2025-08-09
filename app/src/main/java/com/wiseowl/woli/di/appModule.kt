@@ -20,12 +20,14 @@ import com.wiseowl.woli.domain.usecase.common.media.GetPhotoPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
+import com.wiseowl.woli.domain.usecase.common.media.AddMediaToFavouritesUseCase
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
 import com.wiseowl.woli.domain.usecase.detail.SaveFileUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
+import com.wiseowl.woli.domain.usecase.favourites.FavouritesUseCase
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
@@ -64,6 +66,7 @@ fun appModule(application: Context) = module {
     singleOf(::RegistrationUseCase)
     singleOf(::AccountUseCase)
     singleOf(::LoginUseCase)
+    singleOf(::FavouritesUseCase)
     singleOf(::GetNavigationItemsUseCase)
     singleOf(::ProfileUseCase)
     singleOf(::GetPrivacyPolicyUseCase)
@@ -75,4 +78,5 @@ fun appModule(application: Context) = module {
     singleOf(::GetCollectionPageUseCase)
     singleOf(::MediaUseCase)
     singleOf(::SaveFileUseCase)
+    singleOf(::AddMediaToFavouritesUseCase)
 }

@@ -92,6 +92,12 @@ class AccountRepository(
         return user
     }
 
+    override suspend fun addToFavourites(mediaId: Long) {
+        if(accountState.value.isLoggedIn){
+            remoteApiService.addToFavourites(mediaId)
+        }
+    }
+
     override suspend fun signOut(): Result<Boolean> {
         remoteApiService.signOut()
         sharedPreference.clear()
