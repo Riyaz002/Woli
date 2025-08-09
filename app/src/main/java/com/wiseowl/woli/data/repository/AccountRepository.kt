@@ -1,5 +1,6 @@
 package com.wiseowl.woli.data.repository
 
+import android.util.Log
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference.Companion.USER

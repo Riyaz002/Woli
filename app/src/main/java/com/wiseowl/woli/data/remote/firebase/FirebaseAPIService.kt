@@ -1,6 +1,7 @@
 package com.wiseowl.woli.data.remote.firebase
 
 import android.content.Context
+import android.util.Log
 import coil3.Bitmap
 import coil3.ImageLoader
 import coil3.request.ImageRequest
@@ -95,9 +96,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
     override suspend fun addToFavourites(mediaId: Long){
         ensureLoggedIn()
         val email = Firebase.auth.currentUser?.email!!
-        val user = getUserInfo()
-        if(user?.favourites?.contains(mediaId)==false){
-            firestore.collection(USERS_COLLECTION).document(email).set(user.copy(favourites = user.favourites+mediaId))
+        getUserInfo()?.let { user ->
+            if(user.favourites?.contains(mediaId)!=true){
+                firestore.collection(USERS_COLLECTION).document(email).set(user.copy(favourites = user.favourites.orEmpty()+mediaId))
+            }
         }
     }
 

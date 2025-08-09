@@ -88,16 +88,16 @@ fun Favourites(
                         }
                     }
                 }
-                items(
-                    1,
-                    span = { GridItemSpan(2) }
-                ) {
-                    viewModel.onEvent(HomeAction.LoadNextPage)
-                    LoaderFooter(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
+//                items(
+//                    1,
+//                    span = { GridItemSpan(2) }
+//                ) {
+//                    viewModel.onEvent(HomeAction.LoadNextPage)
+//                    LoaderFooter(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                    )
+//                }
             }
         }
     }
