@@ -58,7 +58,7 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ScreenViewM
                     _dialogEvent.update { Event(false) }
                 }
             }
-            on<ProfileAction.DismissDeleteDialog> {
+            on<ProfileAction.OnClickLogin> {
                 onEvent(Action.Navigate(Screen.LOGIN))
             }
         }

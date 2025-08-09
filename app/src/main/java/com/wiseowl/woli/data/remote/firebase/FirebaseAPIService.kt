@@ -135,7 +135,7 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
             return User(
                 firstName = getValue(User::firstName.name).toString(),
                 lastName = getValue(User::lastName.name).toString(),
-                favourites = getValue(User::favourites.name) as List<Long>,
+                favourites = getValue(User::favourites.name) as List<Long>?,
                 uid = getValue(User::uid.name).toString(),
                 email = getValue(User::email.name).toString(),
             )

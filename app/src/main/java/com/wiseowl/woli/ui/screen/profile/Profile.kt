@@ -92,9 +92,7 @@ fun Profile(modifier: Modifier = Modifier) {
                     .padding(top = 20.dp)
                     .padding(horizontal = 20.dp),
                 data = data.authenticationButton,
-                actionHandler = {
-                    viewModel.onEvent(data.authenticationButton.action)
-                }
+                actionHandler = viewModel::onEvent
             )
 
             BasicButton(
