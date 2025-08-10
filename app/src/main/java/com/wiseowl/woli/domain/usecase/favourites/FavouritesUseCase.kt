@@ -12,6 +12,6 @@ class FavouritesUseCase(
     private val mediaUseCase: MediaUseCase,
 ) {
     suspend fun getFavourites(): List<Media>{
-        return accountUseCase.getUserInfo()?.favourites.orEmpty().map { withContext(Dispatcher.IO){ async { mediaUseCase.getPhotoUseCase(it.toInt()) }.await() } }
+        return accountUseCase.getFavouritesUseCase().map{ withContext(Dispatcher.IO){ async { mediaUseCase.getPhotoUseCase(it.toInt()) }.await() } }
     }
 }

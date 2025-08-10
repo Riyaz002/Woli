@@ -10,4 +10,5 @@ class AccountUseCase(private val accountRepository: AccountRepository) {
     suspend fun doesAccountExists(email: String) = accountRepository.isEmailRegistered(email)
     suspend fun getUserInfo() = accountRepository.getUserInfo()
     suspend fun addToFavouritesUseCase(mediaId: Long) = accountRepository.addToFavourites(mediaId)
+    suspend fun getFavouritesUseCase() = accountRepository.getFavourites()
 }

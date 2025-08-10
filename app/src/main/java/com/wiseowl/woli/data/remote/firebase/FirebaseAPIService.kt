@@ -103,6 +103,11 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
+    override suspend fun getFavourites(): List<Long> {
+        ensureLoggedIn()
+        return getUserInfo()?.favourites.orEmpty()
+    }
+
     override suspend fun signOut() = Firebase.auth.signOut()
 
     override suspend fun getPrivacyPolicyPage(): List<Policy>? {

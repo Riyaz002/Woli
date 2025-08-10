@@ -18,5 +18,6 @@ interface RemoteAPIService {
     suspend fun isEmailRegistered(email: String): Boolean
     suspend fun getUserInfo(): User?
     suspend fun addToFavourites(mediaId: Long)
+    suspend fun getFavourites(): List<Long>
     suspend fun signOut()
 }

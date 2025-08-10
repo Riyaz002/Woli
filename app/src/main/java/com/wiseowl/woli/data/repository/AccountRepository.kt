@@ -99,6 +99,12 @@ class AccountRepository(
         }
     }
 
+    override suspend fun getFavourites(): List<Long> {
+        return if(accountState.value.isLoggedIn){
+            remoteApiService.getFavourites()
+        } else emptyList()
+    }
+
     override suspend fun signOut(): Result<Boolean> {
         remoteApiService.signOut()
         sharedPreference.clear()
