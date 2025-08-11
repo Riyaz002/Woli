@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.screen.common.Screen
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
@@ -39,8 +40,9 @@ import org.koin.java.KoinJavaComponent.inject
 fun Home(
     modifier: Modifier = Modifier
 ) {
-    val useCase: MediaUseCase by inject(MediaUseCase::class.java)
-    val viewModel: HomeViewModel =  viewModel{ HomeViewModel(useCase) }
+    val mediaUseCase: MediaUseCase by inject(MediaUseCase::class.java)
+    val accountUseCase: AccountUseCase by inject(AccountUseCase::class.java)
+    val viewModel: HomeViewModel =  viewModel{ HomeViewModel(mediaUseCase, accountUseCase) }
     val state = viewModel.state.collectAsState()
 
     Screen(data = state.value){ data ->

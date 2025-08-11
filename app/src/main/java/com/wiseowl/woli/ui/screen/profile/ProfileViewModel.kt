@@ -29,9 +29,9 @@ class ProfileViewModel(private val profileUseCase: ProfileUseCase) : ScreenViewM
         viewModelScope.launch {
             profileUseCase.getAccountState().stateIn(
                 viewModelScope
-            ).collect {
-                _state.ifSuccess {
-                    ProfileModel(isLoggedIn = it.isLoggedIn, currentUser = it.currentUser)
+            ).collect { accountState ->
+                _state.update {
+                    Result.Success(ProfileModel(isLoggedIn = accountState.isLoggedIn, currentUser = accountState.currentUser))
                 }
             }
         }

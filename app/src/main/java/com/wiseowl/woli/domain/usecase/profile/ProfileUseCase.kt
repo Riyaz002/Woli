@@ -7,7 +7,7 @@ class ProfileUseCase(
     private val accountUseCase: AccountUseCase
 ) {
 
-    fun getAccountState() = accountUseCase.getAccountState()
+    fun getAccountState() = accountUseCase.userState
 
     suspend fun getUserInfo(): User{
         return accountUseCase.getUserInfo()!!

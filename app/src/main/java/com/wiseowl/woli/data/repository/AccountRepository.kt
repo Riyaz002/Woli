@@ -1,6 +1,5 @@
 package com.wiseowl.woli.data.repository
 
-import android.util.Log
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference
 import com.wiseowl.woli.data.local.sharedpreference.EncryptedSharedPreference.Companion.USER
@@ -10,10 +9,10 @@ import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.repository.AccountRepository
 import com.wiseowl.woli.domain.util.Result
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -22,29 +21,21 @@ class AccountRepository(
     private val sharedPreference: EncryptedSharedPreference
 ) : AccountRepository {
 
-    val scope = CoroutineScope(Dispatcher.IO)
+    private val scope = CoroutineScope(Dispatcher.IO)
 
-    private val accountState = MutableStateFlow(
+    override var accountState: StateFlow<AccountState> = remoteApiService.userState.map {
         AccountState(
-            isLoggedIn = getSavedUser()!=null,
+            isLoggedIn = it != null,
+            currentUser = it
+        )
+    }.stateIn(
+        scope,
+        started = SharingStarted.Eagerly,
+        initialValue = AccountState(
+            isLoggedIn = getSavedUser() != null,
             currentUser = getSavedUser()
         )
     )
-
-    init {
-        scope.launch {
-            val currentUser = scope.async { getUserInfo() }.await()
-            accountState.update {
-                AccountState(
-                    isLoggedIn = currentUser != null,
-                    currentUser = currentUser
-                )
-            }
-        }
-    }
-
-    override fun getAccountState(): StateFlow<AccountState> = accountState
-
 
     override suspend fun createAccount(
         email: String,
@@ -59,20 +50,17 @@ class AccountRepository(
 
     override suspend fun login(email: String, password: String): Result<User> {
         val result = remoteApiService.login(email, password)
-        accountState.update {
-            when (result) {
-                is Result.Success<User> -> AccountState(
-                    isLoggedIn = true,
-                    currentUser = result.data
-                )
-                else -> AccountState(
-                    isLoggedIn = false,
-                    currentUser = null
-                )
-            }
+        when (result) {
+            is Result.Success<User> -> AccountState(
+                isLoggedIn = true,
+                currentUser = result.data
+            )
 
+            else -> AccountState(
+                isLoggedIn = false,
+                currentUser = null
+            )
         }
-
         return result
     }
 
@@ -85,7 +73,7 @@ class AccountRepository(
     }
 
     override suspend fun getUserInfo(): User? {
-        if(!remoteApiService.isLoggedIn()) return null
+        if (!remoteApiService.isLoggedIn()) return null
         var user = getSavedUser()
         if (user != null) return user
         user = remoteApiService.getUserInfo()
@@ -94,26 +82,26 @@ class AccountRepository(
     }
 
     override suspend fun addToFavourites(mediaId: Long) {
-        if(accountState.value.isLoggedIn){
+        if (accountState.value.isLoggedIn) {
             remoteApiService.addToFavourites(mediaId)
         }
     }
 
     override suspend fun getFavourites(): List<Long> {
-        return if(accountState.value.isLoggedIn){
+        return if (accountState.value.isLoggedIn) {
             remoteApiService.getFavourites()
         } else emptyList()
+    }
+
+    override suspend fun removeFromFavourites(mediaId: Long) {
+        if (accountState.value.isLoggedIn) {
+            remoteApiService.removeFromFavourites(mediaId)
+        }
     }
 
     override suspend fun signOut(): Result<Boolean> {
         remoteApiService.signOut()
         sharedPreference.clear()
-        accountState.update {
-            AccountState(
-                isLoggedIn = false,
-                currentUser = null
-            )
-        }
         return Result.Success(true)
     }
 

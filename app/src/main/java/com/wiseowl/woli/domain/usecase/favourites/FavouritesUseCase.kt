@@ -9,9 +9,17 @@ import kotlinx.coroutines.withContext
 
 class FavouritesUseCase(
     private val accountUseCase: AccountUseCase,
-    private val mediaUseCase: MediaUseCase,
+    private val mediaUseCase: MediaUseCase
 ) {
+    suspend fun addToFavourites(mediaId: Long){
+        return accountUseCase.addToFavourites(mediaId)
+    }
+
     suspend fun getFavourites(): List<Media>{
-        return accountUseCase.getFavouritesUseCase().map{ withContext(Dispatcher.IO){ async { mediaUseCase.getPhotoUseCase(it.toInt()) }.await() } }
+        return accountUseCase.getFavourites().map { withContext(Dispatcher.IO){ async { mediaUseCase.getPhotoUseCase(it.toInt()) }.await() } }
+    }
+
+    suspend fun removeFromFavourites(mediaId: Long){
+        return accountUseCase.removeFromFavourites(mediaId)
     }
 }

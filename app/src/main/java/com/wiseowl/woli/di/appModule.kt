@@ -20,7 +20,6 @@ import com.wiseowl.woli.domain.usecase.common.media.GetPhotoPageUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetPhotoUseCase
 import com.wiseowl.woli.domain.usecase.common.media.GetSearchUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
-import com.wiseowl.woli.domain.usecase.common.media.AddMediaToFavouritesUseCase
 import com.wiseowl.woli.domain.usecase.detail.DetailUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetBitmapUseCase
 import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
@@ -78,5 +77,4 @@ fun appModule(application: Context) = module {
     singleOf(::GetCollectionPageUseCase)
     singleOf(::MediaUseCase)
     singleOf(::SaveFileUseCase)
-    singleOf(::AddMediaToFavouritesUseCase)
 }

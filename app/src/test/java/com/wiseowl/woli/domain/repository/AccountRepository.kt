@@ -20,7 +20,7 @@ class TestAccountRepository: AccountRepository {
         )
     )
 
-    override fun getAccountState(): StateFlow<AccountState> = accountState
+    override fun observerAccountState(): StateFlow<AccountState> = accountState
 
     override suspend fun createAccount(
         email: String,
