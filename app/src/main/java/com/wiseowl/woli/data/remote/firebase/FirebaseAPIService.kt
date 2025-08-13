@@ -15,19 +15,25 @@ import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.configuration.coroutine.Dispatcher
 import com.wiseowl.woli.domain.RemoteAPIService
 import com.wiseowl.woli.domain.model.Error
+import com.wiseowl.woli.domain.model.GuestUser
 import com.wiseowl.woli.domain.model.Policy
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
-import com.wiseowl.woli.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Suppress("UNCHECKED_CAST")
-class FirebaseAPIService(private val context: Context): RemoteAPIService {
+class FirebaseAPIService(private val context: Context) : RemoteAPIService {
     private val firestore = Firebase.firestore
-    override val userState = MutableStateFlow<User?>(null)
+    private val scope = CoroutineScope(Dispatcher.IO)
+    override val userState = MutableStateFlow(GuestUser).apply {
+        scope.launch { emit(getUserInfo() ?: GuestUser) }
+    }
 
     override suspend fun createUser(
         email: String,
@@ -35,29 +41,28 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         firstName: String,
         lastName: String,
     ): Result<User> {
-        if(isEmailRegistered(email)) return Result.Error(Error("Account already exists"))
+        if (isEmailRegistered(email)) return Result.Error(Error("Account already exists"))
 
         val result = Firebase.auth.createUserWithEmailAndPassword(
             email, password
         ).await()
 
-        return if(result.user!=null){
-            val user = User(firstName, lastName, result.user!!.uid, email, null)
-            firestore.collection(USERS_COLLECTION).document(email).set(user).await()
+        return if (result.user != null) {
+            val user = User(firstName, lastName, result.user!!.uid, email, null) + GuestUser
             updateUser(user)
             Result.Success(user)
-        } else{
+        } else {
             Result.Error(Error("Wrong credentials"))
         }
     }
 
-    private fun updateUser(user: User?){
-        user?.email?.let {
-            firestore.collection(USERS_COLLECTION).document().set(user)
+    private fun updateUser(user: User?) {
+        user?.let {
+            GuestUser = user
+            firestore.collection(USERS_COLLECTION).document(user.email).set(user)
         }
-        userState.update { user }
+        userState.update { user ?: GuestUser }
     }
-
 
     override suspend fun login(email: String, password: String): Result<User> {
         return try {
@@ -65,78 +70,95 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
                 email, password
             ).await()
 
-            if(result.user==null) throw FirebaseAuthInvalidCredentialsException(
+            if (result.user == null) throw FirebaseAuthInvalidCredentialsException(
                 "",
                 "Invalid Credentials"
             )
-
-            val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
-            if(user!=null) {
-                updateUser(user)
-                Result.Success(user)
-            }
-            else Result.Error(Error("Something went wrong"))
-        } catch (e: FirebaseAuthInvalidCredentialsException){
+            val user = getUser(email)
+            if (user != null) {
+                val updatedUser = user + GuestUser
+                updateUser(updatedUser)
+                Result.Success(updatedUser)
+            } else Result.Error(Error("Something went wrong"))
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
             Result.Error(Error("Invalid Credentials"))
         }
     }
 
+    private suspend fun getUser(email: String? = null): User?{
+        return (Firebase.auth.currentUser?.email ?: email)?.let {
+            firestore.collection(USERS_COLLECTION).document(it).get().await().data?.toUser()
+        }
+    }
+
     override suspend fun deleteUser() {
-        if (!isLoggedIn()) throw IllegalStateException("User not logged in")
-        val email = Firebase.auth.currentUser?.email ?: throw IllegalStateException("User not logged in")
-        firestore.collection(USERS_COLLECTION).document(email).delete()
-        Firebase.auth.currentUser?.delete()
-        Firebase.auth.signOut()
-        updateUser(null)
+        ifLoggedIn {
+            val email = Firebase.auth.currentUser?.email!!
+            firestore.collection(USERS_COLLECTION).document(email).delete()
+            Firebase.auth.currentUser?.delete()
+            Firebase.auth.signOut()
+            updateUser(null)
+        }
     }
 
     override suspend fun isEmailRegistered(email: String): Boolean {
         return firestore.collection(USERS_COLLECTION).document(email).get().await().exists()
     }
 
-    override suspend fun getUserInfo(): User? {
-        ensureLoggedIn()
-        val email = Firebase.auth.currentUser?.email!!
-        val user = firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
-        updateUser(user)
-        return user
+    override suspend fun getUserInfo(): User {
+        return ifLoggedIn {
+            val email = Firebase.auth.currentUser?.email!!
+            val user =
+                firestore.collection(USERS_COLLECTION).document(email).get().await().data?.toUser()
+            updateUser(user)
+            user
+        } ?: GuestUser
     }
 
-    private fun ensureLoggedIn(){
-        if(!isLoggedIn()) throw IllegalStateException("User not logged in")
+    private inline fun <R : Any?> ifLoggedIn(onLoggedIn: () -> R): R? {
+        return if (isLoggedIn()) onLoggedIn()
+        else null
     }
 
-    override suspend fun addToFavourites(mediaId: Long){
-        ensureLoggedIn()
-        val email = Firebase.auth.currentUser?.email!!
-        getUserInfo()?.let { user ->
-            if(user.favourites?.contains(mediaId)!=true){
-                val userUpdatedState = user.copy(favourites = user.favourites.orEmpty()+mediaId)
-                firestore.collection(USERS_COLLECTION).document(email).set(userUpdatedState)
+    override suspend fun addToFavourites(mediaId: Long) {
+        getUserInfo().let { user ->
+            if (user.favourites?.contains(mediaId) != true) {
+                val userUpdatedState = user.copy(favourites = user.favourites.orEmpty() + mediaId)
+                if (user != GuestUser) {
+                    val email = Firebase.auth.currentUser?.email
+                    if (email != null) {
+                        firestore.collection(USERS_COLLECTION).document(email).set(userUpdatedState)
+                    }
+                }
                 updateUser(userUpdatedState)
             }
         }
     }
 
     override suspend fun removeFromFavourites(mediaId: Long) {
-        ensureLoggedIn()
-        getUserInfo()?.let { user ->
-            if(user.favourites?.contains(mediaId)==true){
-                val email = Firebase.auth.currentUser?.email!!
+        getUserInfo().let { user ->
+            if (user.favourites?.contains(mediaId) == true) {
                 val newFavourite = user.favourites.filter { it != mediaId }
                 val newUserState = user.copy(favourites = newFavourite)
-                firestore.collection(USERS_COLLECTION).document(email).set(newUserState)
+                if(user!= GuestUser) {
+                    val email = Firebase.auth.currentUser?.email
+                    if (email != null) {
+                        firestore.collection(USERS_COLLECTION).document(email).set(newUserState)
+                    }
+                }
                 updateUser(newUserState)
             }
         }
     }
 
     override suspend fun getFavourites(): List<Long> {
-        ensureLoggedIn()
-        return userState.value?.favourites.orEmpty()
+        return userState.value.favourites.orEmpty()
     }
 
-    override suspend fun signOut() = Firebase.auth.signOut()
+    override suspend fun signOut() {
+        Firebase.auth.signOut()
+        updateUser(null)
+    }
 
     override suspend fun getPrivacyPolicyPage(): List<Policy>? {
         val result = firestore.collection(PRIVACY_POLICY_COLLECTION).getDocumentOrNull(DATA)?.data
@@ -145,7 +167,7 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         return policies
     }
 
-    override fun isLoggedIn(): Boolean = Firebase.auth.currentUser!=null
+    override fun isLoggedIn(): Boolean = Firebase.auth.currentUser != null
 
     override suspend fun getImageBitmap(url: String): Bitmap? {
         return withContext(Dispatcher.IO) {
@@ -160,7 +182,7 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
         }
     }
 
-    companion object{
+    companion object {
         const val PRIVACY_POLICY_COLLECTION = "privacypolicy"
         const val USERS_COLLECTION = "users"
         const val POLICIES = "policies"
@@ -183,10 +205,10 @@ class FirebaseAPIService(private val context: Context): RemoteAPIService {
             )
         }
 
-        suspend fun CollectionReference.getDocumentOrNull(documentId: String): DocumentSnapshot?{
+        suspend fun CollectionReference.getDocumentOrNull(documentId: String): DocumentSnapshot? {
             return try {
                 document(documentId).get().await()
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 null
             }
         }

@@ -1,18 +1,13 @@
 package com.wiseowl.woli.ui.screen.favourites
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,34 +16,22 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil3.Image
-import coil3.request.ImageRequest
 import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.ui.event.Action
-import com.wiseowl.woli.domain.usecase.favourites.FavouritesUseCase
 import com.wiseowl.woli.ui.navigation.Screen
 import com.wiseowl.woli.ui.screen.common.Screen
-import com.wiseowl.woli.ui.screen.home.HomeAction
 import com.wiseowl.woli.ui.screen.home.component.ImageCard
-import com.wiseowl.woli.ui.screen.home.component.LoaderFooter
 import com.wiseowl.woli.ui.shared.component.AlertDialog
-import com.wiseowl.woli.ui.shared.component.BasicButton
-import com.wiseowl.woli.ui.shared.component.BasicTextField
 import org.koin.java.KoinJavaComponent.inject
 
 @Composable
@@ -84,7 +67,9 @@ fun Favourites(
                         image = image,
                         cornerRadius = 20.dp,
                         aspectRatio = 0.6f,
-                        onClick = { viewModel.onEvent(HomeAction.OnClickImage(image.id)) }
+                        onClick = { viewModel.onEvent(Action.Navigate(Screen.DETAIL, params = mapOf(
+                            Screen.DETAIL.ARG_IMAGE_ID to image.id.toString()
+                        ))) }
                     ) {
                         Icon(
                             imageVector = Icons.Default.Favorite,

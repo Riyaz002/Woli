@@ -73,7 +73,6 @@ class AccountRepository(
     }
 
     override suspend fun getUserInfo(): User? {
-        if (!remoteApiService.isLoggedIn()) return null
         var user = getSavedUser()
         if (user != null) return user
         user = remoteApiService.getUserInfo()

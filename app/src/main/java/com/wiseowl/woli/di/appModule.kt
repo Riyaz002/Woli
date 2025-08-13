@@ -26,7 +26,6 @@ import com.wiseowl.woli.domain.usecase.detail.GetComplementaryColorUseCase
 import com.wiseowl.woli.domain.usecase.detail.SaveFileUseCase
 import com.wiseowl.woli.domain.usecase.detail.SetWallpaperUseCase
 import com.wiseowl.woli.domain.usecase.login.LoginUseCase
-import com.wiseowl.woli.domain.usecase.favourites.FavouritesUseCase
 import com.wiseowl.woli.domain.usecase.main.GetNavigationItemsUseCase
 import com.wiseowl.woli.domain.usecase.privacypolicy.GetPrivacyPolicyUseCase
 import com.wiseowl.woli.domain.usecase.profile.ProfileUseCase
@@ -65,7 +64,6 @@ fun appModule(application: Context) = module {
     singleOf(::RegistrationUseCase)
     singleOf(::AccountUseCase)
     singleOf(::LoginUseCase)
-    singleOf(::FavouritesUseCase)
     singleOf(::GetNavigationItemsUseCase)
     singleOf(::ProfileUseCase)
     singleOf(::GetPrivacyPolicyUseCase)

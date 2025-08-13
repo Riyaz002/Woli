@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                         lifecycleScope.launch {
                             accountRepository.signOut()
                             eventListener.pushEvent(Event.Logout)
-                            navController.currentDestination?.route?.let {currentRoute ->
+                            navController.currentDestination?.route?.let { currentRoute ->
                                 navController.popBackStack()
                                 navController.navigate(currentRoute)
                             }
