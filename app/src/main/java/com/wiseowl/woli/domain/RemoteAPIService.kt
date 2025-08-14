@@ -14,8 +14,10 @@ interface RemoteAPIService {
     suspend fun createUser(email: String, password: String, firstName: String, lastName: String): Result<User>
     suspend fun login(email: String, password: String): Result<User>
     suspend fun deleteUser()
-    suspend fun updateUser(user: User)
     suspend fun isEmailRegistered(email: String): Boolean
     suspend fun getUserInfo(): User?
+    suspend fun addToFavourites(mediaId: Long)
+    suspend fun removeFromFavourites(mediaId: Long)
+    suspend fun getFavourites(): List<Long>
     suspend fun signOut()
 }

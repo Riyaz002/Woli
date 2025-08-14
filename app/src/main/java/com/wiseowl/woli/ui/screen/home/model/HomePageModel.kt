@@ -6,5 +6,6 @@ import com.wiseowl.woli.ui.shared.model.FieldData
 data class HomePageModel(
     val search: FieldData = FieldData("Search", ""),
     val images: List<Media>,
+    val favourites: Set<Long> = emptySet(),
     val currentPage: Int
 )
