@@ -4,10 +4,8 @@ import coil3.Bitmap
 import com.wiseowl.woli.domain.model.Policy
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.domain.util.Result
-import kotlinx.coroutines.flow.StateFlow
 
 interface RemoteAPIService {
-    val userState: StateFlow<User?>
     suspend fun getImageBitmap(url: String): Bitmap?
     suspend fun getPrivacyPolicyPage(): List<Policy>?
 

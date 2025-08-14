@@ -30,10 +30,6 @@ import kotlinx.coroutines.withContext
 @Suppress("UNCHECKED_CAST")
 class FirebaseAPIService(private val context: Context) : RemoteAPIService {
     private val firestore = Firebase.firestore
-    private val scope = CoroutineScope(Dispatcher.IO)
-    override val userState = MutableStateFlow(GuestUser).apply {
-        scope.launch { emit(getUserInfo() ?: GuestUser) }
-    }
 
     override suspend fun createUser(
         email: String,
@@ -58,10 +54,8 @@ class FirebaseAPIService(private val context: Context) : RemoteAPIService {
 
     private fun updateUser(user: User?) {
         user?.let {
-            GuestUser = user
             firestore.collection(USERS_COLLECTION).document(user.email).set(user)
         }
-        userState.update { user ?: GuestUser }
     }
 
     override suspend fun login(email: String, password: String): Result<User> {
@@ -152,7 +146,7 @@ class FirebaseAPIService(private val context: Context) : RemoteAPIService {
     }
 
     override suspend fun getFavourites(): List<Long> {
-        return userState.value.favourites.orEmpty()
+        return getUser()?.favourites.orEmpty()
     }
 
     override suspend fun signOut() {
