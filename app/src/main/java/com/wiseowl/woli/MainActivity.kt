@@ -7,9 +7,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
@@ -22,12 +27,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.compose.rememberNavController
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.event.ActionHandler
 import com.wiseowl.woli.ui.event.UnhandledActionException
@@ -55,10 +61,18 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
+            var fullScreen by remember { mutableStateOf(false) }
             var progressVisible by remember { mutableStateOf(false) }
             val snackBarHostState = remember { SnackbarHostState() }
             val deepLinkParser = DeepLinkParser()
             val screen = deepLinkParser.getPage(intent).getOrNull() ?: Screen.HOME
+
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                when(destination.route){
+                    Screen.DETAIL.route -> fullScreen = true
+                    else -> fullScreen = false
+                }
+            }
 
             ActionHandler.listen { action ->
                 when (action) {
@@ -88,11 +102,27 @@ class MainActivity : ComponentActivity() {
             AppTheme(dynamicColor = false) {
                 Scaffold { padding ->
                     Box(Modifier.fillMaxHeight()) {
-                        Root(
-                            modifier = Modifier.padding(top = padding.calculateTopPadding()),
-                            navController = navController,
-                            startScreen = screen.route
-                        )
+                        Column {
+                            AnimatedVisibility(
+                               visible = !fullScreen
+                            ) {
+                                Box(Modifier
+                                    .fillMaxWidth()
+                                    .height(padding.calculateTopPadding()))
+                            }
+                            Root(
+                                modifier = Modifier,
+                                navController = navController,
+                                startScreen = screen.route
+                            )
+                            AnimatedVisibility(
+                                visible = !fullScreen
+                            ) {
+                                Box(Modifier
+                                    .fillMaxWidth()
+                                    .height(padding.calculateBottomPadding()))
+                            }
+                        }
                         SnackbarHost(
                             snackBarHostState,
                             modifier = Modifier.padding(top = 30.dp),
@@ -104,7 +134,7 @@ class MainActivity : ComponentActivity() {
                         BottomNavigation(
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
-                                .padding(bottom = padding.calculateBottomPadding()+16.dp),
+                                .padding(bottom = padding.calculateBottomPadding()),
                             navController
                         )
                     }
