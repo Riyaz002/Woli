@@ -8,6 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -116,7 +118,9 @@ class MainActivity : ComponentActivity() {
                                 startScreen = screen.route
                             )
                             AnimatedVisibility(
-                                visible = !fullScreen
+                                visible = !fullScreen,
+                                enter = slideInVertically { h -> h },
+                                exit = slideOutVertically { h -> h }
                             ) {
                                 Box(Modifier
                                     .fillMaxWidth()
