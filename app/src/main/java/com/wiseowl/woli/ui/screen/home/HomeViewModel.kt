@@ -1,6 +1,7 @@
 package com.wiseowl.woli.ui.screen.home
 
 import androidx.lifecycle.viewModelScope
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 import com.wiseowl.woli.domain.usecase.common.media.MediaUseCase
 import com.wiseowl.woli.domain.util.Result
 import com.wiseowl.woli.ui.event.Action
@@ -13,7 +14,10 @@ import com.wiseowl.woli.ui.shared.launchWithProgress
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val homeUseCase: MediaUseCase): ScreenViewModel<HomePageModel>() {
+class HomeViewModel(
+    private val homeUseCase: MediaUseCase,
+    private val accountUseCase: AccountUseCase
+): ScreenViewModel<HomePageModel>() {
 
     init {
         viewModelScope.launch {
@@ -40,6 +44,14 @@ class HomeViewModel(private val homeUseCase: MediaUseCase): ScreenViewModel<Home
                 }
             }
             on<HomeAction.OnClickSearch>{ search() }
+            on<HomeAction.OnClickAddToFavourite>{ action ->
+                viewModelScope.launch {
+                    accountUseCase.addToFavourites(action.mediaId)
+                }
+                _state.ifSuccess{
+                    it.copy(favourites = it.favourites+action.mediaId)
+                }
+            }
         }
 
     private fun loadNextPage() {

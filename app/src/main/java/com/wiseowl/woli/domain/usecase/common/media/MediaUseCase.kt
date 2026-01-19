@@ -4,6 +4,7 @@ import com.wiseowl.woli.domain.repository.media.MediaRepository
 import com.wiseowl.woli.domain.repository.media.model.CollectionPage
 import com.wiseowl.woli.domain.repository.media.model.PhotoPage
 import com.wiseowl.woli.domain.repository.media.model.Media
+import com.wiseowl.woli.domain.usecase.account.AccountUseCase
 
 
 class MediaUseCase(
@@ -11,7 +12,7 @@ class MediaUseCase(
     val geSearchUseCase: GetSearchUseCase,
     val getPhotoUseCase: GetPhotoUseCase,
     val getCollectionsPageUseCase: GetCollectionsPageUseCase,
-    val getCollectionPageUseCase: GetCollectionPageUseCase,
+    val getCollectionPageUseCase: GetCollectionPageUseCase
 )
 
 class GetPhotoPageUseCase(private val repository: MediaRepository){

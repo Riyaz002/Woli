@@ -103,13 +103,8 @@ jobs:
           LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || true)
           echo "## Release Notes" > release_body.md
           echo "" >> release_body.md
-          if [ -z "$LAST_TAG" ]; then
-            echo "First release" >> release_body.md
-            git log --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
-          else
-            echo "Changes since $LAST_TAG:" >> release_body.md
-            git log "$LAST_TAG"..HEAD --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
-          fi
+          echo "Changes since $LAST_TAG:" >> release_body.md
+          git log "$LAST_TAG"..HEAD --pretty=format:"%s (%h)" | grep -E "^(feat|fix):" | sed 's/^/- /' >> release_body.md
           echo "" >> release_body.md
           echo "- 🗓 Date: $DATE" >> release_body.md
           echo "- 🔢 Version: $VERSION_CODE" >> release_body.md

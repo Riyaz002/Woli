@@ -1,5 +1,6 @@
 package com.wiseowl.woli.ui.screen.profile.model
 
+import com.wiseowl.woli.domain.model.GuestUser
 import com.wiseowl.woli.domain.model.User
 import com.wiseowl.woli.ui.event.Action
 import com.wiseowl.woli.ui.navigation.Screen
@@ -10,8 +11,8 @@ data class ProfileModel(
     val isLoggedIn: Boolean,
     val currentUser: User?,
     val authenticationButton: Button = Button(
-        text = if(currentUser!=null) "Logout" else "Login",
-        action = if(currentUser!=null) Action.Logout else ProfileAction.OnClickLogin
+        text = if(currentUser!= GuestUser) "Logout" else "Login",
+        action = if(currentUser!= GuestUser) Action.Logout else ProfileAction.OnClickLogin
     ),
     val privacyPolicyButton: Button = Button(
         text = "Privacy Policy",

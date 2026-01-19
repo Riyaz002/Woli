@@ -2,6 +2,7 @@ package com.wiseowl.woli.ui.screen.home.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,7 +25,8 @@ fun ImageCard(
     image: Media,
     cornerRadius: Dp = 20.dp,
     aspectRatio: Float? = null,
-    onClick: (() -> Unit)? = null
+    onClick: (() -> Unit)? = null,
+    content: @Composable (BoxScope.() -> Unit)? = null
 ) {
     Box(
         modifier = modifier.clickable { onClick?.invoke() }
@@ -41,6 +43,7 @@ fun ImageCard(
             contentDescription = image.alt,
             contentScale = ContentScale.Crop
         )
+        if(content!=null) content()
     }
 }
 
