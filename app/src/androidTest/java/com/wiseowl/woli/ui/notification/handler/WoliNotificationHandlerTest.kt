@@ -3,6 +3,7 @@ package com.wiseowl.woli.ui.notification.handler
 import android.app.NotificationManager
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.platform.app.InstrumentationRegistry
+import com.wiseowl.woli.ui.notification.model.NotificationChannel
 import com.wiseowl.woli.ui.notification.model.NotificationPayload
 import org.junit.Assert
 import org.junit.Test
@@ -15,7 +16,8 @@ class WoliNotificationHandlerTest {
             id = 10,
             title = "test",
             content = "content",
-            image = null
+            image = null,
+            channel = NotificationChannel.PROMOTIONAL
         )
 
         val notificationHandler = WoliNotificationHandler(getApplicationContext())

@@ -2,6 +2,8 @@ package com.wiseowl.woli.ui.notification
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.wiseowl.woli.ui.notification.model.NotificationChannel
+import com.wiseowl.woli.ui.notification.model.NotificationChannel.Companion.toNotificationChannel
 import com.wiseowl.woli.ui.notification.model.NotificationPayload
 import org.koin.android.ext.android.inject
 
@@ -24,7 +26,8 @@ fun RemoteMessage.toNotificationPayload(): NotificationPayload {
         title = data["TITLE"].toString(),
         content = data["CONTENT"].toString(),
         image = data["IMAGE"].toString(),
-        id = data.values.toString().hashCode()
+        id = data.values.toString().hashCode(),
+        channel = data["channel"]?.toNotificationChannel() ?: NotificationChannel.DEFAULT
     )
     return notificationData
 }

@@ -3,6 +3,7 @@ package com.wiseowl.woli.ui.notification.handler
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.app.NotificationCompat
+import com.wiseowl.woli.R
 import com.wiseowl.woli.ui.notification.Constant.DEFAULT_NOTIFICATION_CHANNEL_ID
 import com.wiseowl.woli.ui.notification.NotificationHandler
 import com.wiseowl.woli.ui.notification.model.NotificationPayload
@@ -18,6 +19,7 @@ class WoliNotificationHandler(private val context: Context): NotificationHandler
         val notificationBuilder = NotificationCompat.Builder(context, DEFAULT_NOTIFICATION_CHANNEL_ID)
             .setContentTitle(notificationPayload.title)
             .setContentText(notificationPayload.content)
+            .setSmallIcon(R.drawable.ic_launcher_background)
 
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.notify(notificationPayload.id, notificationBuilder.build())
